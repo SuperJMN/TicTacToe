@@ -51,7 +51,7 @@ namespace Model
                 diagonal1.Add(piece1);
 
                 var piece2 = board.GetSlot(new Position(i, Board.BoardSize - i - 1));
-                diagonal1.Add(piece2);
+                diagonal2.Add(piece2);
             }
 
             var checkDiagonal1 = AreFullAndTakenBySamePlayer(diagonal1);
