@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Model
 {
@@ -6,7 +8,7 @@ namespace Model
     {
         const int BoardSizeConst = 3;
 
-        readonly Slot[,] slots = new Slot[BoardSizeConst, BoardSizeConst];
+        readonly Square[,] squares = new Square[BoardSizeConst, BoardSizeConst];
         private readonly BoardChecker boardChecker;
 
 
@@ -21,7 +23,7 @@ namespace Model
             get
             {
                 return boardChecker.GetIsFull();
-            } 
+            }
         }
 
         private void CreateSlots()
@@ -30,7 +32,7 @@ namespace Model
             {
                 for (var j = 0; j < 3; j++)
                 {
-                    slots[i, j] = new Slot();
+                    squares[i, j] = new Square();
                 }
             }
         }
@@ -47,33 +49,33 @@ namespace Model
             OnPiecePlaced(new PieceEventHandlerArgs(piece));
         }
 
-        public IEnumerable<Slot> GetRowSlots(int number)
+        public IEnumerable<Square> GetRowSlots(int number)
         {
             for (var i = 0; i < BoardSize; i++)
             {
-                yield return slots[i, number];
+                yield return squares[i, number];
             }
         }
 
-        public IEnumerable<Slot> GetColumnSlots(int number)
+        private IEnumerable<Square> GetColumnSlots(int number)
         {
             for (var i = 0; i < BoardSize; i++)
             {
-                yield return slots[number, i];
+                yield return squares[number, i];
             }
         }
 
 
-        public Slot GetSlot(Position position)
+        public Square GetSlot(Position position)
         {
             if (IsValidPosition(position))
             {
-                return slots[position.X, position.Y];
+                return squares[position.X, position.Y];
             }
             throw new InvalidPositionException(position);
         }
 
-        private bool IsValidPosition(Position position)
+        private static bool IsValidPosition(Position position)
         {
             return position.X < BoardSize &&
                 position.Y < BoardSize;
@@ -98,9 +100,9 @@ namespace Model
             get { return boardChecker; }
         }
 
-        public Slot[,] Slots
+        public Square[,] Squares
         {
-            get { return slots; }
+            get { return squares; }
         }
 
         public event PieceEventHandler PiecePlaced;
@@ -109,6 +111,66 @@ namespace Model
         {
             var handler = PiecePlaced;
             if (handler != null) handler(this, args);
+        }
+
+        public IList<SquareCollection> Rows
+        {
+            get
+            {
+                var rows = new List<SquareCollection>();
+                for (int i = 0; i < BoardSize; i++)
+                {
+                    var row = GetRowSlots(i);
+                    rows.Add(new SquareCollection(row.ToList()));
+                }
+                return rows;
+            }
+        }
+
+        public IList<SquareCollection> Columns
+        {
+            get
+            {
+                var rows = new List<SquareCollection>();
+                for (int i = 0; i < BoardSize; i++)
+                {
+                    var row = GetColumnSlots(i);
+                    rows.Add(new SquareCollection(row.ToList()));
+                }
+                return rows;
+            }
+        }
+
+        public IList<SquareCollection> Diagonals
+        {
+            get
+            {
+                var diagonal1 = new SquareCollection();
+                var diagonal2 = new SquareCollection();
+                for (var i = 0; i < BoardSize; i++)
+                {
+                    var piece1 = GetSlot(new Position(i, i));
+                    diagonal1.Add(piece1);
+
+                    var piece2 = GetSlot(new Position(i, BoardSize - i - 1));
+                    diagonal2.Add(piece2);
+                }
+
+                return new List<SquareCollection> { diagonal1, diagonal2 };
+            }
+        }
+    }
+
+    public class SquareCollection : Collection<Square>
+    {
+        public SquareCollection()
+        {
+
+        }
+        public SquareCollection(IList<Square> squares)
+            : base(squares)
+        {
+
         }
     }
 }

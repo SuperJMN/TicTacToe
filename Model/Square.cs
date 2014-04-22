@@ -1,6 +1,6 @@
 ﻿namespace Model
 {
-    public class Slot
+    public class Square
     {
         public Piece Piece { get; set; }
     }

@@ -19,63 +19,30 @@ namespace Model
 
         private bool GetHasWinningRow()
         {
-            var v = CheckVerticals();
-            var h = CheckHorizontals();
-            var d = CheckDiagonals();
+            var rows = CheckRows();
+            var columns = CheckColumns();
+            var diagonals = CheckDiagonals();
 
-            return h || v || d;
+            return columns || rows || diagonals;
         }
 
-        private bool CheckHorizontals()
+        private bool CheckColumns()
         {
-            for (var i = 0; i < Board.BoardSize; i++)
-            {
-                var horizontalSlots = board.GetRowSlots(i).ToList();
-
-                if (AreFullAndTakenBySamePlayer(horizontalSlots))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return board.Rows.Any(AreFullAndTakenBySamePlayer);
         }
 
         private bool CheckDiagonals()
         {
-            var diagonal1 = new List<Slot>();
-            var diagonal2 = new List<Slot>();
-            for (var i = 0; i < Board.BoardSize; i++)
-            {
-                var piece1 = board.GetSlot(new Position(i, i));
-                diagonal1.Add(piece1);
-
-                var piece2 = board.GetSlot(new Position(i, Board.BoardSize - i - 1));
-                diagonal2.Add(piece2);
-            }
-
-            var checkDiagonal1 = AreFullAndTakenBySamePlayer(diagonal1);
-            var checkDiagonal2 = AreFullAndTakenBySamePlayer(diagonal2);
-           
-            return checkDiagonal1 || checkDiagonal2;
+            return board.Diagonals.Any(AreFullAndTakenBySamePlayer);
         }
 
-        private bool CheckVerticals()
+        private bool CheckRows()
         {
-            for (var i = 0; i < Board.BoardSize; i++)
-            {
-                var verticalSlots = board.GetColumnSlots(i).ToList();
-                if (AreFullAndTakenBySamePlayer(verticalSlots))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return board.Columns.Any(AreFullAndTakenBySamePlayer);            
         }
 
       
-        private static bool AreFullAndTakenBySamePlayer(List<Slot> slots)
+        private static bool AreFullAndTakenBySamePlayer(IList<Square> slots)
         {
             var areSlotsFull = IsSlotCollectionFull(slots);
             if (areSlotsFull)
@@ -85,21 +52,21 @@ namespace Model
             return false;
         }
 
-        private static bool AllTakenBySamePlayer(IEnumerable<Slot> row)
+        private static bool AllTakenBySamePlayer(IEnumerable<Square> row)
         {
             var allTakenBySamePlayer = row.Select(slot => slot.Piece.Player);
             var takenBySamePlayer = allTakenBySamePlayer.Distinct();
             return takenBySamePlayer.Count() == 1;
         }
 
-        private static bool IsSlotCollectionFull(IEnumerable<Slot> row)
+        private static bool IsSlotCollectionFull(IEnumerable<Square> row)
         {
             return row.All(slot => slot.Piece != null);
         }
 
         public bool GetIsFull()
         {
-            var allSlots = board.Slots.Cast<Slot>();
+            var allSlots = board.Squares.Cast<Square>();
             var areAllTaken = allSlots.All(slot => slot.Piece != null);
             return areAllTaken;
         }

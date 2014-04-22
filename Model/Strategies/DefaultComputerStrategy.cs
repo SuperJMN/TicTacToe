@@ -12,7 +12,7 @@ namespace Model.Strategies
 
         private Position GetEmptyPosition(Board board)
         {
-            Slot slot = null;
+            Square square = null;
 
             for (int i = 0; i < Board.BoardSize; i++)
             {
@@ -26,7 +26,7 @@ namespace Model.Strategies
                 }
             }
 
-            throw new InvalidOperationException("Cannot retrieve an empty slot");
+            throw new InvalidOperationException("Cannot retrieve an empty Square");
         }
     }
 }
