@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Model
@@ -9,6 +9,7 @@ namespace Model
         const int BoardSizeConst = 3;
 
         readonly Square[,] squares = new Square[BoardSizeConst, BoardSizeConst];
+
         private readonly BoardChecker boardChecker;
 
 
@@ -16,6 +17,11 @@ namespace Model
         {
             CreateSlots();
             boardChecker = new BoardChecker(this);
+        }
+
+        private Board(Board original)
+        {
+            squares = (Square[,]) original.squares.Clone();            
         }
 
         public bool IsFull
@@ -49,7 +55,7 @@ namespace Model
             OnPiecePlaced(new PieceEventHandlerArgs(piece));
         }
 
-        public IEnumerable<Square> GetRowSlots(int number)
+        private IEnumerable<Square> GetRowSlots(int number)
         {
             for (var i = 0; i < BoardSize; i++)
             {
@@ -66,7 +72,7 @@ namespace Model
         }
 
 
-        public Square GetSlot(Position position)
+        private Square GetSlot(Position position)
         {
             if (IsValidPosition(position))
             {
@@ -100,9 +106,9 @@ namespace Model
             get { return boardChecker; }
         }
 
-        public Square[,] Squares
+        public IEnumerable<Square> Squares
         {
-            get { return squares; }
+            get { return squares.Cast<Square>(); }
         }
 
         public event PieceEventHandler PiecePlaced;
@@ -113,7 +119,7 @@ namespace Model
             if (handler != null) handler(this, args);
         }
 
-        public IList<SquareCollection> Rows
+        public IEnumerable<SquareCollection> Rows
         {
             get
             {
@@ -127,7 +133,7 @@ namespace Model
             }
         }
 
-        public IList<SquareCollection> Columns
+        public IEnumerable<SquareCollection> Columns
         {
             get
             {
@@ -141,7 +147,7 @@ namespace Model
             }
         }
 
-        public IList<SquareCollection> Diagonals
+        public IEnumerable<SquareCollection> Diagonals
         {
             get
             {
@@ -159,18 +165,10 @@ namespace Model
                 return new List<SquareCollection> { diagonal1, diagonal2 };
             }
         }
-    }
 
-    public class SquareCollection : Collection<Square>
-    {
-        public SquareCollection()
+        public Board Clone()
         {
-
-        }
-        public SquareCollection(IList<Square> squares)
-            : base(squares)
-        {
-
+            return new Board(this);
         }
     }
 }

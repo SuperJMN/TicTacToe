@@ -53,6 +53,22 @@ namespace ModelTest
             var value = boardEvaluator.Evaluate(player);
             Assert.AreEqual(1052, value);
         }
+
+        //[TestMethod]
+        //public void BestMove1()
+        //{
+        //    var board = new Board();
+        //    var strategy = new MinimaxStrategy(board);
+        //    var player = new ComputerPlayer("Name", strategy);
+            
+
+        //    board.Move(player, new Move(new Position(0, 0)));
+        //    board.Move(player, new Move(new Position(0, 1)));
+
+        //    var move = strategy.GetMoveFor(board, player);
+        //    Assert.AreEqual(new Position(0, 2), move.Position);
+        //}
+
     }
 
 

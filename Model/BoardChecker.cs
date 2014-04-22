@@ -66,8 +66,8 @@ namespace Model
 
         public bool GetIsFull()
         {
-            var allSlots = board.Squares.Cast<Square>();
-            var areAllTaken = allSlots.All(slot => slot.Piece != null);
+            var squares = board.Squares;
+            var areAllTaken = squares.All(slot => slot.Piece != null);
             return areAllTaken;
         }
     }

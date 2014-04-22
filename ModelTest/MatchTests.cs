@@ -116,12 +116,10 @@ namespace ModelTest
         {
             var session = new Match();
 
-            var strategy = new DefaultComputerStrategy();
-
-            var firstPlayer = new ComputerPlayer("Pepito", strategy);
+            var firstPlayer = new ComputerPlayer("Pepito", new DefaultComputerStrategy());
             session.AddChallenger(firstPlayer);
 
-            var secondPlayer = new ComputerPlayer("Juanito", strategy);
+            var secondPlayer = new ComputerPlayer("Juanito", new DefaultComputerStrategy());
             session.AddChallenger(secondPlayer);
 
             session.Coordinator.GameEnded += (sender, args) => Assert.IsTrue(session.Finished);

@@ -4,7 +4,8 @@ namespace Model.Strategies
 {
     public class DefaultComputerStrategy : IMoveStrategy
     {
-        public Move GetMoveFor(Board board)
+
+        public Move GetMoveFor(Board board, Player player)
         {
             var emptyPosition = GetEmptyPosition(board);
             return new Move(emptyPosition);

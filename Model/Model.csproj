@@ -39,7 +39,8 @@
     <Compile Include="Board.cs" />
     <Compile Include="BoardChecker.cs" />
     <Compile Include="ComputerPlayer.cs" />
-    <Compile Include="Strategies\BoardEvaluationTests.cs" />
+    <Compile Include="SquareCollection.cs" />
+    <Compile Include="Strategies\BoardEvaluator.cs" />
     <Compile Include="Strategies\DefaultComputerStrategy.cs" />
     <Compile Include="MatchCoordinator.cs" />
     <Compile Include="Match.cs" />
