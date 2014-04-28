@@ -45,7 +45,7 @@
     <Compile Include="MatchCoordinator.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="HumanPlayer.cs" />
-    <Compile Include="IMoveStrategy.cs" />
+    <Compile Include="Strategies\IMoveStrategy.cs" />
     <Compile Include="InvalidPositionException.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="MoveEventHandler.cs" />

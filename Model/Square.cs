@@ -7,7 +7,7 @@
             Position = position;
         }
         public Piece Piece { get; set; }
-        public Position Position { get; set; }
+        public Position Position { get; private set; }
 
         public override string ToString()
         {

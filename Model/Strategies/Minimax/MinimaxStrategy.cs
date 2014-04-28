@@ -18,7 +18,9 @@ namespace Model.Strategies.Minimax
             var maxScore = int.MinValue + 1;
             var finalPosition = new Position(-1, -1);
 
-            foreach (var position in board.GetEmptyPositions())
+            var emptyPositions = board.GetEmptyPositions();
+
+            foreach (var position in emptyPositions)
             {
                 var clone = board.Clone();
                 clone.Move(player, new Move(position));
