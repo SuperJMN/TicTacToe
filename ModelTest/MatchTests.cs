@@ -69,7 +69,7 @@ namespace ModelTest
 
             session.Start();
 
-            firstPlayer.MakeMove(new Move(new Position(0,0)));
+            firstPlayer.MakeMove(new Position(0, 0));
 
             Assert.AreEqual(secondPlayer, session.PlayerInTurn);
         }
@@ -88,8 +88,8 @@ namespace ModelTest
 
             session.Start();
 
-            firstPlayer.MakeMove(new Move(new Position(0, 0)));
-            firstPlayer.MakeMove(new Move(new Position(1, 0)));            
+            firstPlayer.MakeMove(new Position(0, 0));
+            firstPlayer.MakeMove(new Position(1, 0));
         }
 
         [TestMethod]
@@ -106,12 +106,12 @@ namespace ModelTest
 
             session.Start();
 
-            firstPlayer.MakeMove(new Move(new Position(0, 0)));
-            secondPlayer.MakeMove(new Move(new Position(0, 0)));
+            firstPlayer.MakeMove(new Position(0, 0));
+            secondPlayer.MakeMove(new Position(0, 0));
         }
 
 
-        [TestMethod]        
+        [TestMethod]
         public void ComputerPlay()
         {
             var session = new Match();
@@ -123,7 +123,7 @@ namespace ModelTest
             session.AddChallenger(secondPlayer);
 
             session.Coordinator.GameEnded += (sender, args) => Assert.IsTrue(session.Finished);
-            session.Start();                       
+            session.Start();
         }
 
         private void CoordinatorOnGameEnded(object sender, EventArgs eventArgs)
@@ -132,5 +132,5 @@ namespace ModelTest
         }
     }
 
-    
+
 }

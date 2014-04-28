@@ -20,7 +20,7 @@ namespace Model.Strategies.Minimax
             foreach (var position in emptyPositions)
             {
                 var boardClone = Board.Clone();
-                boardClone.Move(player, new Move(position));
+                boardClone.Move(new Movement(position, player));
                 var child = new BoardState(boardClone, player);
                 children.Add(child);
             }

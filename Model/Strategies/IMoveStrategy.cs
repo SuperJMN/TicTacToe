@@ -2,6 +2,6 @@ namespace Model
 {
     public interface IMoveStrategy
     {
-        Move GetMoveFor(Board board, Player player);
+        Movement GetMoveFor(Board board, Player player);
     }
 }

@@ -47,7 +47,7 @@
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="Strategies\IMoveStrategy.cs" />
     <Compile Include="InvalidPositionException.cs" />
-    <Compile Include="Move.cs" />
+    <Compile Include="Movement.cs" />
     <Compile Include="MoveEventHandler.cs" />
     <Compile Include="MoveEventHandlerArgs.cs" />
     <Compile Include="Piece.cs" />

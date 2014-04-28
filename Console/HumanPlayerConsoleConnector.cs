@@ -27,7 +27,7 @@ namespace Console
                 try
                 {
                     var position = GetPosition(System.Console.In);
-                    player.MakeMove(new Move(position));
+                    player.MakeMove(position);
                 }
                 catch (InvalidPositionException)
                 {

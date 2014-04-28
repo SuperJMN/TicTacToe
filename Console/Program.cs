@@ -47,7 +47,7 @@ namespace Console
 
         private static void ComputerOnWantToMove(object player, MoveEventHandlerArgs args)
         {
-            System.Console.WriteLine(player + " is making a move!");
+            System.Console.WriteLine(player + " is moving!");
         }
 
 

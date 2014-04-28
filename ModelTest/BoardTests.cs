@@ -12,9 +12,10 @@ namespace ModelTest
         {
             var board = new Board();
             var position = new Position(1, 2);
-            var move = new Move(position);
+
             var player = new HumanPlayer("Pepito");
-            board.Move(player, move);
+            var move = new Movement(position, player);
+            board.Move(move);
 
             var piece = board.GetPiece(position);
             Assert.AreEqual(player, piece.Player);
@@ -26,9 +27,10 @@ namespace ModelTest
         {
             var board = new Board();
             var position = new Position(6, 2);
-            var move = new Move(position);
+
             var player = new HumanPlayer("Pepito");
-            board.Move(player, move);
+            var move = new Movement(position, player);
+            board.Move(move);
         }
 
         [TestMethod]
@@ -37,10 +39,12 @@ namespace ModelTest
         {
             var board = new Board();
             var position = new Position(2, 2);
-            var move = new Move(position);
+
             var player = new HumanPlayer("Pepito");
-            board.Move(player, move);
-            board.Move(player, move);
+            var move = new Movement(position, player);
+
+            board.Move(move);
+            board.Move(move);
         }
 
         [TestMethod]
@@ -48,9 +52,9 @@ namespace ModelTest
         {
             var board = new Board();
             var player = new HumanPlayer("Pepito");
-            board.Move(player, new Move(new Position(0, 1)));
-            board.Move(player, new Move(new Position(1, 1)));
-            board.Move(player, new Move(new Position(2, 1)));
+            board.Move(new Movement(new Position(0, 1), player));
+            board.Move(new Movement(new Position(1, 1), player));
+            board.Move(new Movement(new Position(2, 1), player));
 
             Assert.IsTrue(board.HasWinner);
         }
@@ -60,9 +64,9 @@ namespace ModelTest
         {
             var board = new Board();
             var player = new HumanPlayer("Pepito");
-            board.Move(player, new Move(new Position(0, 0)));
-            board.Move(player, new Move(new Position(0, 1)));
-            board.Move(player, new Move(new Position(0, 2)));
+            board.Move(new Movement(new Position(0, 0), player));
+            board.Move(new Movement(new Position(0, 1), player));
+            board.Move(new Movement(new Position(0, 2), player));
 
             Assert.IsTrue(board.HasWinner);
         }
@@ -74,9 +78,9 @@ namespace ModelTest
             var board = new Board();
             var player1 = new HumanPlayer("Pepito");
             var player2 = new HumanPlayer("Juanito");
-            board.Move(player1, new Move(new Position(0, 0)));
-            board.Move(player2, new Move(new Position(0, 1)));
-            board.Move(player1, new Move(new Position(0, 2)));
+            board.Move(new Movement(new Position(0, 0), player1));
+            board.Move(new Movement(new Position(0, 1), player2));
+            board.Move(new Movement(new Position(0, 2), player1));
 
             Assert.IsFalse(board.HasWinner);
         }
@@ -103,7 +107,7 @@ namespace ModelTest
             {
                 for (var j = 0; j < Board.BoardSize; j++)
                 {
-                    board.Move(player, new Move(new Position(i, j)));
+                    board.Move(new Movement(new Position(i, j), player));
                 }
             }
         }

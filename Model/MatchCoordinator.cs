@@ -15,7 +15,7 @@ namespace Model
         {
             if (player == Match.PlayerInTurn)
             {
-                Match.Board.Move(Match.PlayerInTurn, args.Move);
+                Match.Board.Move(args.Movement);
             }
             else
             {

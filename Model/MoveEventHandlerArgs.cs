@@ -4,11 +4,11 @@ namespace Model
 {
     public class MoveEventHandlerArgs : EventArgs
     {
-        public MoveEventHandlerArgs(Move move)
+        public MoveEventHandlerArgs(Movement movement)
         {
-            Move = move;
+            Movement = movement;
         }
 
-        public Move Move { get; set; }
+        public Movement Movement { get; set; }
     }
 }

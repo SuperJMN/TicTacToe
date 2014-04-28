@@ -13,7 +13,7 @@ namespace Model.Strategies.Minimax
         private ITwoPlayersGame TwoPlayersGame { get; set; }
         private Player Max { get; set; }
 
-        public Move GetMoveFor(Board board, Player player)
+        public Movement GetMoveFor(Board board, Player player)
         {
             var maxScore = int.MinValue + 1;
             var finalPosition = new Position(-1, -1);
@@ -23,7 +23,7 @@ namespace Model.Strategies.Minimax
             foreach (var position in emptyPositions)
             {
                 var clone = board.Clone();
-                clone.Move(player, new Move(position));
+                clone.Move(new Movement(position, player));
                 var node = new BoardState(clone, player);
 
                 var score = Iterate(node, player);
@@ -34,7 +34,7 @@ namespace Model.Strategies.Minimax
                 }
             }
 
-            return new Move(finalPosition);
+            return new Movement(finalPosition, player);
         }
 
         private int Iterate(BoardState boardState, Player player)

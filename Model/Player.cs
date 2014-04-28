@@ -44,8 +44,9 @@ namespace Model
             return !Equals(left, right);
         }
 
-        public void MakeMove(Move move)
+        public void MakeMove(Position position)
         {
+            var move = new Movement(position, this);
             OnWantToMove(new MoveEventHandlerArgs(move));
         }
 

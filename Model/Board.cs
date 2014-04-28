@@ -53,14 +53,14 @@ namespace Model
             }
         }
 
-        public void Move(Player player, Move move)
+        public void Move(Movement movement)
         {
-            var slot = GetSlot(move.Position);
+            var slot = GetSlot(movement.Position);
             if (slot.Piece != null)
             {
-                throw new InvalidPositionException(move.Position);
+                throw new InvalidPositionException(movement.Position);
             }
-            var piece = new Piece(player);
+            var piece = new Piece(movement.Player);
             slot.Piece = piece;
             OnPiecePlaced(new PieceEventHandlerArgs(piece));
         }
