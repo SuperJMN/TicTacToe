@@ -1,49 +1,51 @@
 ﻿using System;
 using Model;
 using Model.Strategies;
+using Model.Strategies.Minimax;
 
 namespace Console
 {
-    class Program
+    static class Program
     {
-        private static PlayerPieceMapping playerPieceMapping;
-        private static BoardConsoleRenderer renderer;
-        private static Match session;
+        public static Match Match { get; set; }
 
         static void Main()
         {
-            session = new Match();
+            Match = new Match();
 
-            var strategy = new DefaultComputerStrategy();
+            var firstPlayer = CreateComputerPlayer("Anytta");
+            var secondPlayer = CreateComputerPlayer("JMN");
 
-            var firstPlayer = new ComputerPlayer("Anytta", strategy);
-            firstPlayer.WantToMove += FirstPlayerOnWantToMove;
-            //var firstPlayerConsoleConnector = new HumanPlayerConsoleConnector(firstPlayer);
-            session.AddChallenger(firstPlayer);
+            Match.AddChallenger(firstPlayer);
+            Match.AddChallenger(secondPlayer);
 
-            
-            
-            var secondPlayer = new HumanPlayer("JMN");
-            var secondPlayerConsoleConnector = new HumanPlayerConsoleConnector(secondPlayer);
-            session.AddChallenger(secondPlayer);
+            var boardWriter = CreateBoardWriter();
+            boardWriter.Write(System.Console.Out);
 
-            InitializeRenderer();
+            SubscribeToMatchEvents(Match, boardWriter);
 
-            renderer.Render();
-
-            session.Coordinator.GameEnded += (sender, eventArgs) => ShowGameResults();
-            session.Board.PiecePlaced += (sender, handlerArgs) => renderer.Render();
 
             System.Console.Write("¨¨ The match has started!\n\n");
-            session.Start();
+            Match.Start();
 
-            //firstPlayerConsoleConnector.Dispose();
-            secondPlayerConsoleConnector.Dispose();
-            
             System.Console.ReadLine();
         }
 
-        private static void FirstPlayerOnWantToMove(object player, MoveEventHandlerArgs args)
+        private static void SubscribeToMatchEvents(Match match, BoardStreamWriter writer)
+        {
+            match.Coordinator.GameEnded += (sender, eventArgs) => ShowGameResults();
+            match.Board.PiecePlaced += (sender, handlerArgs) => writer.Write(System.Console.Out);
+        }
+
+        private static ComputerPlayer CreateComputerPlayer(string name)
+        {
+            var firstPlayer = new ComputerPlayer(name);
+            firstPlayer.Strategy = new MinimaxStrategy(Match, firstPlayer);
+            firstPlayer.WantToMove += ComputerOnWantToMove;
+            return firstPlayer;
+        }
+
+        private static void ComputerOnWantToMove(object player, MoveEventHandlerArgs args)
         {
             System.Console.WriteLine(player + " is making a move!");
         }
@@ -51,12 +53,12 @@ namespace Console
 
         private static void ShowGameResults()
         {
-            var hasWinner = session.Board.BoardChecker.HasWinningRow;
+            var hasWinner = Match.HasWinner;
             System.Console.WriteLine("The game has ended");
 
             if (hasWinner)
             {
-                System.Console.WriteLine(String.Format("We have a winner! Congratulations, " + session.PlayerInTurn));
+                System.Console.WriteLine(String.Format("We have a winner! Congratulations, " + Match.PlayerInTurn));
             }
             else
             {
@@ -64,20 +66,19 @@ namespace Console
             }
         }
 
-        private static void InitializeRenderer()
+        private static BoardStreamWriter CreateBoardWriter()
         {
-            InitializeConsoleRenderePieceMapping();
-            renderer = new BoardConsoleRenderer(session.Board, playerPieceMapping);
+            CreateConsoleRenderePieceMapping();
+            var boardWriter = new BoardStreamWriter(Match.Board, CreateConsoleRenderePieceMapping());
+            return boardWriter;
         }
 
-        private static void InitializeConsoleRenderePieceMapping()
+        private static PlayerPieceMapping CreateConsoleRenderePieceMapping()
         {
-            playerPieceMapping = new PlayerPieceMapping();
-            playerPieceMapping.Add(session.Contenders[0], 'O');
-            playerPieceMapping.Add(session.Contenders[1], 'X');
-        }
-
-
-
+            var playerPieceMapping = new PlayerPieceMapping();
+            playerPieceMapping.Add(Match.Contenders[0], 'X');
+            playerPieceMapping.Add(Match.Contenders[1], 'O');
+            return playerPieceMapping;
+        }   
     }
 }

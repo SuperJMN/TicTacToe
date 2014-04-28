@@ -2,6 +2,21 @@
 {
     public class Square
     {
+        public Square(Position position)
+        {
+            Position = position;
+        }
         public Piece Piece { get; set; }
+        public Position Position { get; set; }
+
+        public override string ToString()
+        {
+            if (Piece == null)
+            {
+                return Position +  " - Empty Square";
+            } 
+
+            return Position +  "Taken by " + Piece.Player;
+        }       
     }
 }

@@ -52,7 +52,7 @@ namespace ModelTest
             board.Move(player, new Move(new Position(1, 1)));
             board.Move(player, new Move(new Position(2, 1)));
 
-            Assert.IsTrue(board.BoardChecker.HasWinningRow);
+            Assert.IsTrue(board.HasWinner);
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace ModelTest
             board.Move(player, new Move(new Position(0, 1)));
             board.Move(player, new Move(new Position(0, 2)));
 
-            Assert.IsTrue(board.BoardChecker.HasWinningRow);
+            Assert.IsTrue(board.HasWinner);
         }
 
 
@@ -78,7 +78,7 @@ namespace ModelTest
             board.Move(player2, new Move(new Position(0, 1)));
             board.Move(player1, new Move(new Position(0, 2)));
 
-            Assert.IsFalse(board.BoardChecker.HasWinningRow);
+            Assert.IsFalse(board.HasWinner);
         }
 
         [TestMethod]

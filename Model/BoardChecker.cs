@@ -5,7 +5,7 @@ namespace Model
 {
     public class BoardChecker
     {
-        private Board board;
+        private readonly Board board;
 
         public BoardChecker(Board board)
         {
@@ -14,34 +14,24 @@ namespace Model
 
         public bool HasWinningRow
         {
-            get { return GetHasWinningRow(); }
+            get { return Has3InAnyRow || Has3InAnyColumn || Has3InAnyDiagonal; }
         }
 
-        private bool GetHasWinningRow()
+        private bool Has3InAnyRow
         {
-            var rows = CheckRows();
-            var columns = CheckColumns();
-            var diagonals = CheckDiagonals();
-
-            return columns || rows || diagonals;
+            get { return board.Rows.Any(AreFullAndTakenBySamePlayer); }
         }
 
-        private bool CheckColumns()
+        private bool Has3InAnyColumn
         {
-            return board.Rows.Any(AreFullAndTakenBySamePlayer);
+            get { return board.Columns.Any(AreFullAndTakenBySamePlayer); }
         }
 
-        private bool CheckDiagonals()
+        private bool Has3InAnyDiagonal
         {
-            return board.Diagonals.Any(AreFullAndTakenBySamePlayer);
+            get { return board.Diagonals.Any(AreFullAndTakenBySamePlayer); }
         }
 
-        private bool CheckRows()
-        {
-            return board.Columns.Any(AreFullAndTakenBySamePlayer);            
-        }
-
-      
         private static bool AreFullAndTakenBySamePlayer(IList<Square> slots)
         {
             var areSlotsFull = IsSlotCollectionFull(slots);

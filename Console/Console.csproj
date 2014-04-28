@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoardConsoleRenderer.cs" />
+    <Compile Include="BoardStreamWriter.cs" />
     <Compile Include="HumanPlayerConsoleConnector.cs" />
     <Compile Include="PlayerPieceMapping.cs" />
     <Compile Include="Program.cs" />

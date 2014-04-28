@@ -1,20 +1,25 @@
-﻿using Model;
+﻿using System.IO;
+using System.Text;
+using Model;
+using Model.Strategies;
 
 namespace Console
 {
-    public class BoardConsoleRenderer
+    public class BoardStreamWriter
     {
         private readonly Board board;
         private readonly PlayerPieceMapping playerPieceMapping;
 
-        public BoardConsoleRenderer(Board board, PlayerPieceMapping playerPieceMapping)
+        public BoardStreamWriter(Board board, PlayerPieceMapping playerPieceMapping)
         {
             this.board = board;
             this.playerPieceMapping = playerPieceMapping;
         }
 
-        public void Render()
+        public void Write(TextWriter textWriter)
         {
+            var builder = new StringBuilder();
+
             for (var i = 0; i < Board.BoardSize; i++)
             {
                 for (var j = 0; j < Board.BoardSize; j++)
@@ -32,12 +37,14 @@ namespace Console
                     }
 
 
-                    System.Console.Write("[" + representation + "]");
+                    builder.Append("[" + representation + "]");
                 }
 
-                System.Console.WriteLine();
+                builder.AppendLine();
             }
-            System.Console.WriteLine();
+            builder.AppendLine();
+
+            textWriter.Write(builder.ToString());
         }
     }
 }

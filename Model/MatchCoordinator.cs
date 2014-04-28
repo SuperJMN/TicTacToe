@@ -4,18 +4,18 @@ namespace Model
 {
     public class MatchCoordinator
     {
-        public MatchCoordinator(Match session)
+        public MatchCoordinator(Match match)
         {
-            Session = session;
+            Match = match;
         }
 
-        public Match Session { get; set; }
+        public Match Match { get; set; }
 
         public void PlayerOnWantToMove(Player player, MoveEventHandlerArgs args)
         {
-            if (player == Session.PlayerInTurn)
+            if (player == Match.PlayerInTurn)
             {
-                Session.Board.Move(Session.PlayerInTurn, args.Move);
+                Match.Board.Move(Match.PlayerInTurn, args.Move);
             }
             else
             {
@@ -24,8 +24,8 @@ namespace Model
 
             if (CanContinueGame())
             {
-                Session.SwitchTurn();
-                Session.PlayerInTurn.RequestMove(Session.Board);
+                Match.SwitchTurn();
+                Match.PlayerInTurn.RequestMove(Match.Board);
             }
             else
             {
@@ -35,7 +35,7 @@ namespace Model
 
         private bool CanContinueGame()
         {
-            return !Session.Board.IsFull && !Session.Board.BoardChecker.HasWinningRow;
+            return !Match.Board.IsFull && !Match.HasWinner;
         }
 
         public event EventHandler GameEnded;
@@ -48,7 +48,7 @@ namespace Model
 
         public void StartGame()
         {
-            Session.PlayerInTurn.RequestMove(Session.Board);
+            Match.PlayerInTurn.RequestMove(Match.Board);
         }
     }
 }

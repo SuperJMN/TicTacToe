@@ -40,7 +40,7 @@
     <Compile Include="BoardChecker.cs" />
     <Compile Include="ComputerPlayer.cs" />
     <Compile Include="SquareCollection.cs" />
-    <Compile Include="Strategies\BoardEvaluator.cs" />
+    <Compile Include="Strategies\Minimax\BoardEvaluator.cs" />
     <Compile Include="Strategies\DefaultComputerStrategy.cs" />
     <Compile Include="MatchCoordinator.cs" />
     <Compile Include="Match.cs" />
@@ -57,7 +57,9 @@
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Square.cs" />
-    <Compile Include="Strategies\MinimaxStrategy.cs" />
+    <Compile Include="Strategies\ITwoPlayersGame.cs" />
+    <Compile Include="Strategies\Minimax\BoardState.cs" />
+    <Compile Include="Strategies\Minimax\MinimaxStrategy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

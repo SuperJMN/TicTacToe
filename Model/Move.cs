@@ -10,5 +10,10 @@ namespace Model
         {
             Position = position;            
         }
+
+        public override string ToString()
+        {
+            return "Move to " + Position;
+        }
     }
 }

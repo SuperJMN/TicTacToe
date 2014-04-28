@@ -5,12 +5,16 @@ namespace Model
     public class Piece
     {
 
-
         public Piece(Player player)
         {
             Player = player;
         }
 
-        public Player Player { get; set; }        
+        public Player Player { get; set; }
+
+        public Piece Clone()
+        {
+            return new Piece(Player);
+        }
     }
 }

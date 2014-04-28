@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Model.Strategies;
 
 namespace Model
 {
-    public class Match
+    public class Match : ITwoPlayersGame
     {
         public Board Board { get; set; }
 
@@ -13,7 +14,7 @@ namespace Model
             Contenders = new List<Player>();
             Coordinator = new MatchCoordinator(this);
             Coordinator.GameEnded += CoordinatorOnGameEnded;
-            
+
             Board = new Board();
         }
 
@@ -29,12 +30,12 @@ namespace Model
                 throw new InvalidOperationException("Cannot add more players to the game");
             }
 
-            player.WantToMove += (p, args) => Coordinator.PlayerOnWantToMove((Player) p, args);
+            player.WantToMove += (p, args) => Coordinator.PlayerOnWantToMove((Player)p, args);
             Contenders.Add(player);
         }
 
         public MatchCoordinator Coordinator { get; set; }
-        
+
         public void SwitchTurn()
         {
             if (PlayerInTurn == Contenders[0])
@@ -61,6 +62,14 @@ namespace Model
 
             PlayerInTurn = Contenders.First();
             Coordinator.StartGame();
+        }
+
+        public Player FirstPlayer { get { return Contenders[0]; } }
+        public Player SecondPlayer { get { return Contenders[1]; } }
+
+        public bool HasWinner
+        {
+            get { return Board.HasWinner; }
         }
     }
 }

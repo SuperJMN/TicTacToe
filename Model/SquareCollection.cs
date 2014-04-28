@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace Model
 {
-    public class SquareCollection : Collection<Square>
+    public class SquareCollection : List<Square>
     {
         public SquareCollection()
         {

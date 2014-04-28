@@ -1,18 +1,21 @@
+using Model.Strategies;
+
 namespace Model
 {
     public class ComputerPlayer : Player
     {
-        private readonly IMoveStrategy strategy;
-
-        public ComputerPlayer(string name, IMoveStrategy strategy)
+        
+        public ComputerPlayer(string name)
             : base(name)
         {
-            this.strategy = strategy;
+            Strategy = new DefaultComputerStrategy();
         }
+
+        public IMoveStrategy Strategy { get; set; }
 
         public override void RequestMove(Board board)
         {
-            var move = strategy.GetMoveFor(board, this);
+            var move = Strategy.GetMoveFor(board, this);
             OnWantToMove(new MoveEventHandlerArgs(move));
         }
     }

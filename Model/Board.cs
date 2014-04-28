@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Model
@@ -20,8 +19,19 @@ namespace Model
         }
 
         private Board(Board original)
+            : this()
         {
-            squares = (Square[,]) original.squares.Clone();            
+            for (var i = 0; i < 3; i++)
+            {
+                for (var j = 0; j < 3; j++)
+                {
+                    var square = original.squares[i, j];
+                    if (square.Piece != null)
+                    {
+                        squares[i, j].Piece = square.Piece.Clone();
+                    }
+                }
+            }
         }
 
         public bool IsFull
@@ -38,7 +48,7 @@ namespace Model
             {
                 for (var j = 0; j < 3; j++)
                 {
-                    squares[i, j] = new Square();
+                    squares[i, j] = new Square(new Position(i, j));
                 }
             }
         }
@@ -71,7 +81,6 @@ namespace Model
             }
         }
 
-
         private Square GetSlot(Position position)
         {
             if (IsValidPosition(position))
@@ -101,9 +110,14 @@ namespace Model
             }
         }
 
-        public BoardChecker BoardChecker
+        private BoardChecker BoardChecker
         {
             get { return boardChecker; }
+        }
+
+        public bool HasWinner
+        {
+            get { return BoardChecker.HasWinningRow; }
         }
 
         public IEnumerable<Square> Squares
@@ -169,6 +183,13 @@ namespace Model
         public Board Clone()
         {
             return new Board(this);
+        }
+
+        public IEnumerable<Position> GetEmptyPositions()
+        {
+            return from square in Squares 
+                   where square.Piece == null 
+                   select square.Position;
         }
     }
 }
