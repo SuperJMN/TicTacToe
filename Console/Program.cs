@@ -16,17 +16,14 @@ namespace Console
         {
             Match = new Match();
 
-            var firstPlayer = CreateComputerPlayer("CPU1");
-            var secondPlayer = CreateComputerPlayer("CPU2");
+            var cpu = CreateComputerPlayer("CPU1");
+            var human = CreateHumanPlayer("JMN");
 
 
-            //var consoleInputAdapter = new HumanPlayerConsoleConnector(secondPlayer);
+            var consoleInputAdapter = new HumanPlayerConsoleConnector(human);
 
-            var initialPosition = GenerateRandomPosition();
-            Match.Board.Move(new Movement(initialPosition, firstPlayer));
-
-            Match.AddChallenger(secondPlayer);
-            Match.AddChallenger(firstPlayer);
+            Match.AddChallenger(human);
+            Match.AddChallenger(cpu);
 
             var boardWriter = CreateBoardWriter();
             boardWriter.Write(System.Console.Out);
@@ -37,7 +34,7 @@ namespace Console
             System.Console.Write("¨¨ The match has started!\n\n");
             Match.Start();
 
-            //consoleInputAdapter.Dispose();
+            consoleInputAdapter.Dispose();
             System.Console.ReadLine();
         }
 
