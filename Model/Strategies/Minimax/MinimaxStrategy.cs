@@ -1,4 +1,5 @@
-using System;
+using System.Collections;
+using System.Linq;
 
 namespace Model.Strategies.Minimax
 {
@@ -15,60 +16,19 @@ namespace Model.Strategies.Minimax
 
         public Movement GetMoveFor(Board board, Player player)
         {
-            var maxScore = int.MinValue + 1;
-            var finalPosition = new Position(-1, -1);
+            var root = new Node(board, new Movement(new Position(-1, -1), GetOponent(Max)), TwoPlayersGame, Max, 0);
 
-            var emptyPositions = board.GetEmptyPositions();
+            var max = root.Nodes.Max(node => node.Score);
 
-            foreach (var position in emptyPositions)
-            {
-                var clone = board.Clone();
-                clone.Move(new Movement(position, player));
-                var node = new BoardState(clone, player);
+            var result = root.Nodes.First(node => node.Score == max);
 
-                var score = Iterate(node, player);
-                if (score > maxScore)
-                {
-                    finalPosition = position;
-                    maxScore = score;
-                }
-            }
-
-            return new Movement(finalPosition, player);
+            return result.OriginatingMovement;
         }
 
-        private int Iterate(BoardState boardState, Player player)
-        {
-            if (boardState.IsTerminal())
-            {
-                return boardState.GetTotalScore();
-            }
-
-            if (player == Max)
-            {
-                var score = int.MinValue + 1;
-                foreach (BoardState child in boardState.GetSubStates(player))
-                {
-                    score = Math.Max(Iterate(child, GetOponent(player)), score);
-                }
-
-                return score;
-            }
-            else
-            {
-                var score = int.MaxValue - 1;
-                foreach (BoardState child in boardState.GetSubStates(player))
-                {
-                    score = Math.Min(Iterate(child, GetOponent(player)), score);
-                }
-
-                return -score;
-            }
-        }
 
         private Player GetOponent(Player player)
         {
-            return player.Equals(TwoPlayersGame.FirstPlayer) ? TwoPlayersGame.SecondPlayer : TwoPlayersGame.FirstPlayer;
+            return player == TwoPlayersGame.FirstPlayer ? TwoPlayersGame.SecondPlayer : TwoPlayersGame.FirstPlayer;
         }
     }
 }

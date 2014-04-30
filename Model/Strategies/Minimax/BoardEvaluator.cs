@@ -18,9 +18,9 @@ namespace Model.Strategies.Minimax
         {
             var rows = Board.Rows.Sum(collection => Evaluate(collection, player));
             var columns = Board.Columns.Sum(collection => Evaluate(collection, player));
-            var diagonales = Board.Diagonals.Sum(collection => Evaluate(collection, player));
+            var diagonals = Board.Diagonals.Sum(collection => Evaluate(collection, player));
 
-            return rows + columns + diagonales;
+            return rows + columns + diagonals;
         }
 
         private int Evaluate(SquareCollection collection, Player player)
@@ -28,18 +28,38 @@ namespace Model.Strategies.Minimax
             var takenByPlayerCount = TakenByPlayer(collection, player).Count();
             var takenByOponentCount = TakenByOponent(collection, player).Count();
 
-            if (takenByPlayerCount > 0 && takenByOponentCount > 0)
+            if (takenByPlayerCount == 3)
             {
-                return 0;
+                return 100;
             }
-            if (takenByPlayerCount > 0)
+            if (takenByPlayerCount == 2 && takenByOponentCount == 0)
             {
-                return GetScore(takenByPlayerCount);
+                return 10;
             }
-            return -GetScore(takenByOponentCount);
+
+            if (takenByPlayerCount == 1 && takenByOponentCount == 0)
+            {
+                return 1;
+            }
+
+            if (takenByOponentCount == 3)
+            {
+                return -100;
+            }
+            if (takenByOponentCount == 2 && takenByPlayerCount == 0)
+            {
+                return -10;
+            }
+
+            if (takenByOponentCount == 1 && takenByPlayerCount == 0)
+            {
+                return -1;
+            }
+
+            return 0;
         }
 
-        private static int GetScore(int takenByPlayer)
+        private static int Evaluate(int takenByPlayer)
         {
             switch (takenByPlayer)
             {

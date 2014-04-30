@@ -2,22 +2,31 @@
 using Model;
 using Model.Strategies;
 using Model.Strategies.Minimax;
+using Model.Utils;
 
 namespace Console
 {
     static class Program
     {
         public static Match Match { get; set; }
+        public static PlayerPieceMapping PlayerPieceMapping { get; set; }
+
 
         static void Main()
         {
             Match = new Match();
 
-            var firstPlayer = CreateComputerPlayer("Anytta");
-            var secondPlayer = CreateComputerPlayer("JMN");
+            var firstPlayer = CreateComputerPlayer("CPU1");
+            var secondPlayer = CreateComputerPlayer("CPU2");
 
-            Match.AddChallenger(firstPlayer);
+
+            //var consoleInputAdapter = new HumanPlayerConsoleConnector(secondPlayer);
+
+            var initialPosition = GenerateRandomPosition();
+            Match.Board.Move(new Movement(initialPosition, firstPlayer));
+
             Match.AddChallenger(secondPlayer);
+            Match.AddChallenger(firstPlayer);
 
             var boardWriter = CreateBoardWriter();
             boardWriter.Write(System.Console.Out);
@@ -28,13 +37,27 @@ namespace Console
             System.Console.Write("¨¨ The match has started!\n\n");
             Match.Start();
 
+            //consoleInputAdapter.Dispose();
             System.Console.ReadLine();
         }
+
+        private static Position GenerateRandomPosition()
+        {
+            var random = new Random((int)DateTime.Now.Ticks);
+            var x = random.Next(0, 2);
+            var y = random.Next(0, 2);
+            return new Position(x, y);
+        }
+
 
         private static void SubscribeToMatchEvents(Match match, BoardStreamWriter writer)
         {
             match.Coordinator.GameEnded += (sender, eventArgs) => ShowGameResults();
-            match.Board.PiecePlaced += (sender, handlerArgs) => writer.Write(System.Console.Out);
+            match.Board.PiecePlaced += (sender, handlerArgs) =>
+                                       {
+                                           writer.Write(System.Console.Out);
+                                           System.Console.WriteLine();
+                                       };            
         }
 
         private static ComputerPlayer CreateComputerPlayer(string name)
@@ -44,10 +67,17 @@ namespace Console
             firstPlayer.WantToMove += ComputerOnWantToMove;
             return firstPlayer;
         }
-
-        private static void ComputerOnWantToMove(object player, MoveEventHandlerArgs args)
+        private static HumanPlayer CreateHumanPlayer(string name)
         {
-            System.Console.WriteLine(player + " is moving!");
+            var firstPlayer = new HumanPlayer(name);
+            return firstPlayer;
+        }
+
+
+        private static void ComputerOnWantToMove(object sender, MoveEventHandlerArgs args)
+        {
+            var player = (Player)sender;
+            System.Console.WriteLine(player + "({0}) is moving!", PlayerPieceMapping[player]);
         }
 
 
@@ -69,16 +99,15 @@ namespace Console
         private static BoardStreamWriter CreateBoardWriter()
         {
             CreateConsoleRenderePieceMapping();
-            var boardWriter = new BoardStreamWriter(Match.Board, CreateConsoleRenderePieceMapping());
+            var boardWriter = new BoardStreamWriter(Match.Board, PlayerPieceMapping);
             return boardWriter;
         }
 
-        private static PlayerPieceMapping CreateConsoleRenderePieceMapping()
+        private static void CreateConsoleRenderePieceMapping()
         {
-            var playerPieceMapping = new PlayerPieceMapping();
-            playerPieceMapping.Add(Match.Contenders[0], 'X');
-            playerPieceMapping.Add(Match.Contenders[1], 'O');
-            return playerPieceMapping;
-        }   
+            PlayerPieceMapping = new PlayerPieceMapping();
+            PlayerPieceMapping.Add(Match.Contenders[0], 'O');
+            PlayerPieceMapping.Add(Match.Contenders[1], 'X');
+        }
     }
 }

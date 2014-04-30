@@ -16,7 +16,7 @@
                 return Position +  " - Empty Square";
             } 
 
-            return Position +  "Taken by " + Piece.Player;
+            return Position +  " - Taken by " + Piece.Player;
         }       
     }
 }

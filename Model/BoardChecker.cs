@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Model.Strategies.Minimax;
 
 namespace Model
 {
@@ -31,6 +32,31 @@ namespace Model
         {
             get { return board.Diagonals.Any(AreFullAndTakenBySamePlayer); }
         }
+
+        public IEnumerable<Player> GetPlayersWithLine()
+        {
+            var hashSet = new HashSet<Player>();
+            hashSet.UnionWith(GetPlayersWithLine(board.Columns));
+            hashSet.UnionWith(GetPlayersWithLine(board.Rows));
+            hashSet.UnionWith(GetPlayersWithLine(board.Diagonals));
+            return hashSet;
+        }
+
+        private IEnumerable<Player> GetPlayersWithLine(IEnumerable<SquareCollection> rows)
+        {
+            var rowsTakenBySamePlayer = from row in rows
+                where AreFullAndTakenBySamePlayer(row)
+                select row;
+
+            var players = rowsTakenBySamePlayer.Select(GetFirstPlayer);
+            return players;
+        }
+
+        private Player GetFirstPlayer(SquareCollection squares)
+        {
+            return squares.First().Piece.Player;
+        }
+
 
         private static bool AreFullAndTakenBySamePlayer(IList<Square> slots)
         {

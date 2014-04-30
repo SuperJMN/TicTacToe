@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Model.Utils;
 
 namespace Model
 {
+    [DebuggerTypeProxy(typeof(BoardDebugView))]
     public class Board
     {
         const int BoardSizeConst = 3;
@@ -120,6 +123,11 @@ namespace Model
             get { return BoardChecker.HasWinningRow; }
         }
 
+        public IEnumerable<Player> GetPlayersWithLine()
+        {
+            return BoardChecker.GetPlayersWithLine();
+        }
+
         public IEnumerable<Square> Squares
         {
             get { return squares.Cast<Square>(); }
@@ -133,7 +141,7 @@ namespace Model
             if (handler != null) handler(this, args);
         }
 
-        public IEnumerable<SquareCollection> Rows
+        public IList<SquareCollection> Rows
         {
             get
             {
@@ -187,9 +195,15 @@ namespace Model
 
         public IEnumerable<Position> GetEmptyPositions()
         {
-            return from square in Squares 
-                   where square.Piece == null 
+            return from square in Squares
+                   where square.Piece == null
                    select square.Position;
+        }
+
+        public override string ToString()
+        {
+            var encoder = new BoardToStringEncoder(this);
+            return encoder.ToString();
         }
     }
 }

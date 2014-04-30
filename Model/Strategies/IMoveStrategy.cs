@@ -1,4 +1,4 @@
-namespace Model
+namespace Model.Strategies
 {
     public interface IMoveStrategy
     {
