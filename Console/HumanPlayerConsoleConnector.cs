@@ -6,28 +6,34 @@ namespace Console
 {
     class HumanPlayerConsoleConnector : IDisposable
     {
+        private char PieceChar { get; set; }
+
+        public HumanPlayer Player
+        {
+            get { return player; }
+        }
+
         private readonly HumanPlayer player;
 
-        public HumanPlayerConsoleConnector(HumanPlayer player)
+        public HumanPlayerConsoleConnector(HumanPlayer player, char pieceChar)
         {
+            PieceChar = pieceChar;
             this.player = player;
             player.MoveRequested += HumanPlayerOnMoveRequested;
         }
 
-        private static void HumanPlayerOnMoveRequested(object sender, EventArgs eventArgs)
+        private void HumanPlayerOnMoveRequested(object sender, EventArgs eventArgs)
         {
-            var player = (Player)sender;
-
             bool isPositionInvalid;
             do
             {
                 isPositionInvalid = false;
-                System.Console.WriteLine("Enter the position in which " + player + " should move next");
+                System.Console.WriteLine("Enter the position in which {0} ({1}) should move next", Player, PieceChar);
 
                 try
                 {
                     var position = GetPosition(System.Console.In);
-                    player.MakeMove(position);
+                    Player.MakeMove(position);
                 }
                 catch (InvalidPositionException)
                 {
@@ -67,7 +73,7 @@ namespace Console
 
         public void Dispose()
         {
-            player.MoveRequested -= HumanPlayerOnMoveRequested;
+            Player.MoveRequested -= HumanPlayerOnMoveRequested;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Model.Strategies
 {
@@ -13,21 +14,7 @@ namespace Model.Strategies
 
         private Position GetEmptyPosition(Board board)
         {
-            Square square = null;
-
-            for (int i = 0; i < Board.BoardSize; i++)
-            {
-                for (int j = 0; j < Board.BoardSize; j++)
-                {
-                    var position = new Position(i, j);
-                    if (board.GetPiece(position) == null)
-                    {
-                        return position;
-                    }
-                }
-            }
-
-            throw new InvalidOperationException("Cannot retrieve an empty Square");
+            return board.GetEmptyPositions().First();            
         }
     }
 }

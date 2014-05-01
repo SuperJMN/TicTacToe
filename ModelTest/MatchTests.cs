@@ -122,7 +122,7 @@ namespace ModelTest
             var secondPlayer = new ComputerPlayer("Juanito");
             session.AddChallenger(secondPlayer);
 
-            session.Coordinator.GameEnded += (sender, args) => Assert.IsTrue(session.Finished);
+            session.Coordinator.GameEnded += (sender, args) => Assert.IsTrue(session.IsFinished);
             session.Start();
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Model;
 using Model.Strategies;
 using Model.Strategies.Minimax;
@@ -8,103 +9,61 @@ namespace Console
 {
     static class Program
     {
-        public static Match Match { get; set; }
-        public static PlayerPieceMapping PlayerPieceMapping { get; set; }
+        static Dictionary<string, int> scores = new Dictionary<string, int>();
 
-
-        static void Main()
+        public static void Main()
         {
-            Match = new Match();
+            var i = 1000;
+            for (var t = 0; t < i; t++)
+            {
 
-            var cpu = CreateComputerPlayer("CPU1");
-            var human = CreateHumanPlayer("JMN");
+                var matchConfiguration = new MatchConfiguration
+                {
+                    Player1 = new PlayerInfo("JMN", PlayerType.ComputerRandom, 'O'),
+                    Player2 = new PlayerInfo("Anytta", PlayerType.ComputerRandom, 'X'),
+                };
 
+                var match = new ConsoleMatch(matchConfiguration);
+                match.Start();
 
-            var consoleInputAdapter = new HumanPlayerConsoleConnector(human);
+                RegisterScores(match);
+            }
 
-            Match.AddChallenger(human);
-            Match.AddChallenger(cpu);
-
-            var boardWriter = CreateBoardWriter();
-            boardWriter.Write(System.Console.Out);
-
-            SubscribeToMatchEvents(Match, boardWriter);
-
-
-            System.Console.Write("¨¨ The match has started!\n\n");
-            Match.Start();
-
-            consoleInputAdapter.Dispose();
+            ShowScores(i);
             System.Console.ReadLine();
         }
 
-        private static Position GenerateRandomPosition()
+        private static void ShowScores(int playedGames)
         {
-            var random = new Random((int)DateTime.Now.Ticks);
-            var x = random.Next(0, 2);
-            var y = random.Next(0, 2);
-            return new Position(x, y);
-        }
+            System.Console.WriteLine("Total matches played: {0}", playedGames);
 
-
-        private static void SubscribeToMatchEvents(Match match, BoardStreamWriter writer)
-        {
-            match.Coordinator.GameEnded += (sender, eventArgs) => ShowGameResults();
-            match.Board.PiecePlaced += (sender, handlerArgs) =>
-                                       {
-                                           writer.Write(System.Console.Out);
-                                           System.Console.WriteLine();
-                                       };            
-        }
-
-        private static ComputerPlayer CreateComputerPlayer(string name)
-        {
-            var firstPlayer = new ComputerPlayer(name);
-            firstPlayer.Strategy = new MinimaxStrategy(Match, firstPlayer);
-            firstPlayer.WantToMove += ComputerOnWantToMove;
-            return firstPlayer;
-        }
-        private static HumanPlayer CreateHumanPlayer(string name)
-        {
-            var firstPlayer = new HumanPlayer(name);
-            return firstPlayer;
-        }
-
-
-        private static void ComputerOnWantToMove(object sender, MoveEventHandlerArgs args)
-        {
-            var player = (Player)sender;
-            System.Console.WriteLine(player + "({0}) is moving!", PlayerPieceMapping[player]);
-        }
-
-
-        private static void ShowGameResults()
-        {
-            var hasWinner = Match.HasWinner;
-            System.Console.WriteLine("The game has ended");
-
-            if (hasWinner)
+            var wins = 0;
+            foreach (var score in scores)
             {
-                System.Console.WriteLine(String.Format("We have a winner! Congratulations, " + Match.PlayerInTurn));
+                wins += score.Value;
+                System.Console.WriteLine("{0} won {1} times", score.Key, score.Value);
             }
-            else
+
+            var draws = playedGames-wins;
+            System.Console.WriteLine("There have been {0} draws", draws);
+        }
+
+        private static void RegisterScores(Match match)
+        {
+            if (match.HasWinner)
             {
-                System.Console.WriteLine(String.Format("It's a draw :S"));
+                var winner = match.GetWinner();
+                int score;
+                var existing = scores.TryGetValue(winner.Name, out score);
+                if (existing)
+                {
+                    scores[winner.Name] = score + 1;
+                }
+                else
+                {
+                    scores.Add(winner.Name, 1);
+                }
             }
-        }
-
-        private static BoardStreamWriter CreateBoardWriter()
-        {
-            CreateConsoleRenderePieceMapping();
-            var boardWriter = new BoardStreamWriter(Match.Board, PlayerPieceMapping);
-            return boardWriter;
-        }
-
-        private static void CreateConsoleRenderePieceMapping()
-        {
-            PlayerPieceMapping = new PlayerPieceMapping();
-            PlayerPieceMapping.Add(Match.Contenders[0], 'O');
-            PlayerPieceMapping.Add(Match.Contenders[1], 'X');
         }
     }
 }

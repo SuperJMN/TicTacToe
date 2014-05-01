@@ -39,7 +39,10 @@
     <Compile Include="Board.cs" />
     <Compile Include="BoardChecker.cs" />
     <Compile Include="BoardDebugView.cs" />
+    <Compile Include="PlayerFactory.cs" />
+    <Compile Include="PlayerType.cs" />
     <Compile Include="Strategies\Minimax\Node.cs" />
+    <Compile Include="Strategies\RandomStrategy.cs" />
     <Compile Include="Utils\BoardStreamWriter.cs" />
     <Compile Include="ComputerPlayer.cs" />
     <Compile Include="SquareCollection.cs" />

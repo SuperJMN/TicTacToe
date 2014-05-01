@@ -7,7 +7,8 @@ namespace Model
 {
     public class Match : ITwoPlayersGame
     {
-        public Board Board { get; set; }
+        public Board Board { get; private set; }
+        public bool IsStarted { get; private set; }
 
         public Match()
         {
@@ -20,7 +21,23 @@ namespace Model
 
         private void CoordinatorOnGameEnded(object sender, EventArgs eventArgs)
         {
-            Finished = true;
+            IsFinished = true;
+            OnFinished();
+        }
+
+        public event EventHandler Finished;
+        public event EventHandler Started;
+
+        protected virtual void OnStarted()
+        {
+            EventHandler handler = Started;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnFinished()
+        {
+            EventHandler handler = Finished;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
 
         public void AddChallenger(Player player)
@@ -51,7 +68,7 @@ namespace Model
         public IList<Player> Contenders { get; private set; }
 
         public Player PlayerInTurn { get; set; }
-        public bool Finished { get; set; }
+        public bool IsFinished { get; set; }
 
         public void Start()
         {
@@ -59,7 +76,13 @@ namespace Model
             {
                 throw new InvalidOperationException("Cannot start a session without 2 players");
             }
+            if (IsStarted)
+            {
+                throw new InvalidOperationException("Cannot start a game that has already been started");
+            }
 
+            IsStarted = true;
+            OnStarted();
             PlayerInTurn = Contenders.First();
             Coordinator.StartGame();
         }
@@ -70,6 +93,12 @@ namespace Model
         public bool HasWinner
         {
             get { return Board.HasWinner; }
+        }
+
+        public Player GetWinner()
+        {
+            var winner = Board.GetPlayersWithLine().FirstOrDefault();
+            return winner;
         }
     }
 }
