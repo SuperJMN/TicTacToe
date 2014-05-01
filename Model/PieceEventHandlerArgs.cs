@@ -10,5 +10,8 @@ namespace Model
         }
 
         public Piece Piece { get; set; }
+        public Position Position { get; set; }
+
+
     }
 }

@@ -1,3 +1,5 @@
+using Model;
+
 namespace Console
 {
     internal class PlayerInfo

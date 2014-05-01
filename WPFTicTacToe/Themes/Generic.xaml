@@ -1,0 +1,57 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:WPFTicTacToe"
+    xmlns:model="clr-namespace:Model;assembly=Model">
+
+    <DataTemplate DataType="{x:Type local:SquareViewModel}">
+        <Border Background="Red">
+            <Button Command="{Binding Path=DataContext.PlaceHumanPieceCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" CommandParameter="{Binding}">
+                <ContentControl Content="{Binding Piece}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+            </Button>
+        </Border>
+    </DataTemplate>
+
+    <local:PlayerToCharConverter x:Key="PlayerToCharConverter"  />
+    <DataTemplate DataType="{x:Type local:PieceViewModel}">
+
+        <Image Stretch="Uniform" Width="40">
+            <Image.Style>
+                <Style TargetType="{x:Type Image}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding PieceChar}" Value="O">
+                            <Setter Property="Source" Value="/Resources/o.png" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding PieceChar}" Value="X">
+                            <Setter Property="Source" Value="/Resources/x.png" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+
+    </DataTemplate>
+
+    <Style TargetType="{x:Type local:TicTacToeControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:TicTacToeControl}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ListBox ItemsSource="{Binding SquareViewModels}"
+                                 HorizontalContentAlignment="Stretch"
+                                 VerticalContentAlignment="Stretch"
+                                 DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="{Binding ColumnCount}" Rows="{Binding RowCount}" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                        </ListBox>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

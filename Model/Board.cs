@@ -58,14 +58,14 @@ namespace Model
 
         public void Move(Movement movement)
         {
-            var slot = GetSlot(movement.Position);
-            if (slot.Piece != null)
+            var square = GetSlot(movement.Position);
+            if (square.Piece != null)
             {
                 throw new InvalidPositionException(movement.Position);
             }
             var piece = new Piece(movement.Player);
-            slot.Piece = piece;
-            OnPiecePlaced(new PieceEventHandlerArgs(piece));
+            square.Piece = piece;
+            OnPiecePlaced(new PieceEventHandlerArgs(piece) { Position = movement.Position});
         }
 
         private IEnumerable<Square> GetRowSlots(int number)

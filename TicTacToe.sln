@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{7EE4D7A7-1BF3-4A5C-A224-0157FA4F9A70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFTicTacToe", "WPFTicTacToe\WPFTicTacToe.csproj", "{144DDCC9-877D-44E8-9F8E-59ED1971E06B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,11 +31,16 @@ Global
 		{D9641A29-78A0-403C-9F70-4628B9A83AE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9641A29-78A0-403C-9F70-4628B9A83AE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9641A29-78A0-403C-9F70-4628B9A83AE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{144DDCC9-877D-44E8-9F8E-59ED1971E06B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{144DDCC9-877D-44E8-9F8E-59ED1971E06B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{144DDCC9-877D-44E8-9F8E-59ED1971E06B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{144DDCC9-877D-44E8-9F8E-59ED1971E06B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D9641A29-78A0-403C-9F70-4628B9A83AE3} = {7EE4D7A7-1BF3-4A5C-A224-0157FA4F9A70}
+		{144DDCC9-877D-44E8-9F8E-59ED1971E06B} = {7EE4D7A7-1BF3-4A5C-A224-0157FA4F9A70}
 	EndGlobalSection
 EndGlobal

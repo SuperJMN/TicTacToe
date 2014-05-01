@@ -1,4 +1,4 @@
-namespace Console
+namespace Model
 {
     public enum PlayerType
     {

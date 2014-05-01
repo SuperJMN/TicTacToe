@@ -1,5 +1,4 @@
 ﻿using System;
-using Console;
 using Model.Strategies;
 using Model.Strategies.Minimax;
 
