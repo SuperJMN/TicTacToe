@@ -10,6 +10,17 @@ namespace ModelTest
     {
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void StartMatchTwiceTest()
+        {
+            var session = new Match();
+            session.AddChallenger(new HumanPlayer("Pepito"));
+            session.AddChallenger(new HumanPlayer("Juanito"));
+            session.Start();
+            session.Start();
+        }
+
+        [TestMethod]
         public void AddOnePlayer()
         {
             var session = new Match();
@@ -94,7 +105,7 @@ namespace ModelTest
 
         [TestMethod]
         [ExpectedException(typeof(InvalidPositionException))]
-        public void PlayerMovesToTakenSlot()
+        public void PlayerMovesToTakenSquares()
         {
             var session = new Match();
 

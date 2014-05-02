@@ -84,32 +84,32 @@ namespace Model
         }
 
 
-        private static bool AreFullAndTakenBySamePlayer(IList<Square> slots)
+        private static bool AreFullAndTakenBySamePlayer(IList<Square> squares)
         {
-            var areSlotsFull = IsSlotCollectionFull(slots);
-            if (areSlotsFull)
+            var areSquaresFull = IsSquareCollectionFull(squares);
+            if (areSquaresFull)
             {
-                return AllTakenBySamePlayer(slots);
+                return AllTakenBySamePlayer(squares);
             }
             return false;
         }
 
         private static bool AllTakenBySamePlayer(IEnumerable<Square> row)
         {
-            var allTakenBySamePlayer = row.Select(slot => slot.Piece.Player);
+            var allTakenBySamePlayer = row.Select(square => square.Piece.Player);
             var takenBySamePlayer = allTakenBySamePlayer.Distinct();
             return takenBySamePlayer.Count() == 1;
         }
 
-        private static bool IsSlotCollectionFull(IEnumerable<Square> row)
+        private static bool IsSquareCollectionFull(IEnumerable<Square> row)
         {
-            return row.All(slot => slot.Piece != null);
+            return row.All(square => square.Piece != null);
         }
 
         public bool GetIsFull()
         {
             var squares = board.Squares;
-            var areAllTaken = squares.All(slot => slot.Piece != null);
+            var areAllTaken = squares.All(square => square.Piece != null);
             return areAllTaken;
         }
     }

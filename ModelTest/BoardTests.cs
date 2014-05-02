@@ -35,7 +35,7 @@ namespace ModelTest
 
         [TestMethod]
         [ExpectedException(typeof(InvalidPositionException))]
-        public void MoveToSlotAlreadyTaken()
+        public void MoveToSquaresAlreadyTaken()
         {
             var board = new Board();
             var position = new Position(2, 2);

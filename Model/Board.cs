@@ -17,7 +17,7 @@ namespace Model
 
         public Board()
         {
-            CreateSlots();
+            CreateSquares();
             boardChecker = new BoardChecker(this);
         }
 
@@ -45,7 +45,7 @@ namespace Model
             }
         }
 
-        private void CreateSlots()
+        private void CreateSquares()
         {
             for (var i = 0; i < 3; i++)
             {
@@ -58,7 +58,7 @@ namespace Model
 
         public void Move(Movement movement)
         {
-            var square = GetSlot(movement.Position);
+            var square = GetSquare(movement.Position);
             if (square.Piece != null)
             {
                 throw new InvalidPositionException(movement.Position);
@@ -68,7 +68,7 @@ namespace Model
             OnPiecePlaced(new PieceEventHandlerArgs(piece) { Position = movement.Position});
         }
 
-        private IEnumerable<Square> GetRowSlots(int number)
+        private IEnumerable<Square> GetRowSquares(int number)
         {
             for (var i = 0; i < BoardSize; i++)
             {
@@ -76,7 +76,7 @@ namespace Model
             }
         }
 
-        private IEnumerable<Square> GetColumnSlots(int number)
+        private IEnumerable<Square> GetColumnSquares(int number)
         {
             for (var i = 0; i < BoardSize; i++)
             {
@@ -84,7 +84,7 @@ namespace Model
             }
         }
 
-        private Square GetSlot(Position position)
+        private Square GetSquare(Position position)
         {
             if (IsValidPosition(position))
             {
@@ -101,8 +101,8 @@ namespace Model
 
         public Piece GetPiece(Position p)
         {
-            var slot = GetSlot(p);
-            return slot.Piece;
+            var square = GetSquare(p);
+            return square.Piece;
         }
 
         public static int BoardSize
@@ -148,7 +148,7 @@ namespace Model
                 var rows = new List<SquareCollection>();
                 for (int i = 0; i < BoardSize; i++)
                 {
-                    var row = GetRowSlots(i);
+                    var row = GetRowSquares(i);
                     rows.Add(new SquareCollection(row.ToList()));
                 }
                 return rows;
@@ -162,7 +162,7 @@ namespace Model
                 var rows = new List<SquareCollection>();
                 for (int i = 0; i < BoardSize; i++)
                 {
-                    var row = GetColumnSlots(i);
+                    var row = GetColumnSquares(i);
                     rows.Add(new SquareCollection(row.ToList()));
                 }
                 return rows;
@@ -177,10 +177,10 @@ namespace Model
                 var diagonal2 = new SquareCollection();
                 for (var i = 0; i < BoardSize; i++)
                 {
-                    var piece1 = GetSlot(new Position(i, i));
+                    var piece1 = GetSquare(new Position(i, i));
                     diagonal1.Add(piece1);
 
-                    var piece2 = GetSlot(new Position(i, BoardSize - i - 1));
+                    var piece2 = GetSquare(new Position(i, BoardSize - i - 1));
                     diagonal2.Add(piece2);
                 }
 
