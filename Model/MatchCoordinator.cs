@@ -12,11 +12,15 @@ namespace Model
 
         public Match Match { get; set; }
 
-        public void PlayerOnWantToMove(Player player, MoveEventHandlerArgs args)
+        public void PlayerOnWantToMove(object sender, PositionEventHandlerArgs e)
         {
-            if (player == Match.PlayerInTurn)
+            var player = (Player) sender;
+            var movement = new Movement(e.Position, player); ;
+
+
+            if (player == Match.PlayerInTurn && !Match.IsFinished)
             {
-                Match.Board.Move(args.Movement);
+                Match.Board.Move(movement);
             }
             else
             {
@@ -39,11 +43,11 @@ namespace Model
             return !Match.Board.IsFull && !Match.HasWinner;
         }
 
-        public event EventHandler GameEnded;
+        public event EventHandler GameOver;
 
         protected virtual void OnGameEnded()
         {
-            var handler = GameEnded;
+            var handler = GameOver;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 

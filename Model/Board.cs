@@ -205,5 +205,13 @@ namespace Model
             var encoder = new BoardToStringEncoder(this);
             return encoder.ToString();
         }
+
+        public IEnumerable<WinningLine> WinningLines
+        {
+            get
+            {
+                return BoardChecker.WinningLines;
+            }
+        }
     }
 }

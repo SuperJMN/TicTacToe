@@ -46,13 +46,12 @@ namespace Model
 
         public void MakeMove(Position position)
         {
-            var move = new Movement(position, this);
-            OnWantToMove(new MoveEventHandlerArgs(move));
+            OnWantToMove(new PositionEventHandlerArgs(position));
         }
 
-        public virtual event MoveEventHandler WantToMove;
+        public virtual event PositionEventHandler WantToMove;
 
-        protected virtual void OnWantToMove(MoveEventHandlerArgs e)
+        protected virtual void OnWantToMove(PositionEventHandlerArgs e)
         {
             var handler = WantToMove;
             if (handler != null) handler(this, e);

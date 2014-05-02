@@ -9,8 +9,9 @@ namespace WPFTicTacToe
     {
         private Square square;
         private PieceViewModel piece;
+        private bool isWinning;
 
-        public Square Square
+        private Square Square
         {
             get { return square; }
             set
@@ -31,12 +32,12 @@ namespace WPFTicTacToe
             Piece = new PieceViewModel(piece, PlayerPieceMapping[player]);
         }
 
-        private PlayerPieceMapping PlayerPieceMapping { get; set; }
+        public PlayerPieceMapping PlayerPieceMapping { get; set; }
 
         public SquareViewModel(Square square, PlayerPieceMapping playerPieceMapping)
         {
-            Square = square;
             PlayerPieceMapping = playerPieceMapping;
+            Square = square;           
         }
 
         public bool IsEmpty
@@ -57,6 +58,16 @@ namespace WPFTicTacToe
         public Position Position
         {
             get { return Square.Position; }
+        }
+
+        public bool IsWinning
+        {
+            get { return isWinning; }
+            set
+            {
+                isWinning = value;
+                NotifyPropertyChanged("IsWinning");
+            }
         }
     }
 }

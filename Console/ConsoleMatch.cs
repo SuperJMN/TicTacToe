@@ -37,9 +37,9 @@ namespace Console
             System.Console.Write(" ¨¨ The match has started!\n\n");
         }
 
-        protected override void OnFinished()
+        protected override void OnGameOver(GameOverEventArgs e)
         {
-            base.OnFinished();
+            base.OnGameOver(e);
 
             DisposeHumanConsoleAdapters();
 
@@ -85,7 +85,7 @@ namespace Console
 
         private void SubscribeToMatchEvents(Match match, BoardStreamWriter writer)
         {
-            match.Coordinator.GameEnded += (sender, eventArgs) => ShowGameResults();
+            match.Coordinator.GameOver += (sender, eventArgs) => ShowGameResults();
             match.Board.PiecePlaced += (sender, handlerArgs) =>
             {
                 writer.Write(System.Console.Out);
@@ -95,7 +95,7 @@ namespace Console
 
 
 
-        private void ComputerOnWantToMove(object sender, MoveEventHandlerArgs args)
+        private void ComputerOnWantToMove(object sender, PositionEventHandlerArgs args)
         {
             var player = (Player)sender;
             System.Console.WriteLine(" · {0} ({1}) is moving!", player, PlayerPieceMapping[player]);

@@ -4,16 +4,68 @@
         xmlns:wpfTicTacToe="clr-namespace:WPFTicTacToe"
         xmlns:viewModelLocator="http:\\www.codeplex.com\MEFedMVVM"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:WPFTicTacToe.Controls"
+        xmlns:converters="clr-namespace:WPFTicTacToe.Converters"
+        mc:Ignorable="d"
         viewModelLocator:ViewModelLocator.ViewModel="Main"
-        Title="MainWindow" Height="385" Width="832" d:DataContext="{d:DesignInstance wpfTicTacToe:MainWindowViewModel}">
+        WindowStartupLocation="CenterScreen"
+        Title="Tic Tac Toe" Height="623.333" Width="711.688" d:DataContext="{d:DesignInstance wpfTicTacToe:MainWindowViewModel}">
+    <Window.Resources>
+        <converters:Bool2VisibilityHiddenConverter x:Key="Bool2VisibilityHiddenConverter" />
+        <converters:InverseBool2VisibilityConverter x:Key="InverseBool2VisibilityConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <wpfTicTacToe:TicTacToeControl Grid.Column="1" Squares="{Binding Squares}" PlayerPieceMapping="{Binding PlayerPieceMapping}" />
-        <Button Command="{Binding StartMatchCommand}" Content="Button" HorizontalAlignment="Left" Height="39" Margin="21,10,0,0" VerticalAlignment="Top" Width="113"/>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Viewbox Grid.Column="1" Margin="20">
+            <controls:TicTacToeControl 
+                    IsHitTestVisible="{Binding IsMatchRunning}"                                       
+                                       Squares="{Binding Squares}"
+                                       HighlightedLines="{Binding HighlightedLines}"
+                                       PlayerPieceMapping="{Binding PlayerPieceMapping}">
+                <controls:TicTacToeControl.Style>
+                    <Style TargetType="{x:Type Control}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsMatchRunning}" Value="False">
+                                <Setter Property="Opacity" Value="0.5" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:TicTacToeControl.Style>
+            </controls:TicTacToeControl>
+        </Viewbox>
+        <controls:OutlinedTextBlock Stroke="#8D5B22" Fill="#F1F063" StrokeThickness="2" FontWeight="ExtraBold" Visibility="{Binding IsMatchRunning, Converter={StaticResource InverseBool2VisibilityConverter}}" FontSize="40" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Center">
+            <controls:OutlinedTextBlock.Effect>
+                <DropShadowEffect ShadowDepth="0"
+                          Color="White"
+                          Opacity="1"
+                          BlurRadius="12"/>
+            </controls:OutlinedTextBlock.Effect>
+            <controls:OutlinedTextBlock.Style>
+                <Style TargetType="controls:OutlinedTextBlock">
+                    <Setter Property="Text" Value="{Binding Winner.Name, StringFormat='{}{0} is the winner!!'}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Winner}" Value="{x:Null}">
+                            <Setter Property="Text" Value="It's a draw!" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls:OutlinedTextBlock.Style>
+        </controls:OutlinedTextBlock>
+        <Button Grid.Row="0" Grid.Column="0" Command="{Binding StartMatchCommand}" Content="Start new match" Height="38" Margin="10" Padding="10" VerticalAlignment="Top"/>
+        <StatusBar VerticalAlignment="Bottom" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0">
+            <TextBlock Visibility="{Binding IsMatchRunning, Converter={StaticResource Bool2VisibilityHiddenConverter}}">
+                <TextBlock.Text>
+                    <Binding Path="PlayerInTurn.Name" StringFormat="It's {0}'s turn" />
+                </TextBlock.Text>
+            </TextBlock>
+        </StatusBar>
     </Grid>
 </Window>

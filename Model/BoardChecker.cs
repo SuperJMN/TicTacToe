@@ -13,6 +13,32 @@ namespace Model
             this.board = board;
         }
 
+        public IEnumerable<WinningLine> WinningLines
+        {
+            get
+            {
+                var winningRows = new List<WinningLine>();
+                winningRows.AddRange(GetWinningLines(board.Columns));
+                winningRows.AddRange(GetWinningLines(board.Rows));
+                winningRows.AddRange(GetWinningLines(board.Diagonals));
+
+                return winningRows;
+            }
+        }
+
+        private static IEnumerable<WinningLine> GetWinningLines(IEnumerable<SquareCollection> squareCollection)
+        {
+            var winningLines = from column in squareCollection
+                where AreFullAndTakenBySamePlayer(column)
+                select new WinningLine
+                {
+                    Player = column.First().Piece.Player,                                        
+                    Line = column,
+                };
+
+            return winningLines;
+        }
+
         public bool HasWinningRow
         {
             get { return Has3InAnyRow || Has3InAnyColumn || Has3InAnyDiagonal; }
@@ -45,8 +71,8 @@ namespace Model
         private IEnumerable<Player> GetPlayersWithLine(IEnumerable<SquareCollection> rows)
         {
             var rowsTakenBySamePlayer = from row in rows
-                where AreFullAndTakenBySamePlayer(row)
-                select row;
+                                        where AreFullAndTakenBySamePlayer(row)
+                                        select row;
 
             var players = rowsTakenBySamePlayer.Select(GetFirstPlayer);
             return players;
@@ -86,5 +112,11 @@ namespace Model
             var areAllTaken = squares.All(slot => slot.Piece != null);
             return areAllTaken;
         }
+    }
+
+    public class WinningLine
+    {
+        public Player Player { get; set; }
+        public SquareCollection Line { get; set; }
     }
 }

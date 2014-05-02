@@ -87,9 +87,9 @@ namespace ModelTest
         //    match.AddChallenger(human);
         //    match.AddChallenger(cpu);
 
-        //    match.Board.Move(new Movement(new Position(0, 0), human));
-        //    match.Board.Move(new Movement(new Position(1, 0), human));
-        //    match.Board.Move(new Movement(new Position(0, 1), cpu));
+        //    match.Board.Move(new Position(new Position(0, 0), human));
+        //    match.Board.Move(new Position(new Position(1, 0), human));
+        //    match.Board.Move(new Position(new Position(0, 1), cpu));
 
         //    var move = cpu.Strategy.GetMoveFor(match.Board, cpu);
         //    Assert.AreEqual(new Position(2, 0), move.Position);
@@ -124,13 +124,13 @@ namespace ModelTest
         //    match.AddChallenger(max);
         //    match.AddChallenger(min);
 
-        //    match.Board.Move(new Movement(new Position(0, 0), max));
-        //    match.Board.Move(new Movement(new Position(0, 2), max));
-        //    match.Board.Move(new Movement(new Position(2, 2), max));
+        //    match.Board.Move(new Position(new Position(0, 0), max));
+        //    match.Board.Move(new Position(new Position(0, 2), max));
+        //    match.Board.Move(new Position(new Position(2, 2), max));
 
-        //    match.Board.Move(new Movement(new Position(1, 0), min));
-        //    match.Board.Move(new Movement(new Position(1, 1), min));
-        //    match.Board.Move(new Movement(new Position(0, 1), min));
+        //    match.Board.Move(new Position(new Position(1, 0), min));
+        //    match.Board.Move(new Position(new Position(1, 1), min));
+        //    match.Board.Move(new Position(new Position(0, 1), min));
 
         //    var node = new Node(match.Board, min, match, max);
         //}

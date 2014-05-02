@@ -60,16 +60,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\Bool2VisibilityHiddenConverter.cs" />
+    <Compile Include="Converters\InverseBool2VisibilityConverter.cs" />
+    <Compile Include="Controls\OutlinedTextBlock.cs" />
     <Compile Include="MainWindowViewModel.cs" />
-    <Compile Include="Pieces.cs" />
     <Compile Include="PieceViewModel.cs" />
     <Compile Include="PlayerConfigurationControl.xaml.cs">
       <DependentUpon>PlayerConfigurationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PlayerToCharConverter.cs" />
-    <Compile Include="PlayerToPieceConverter.cs" />
+    <Compile Include="Converters\PlayerToCharConverter.cs" />
     <Compile Include="SquareViewModel.cs" />
-    <Compile Include="TicTacToeControl.cs" />
+    <Compile Include="Controls\TicTacToeControl.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

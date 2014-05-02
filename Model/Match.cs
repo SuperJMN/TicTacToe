@@ -7,25 +7,34 @@ namespace Model
 {
     public class Match : ITwoPlayersGame
     {
+        private Player playerInTurn;
         public Board Board { get; private set; }
-        public bool IsStarted { get; private set; }
+        private bool IsStarted { get; set; }
 
         public Match()
         {
             Contenders = new List<Player>();
             Coordinator = new MatchCoordinator(this);
-            Coordinator.GameEnded += CoordinatorOnGameEnded;
+            Coordinator.GameOver += CoordinatorOnGameOver;
 
             Board = new Board();
         }
 
-        private void CoordinatorOnGameEnded(object sender, EventArgs eventArgs)
+        private void CoordinatorOnGameOver(object sender, EventArgs eventArgs)
         {
             IsFinished = true;
-            OnFinished();
+            var gameOverEventArgs = new GameOverEventArgs(Board.WinningLines);
+            OnGameOver(gameOverEventArgs);
         }
 
-        public event EventHandler Finished;
+        public event GameOverEventHandler GameOver;
+
+        protected virtual void OnGameOver(GameOverEventArgs e)
+        {
+            var handler = GameOver;
+            if (handler != null) handler(this, e);
+        }
+
         public event EventHandler Started;
 
         protected virtual void OnStarted()
@@ -34,11 +43,7 @@ namespace Model
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        protected virtual void OnFinished()
-        {
-            EventHandler handler = Finished;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
+
 
         public void AddChallenger(Player player)
         {
@@ -47,11 +52,11 @@ namespace Model
                 throw new InvalidOperationException("Cannot add more players to the game");
             }
 
-            player.WantToMove += (p, args) => Coordinator.PlayerOnWantToMove((Player)p, args);
+            player.WantToMove += (p, args) => Coordinator.PlayerOnWantToMove(p, args);
             Contenders.Add(player);
         }
 
-        public MatchCoordinator Coordinator { get; set; }
+        public MatchCoordinator Coordinator { get; private set; }
 
         public void SwitchTurn()
         {
@@ -67,8 +72,25 @@ namespace Model
 
         public IList<Player> Contenders { get; private set; }
 
-        public Player PlayerInTurn { get; set; }
-        public bool IsFinished { get; set; }
+        public Player PlayerInTurn
+        {
+            get { return playerInTurn; }
+            set
+            {
+                playerInTurn = value;
+                OnTurnChanged();
+            }
+        }
+
+        public event EventHandler TurnChanged;
+
+        protected virtual void OnTurnChanged()
+        {
+            var handler = TurnChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public bool IsFinished { get; private set; }
 
         public void Start()
         {
@@ -101,4 +123,19 @@ namespace Model
             return winner;
         }
     }
+
+    public delegate void GameOverEventHandler(object sender, GameOverEventArgs e);
+
+
+    public class GameOverEventArgs : EventArgs
+    {
+        public GameOverEventArgs(IEnumerable<WinningLine> winningLines)
+        {
+            WinningLines = winningLines;
+        }
+
+        public IEnumerable<WinningLine> WinningLines { get; private set; }
+    }
+
+
 }

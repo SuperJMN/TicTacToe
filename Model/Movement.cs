@@ -15,7 +15,7 @@ namespace Model
 
         public override string ToString()
         {
-            return "Movement to " + Position;
+            return "Position to " + Position;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Model
         public override void RequestMove(Board board)
         {
             var move = Strategy.GetMoveFor(board, this);
-            OnWantToMove(new MoveEventHandlerArgs(move));
+            OnWantToMove(new PositionEventHandlerArgs(move.Position));
         }
     }
 }
