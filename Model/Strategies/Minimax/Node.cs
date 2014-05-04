@@ -44,8 +44,7 @@ namespace Model.Strategies.Minimax
                 var childScore = int.MaxValue - 1;
                 foreach (var stateNode in node.Nodes)
                 {
-                    var currentScore = -GetScore(stateNode);
-                    childScore = Math.Min(childScore, currentScore);
+                    childScore = Math.Min(childScore, GetScore(stateNode));
                 }
                 return childScore;
             }
@@ -55,7 +54,17 @@ namespace Model.Strategies.Minimax
         {
             var boardEvaluatorSimple = new BoardEvaluator(node.OriginalBoard);
             var best = boardEvaluatorSimple.Evaluate(node.OriginatingPlayer);
-            return best;
+
+            if (node.CurrentPlayer == node.Max)
+            {
+                return -best;    
+            }
+            else
+            {
+                return best;
+            }
+
+            
         }
 
         private Player GetOponent(Player player)
@@ -104,20 +113,17 @@ namespace Model.Strategies.Minimax
                     return new List<Node>();
                 }
 
-                var nextLevel = Level + 1;
-
-                if (nextLevel <= MaxLevel)
+                if (Level + 1 <= MaxLevel)
                 {
 
                     foreach (var emptyPosition in OriginalBoard.GetEmptyPositions().ToList())
                     {
                         var boardSucessor = OriginalBoard.Clone();
 
-                        var nextPlayer = CurrentPlayer;
-                        var movement = new Movement(emptyPosition, nextPlayer);
+                        var movement = new Movement(emptyPosition, CurrentPlayer);
                         boardSucessor.Move(movement);
 
-                        var childNode = new Node(boardSucessor, movement, TwoPlayersGame, Max, nextLevel);
+                        var childNode = new Node(boardSucessor, movement, TwoPlayersGame, Max, Level + 1);
                         nodes.Add(childNode);
                     }
                 }
