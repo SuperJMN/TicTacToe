@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Model.Strategies.Minimax
@@ -30,51 +29,33 @@ namespace Model.Strategies.Minimax
 
             if (takenByPlayerCount == 3)
             {
-                return 100;
+                return 1000;
             }
             if (takenByPlayerCount == 2 && takenByOponentCount == 0)
             {
-                return 10;
+                return 100;
             }
 
             if (takenByPlayerCount == 1 && takenByOponentCount == 0)
             {
-                return 1;
+                return 10;
             }
 
             if (takenByOponentCount == 3)
             {
-                return -100;
+                return -1000;
             }
             if (takenByOponentCount == 2 && takenByPlayerCount == 0)
             {
-                return -10;
+                return -100;
             }
 
             if (takenByOponentCount == 1 && takenByPlayerCount == 0)
             {
-                return -1;
+                return -10;
             }
 
             return 0;
-        }
-
-        private static int Evaluate(int takenByPlayer)
-        {
-            switch (takenByPlayer)
-            {
-                case 0:
-                    return 0;
-                case 1:
-                    return 10;
-                case 2:
-                    return 100;
-                case 3:
-                    return 1000;
-
-                default:
-                    throw new InvalidOperationException();
-            }
         }
 
         private IEnumerable<Square> TakenByPlayer(IEnumerable<Square> collection, Player player)

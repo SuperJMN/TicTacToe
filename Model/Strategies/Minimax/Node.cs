@@ -18,39 +18,44 @@ namespace Model.Strategies.Minimax
             OriginalBoard = originalBoard;
         }
 
-        public Player OriginatingPlayer
+        private Player OriginatingPlayer
         {
             get { return OriginatingMovement.Player; }
         }
 
-        private int GetScore(Node node, Player player)
+        private int GetScore(Node node)
         {
-            if (node.IsTerminal || Level < MaxLevel)
+            if (node.IsTerminal)
             {
-                var boardEvaluatorSimple = new BoardEvaluator(node.OriginalBoard);
-                var best = boardEvaluatorSimple.Evaluate(player);                
-
-                return best;
+                return EvaluateTerminalNode(node);
             }
 
-            if (player == Max)
+            if (node.CurrentPlayer == Max)
             {
-                var score = int.MinValue + 1;
+                var childScore = int.MinValue + 1;
                 foreach (var stateNode in node.Nodes)
                 {
-                    score = Math.Max(score, GetScore(stateNode, GetOponent(player)));
+                    childScore = Math.Max(childScore, GetScore(stateNode));
                 }
-                return score;
+                return childScore;
             }
             else
             {
-                var score = int.MaxValue - 1;
+                var childScore = int.MaxValue - 1;
                 foreach (var stateNode in node.Nodes)
                 {
-                    score = Math.Min(score, GetScore(stateNode, GetOponent(player)));
+                    var currentScore = -GetScore(stateNode);
+                    childScore = Math.Min(childScore, currentScore);
                 }
-                return score;
+                return childScore;
             }
+        }
+
+        private static int EvaluateTerminalNode(Node node)
+        {
+            var boardEvaluatorSimple = new BoardEvaluator(node.OriginalBoard);
+            var best = boardEvaluatorSimple.Evaluate(node.OriginatingPlayer);
+            return best;
         }
 
         private Player GetOponent(Player player)
@@ -64,7 +69,12 @@ namespace Model.Strategies.Minimax
 
         private bool IsTerminal
         {
-            get { return OriginalBoard.IsFull || OriginalBoard.HasWinner; }
+            get
+            {
+                return OriginalBoard.IsFull ||
+                    Level == MaxLevel ||
+                    OriginalBoard.HasWinner;
+            }
         }
 
         private int? score;
@@ -75,7 +85,7 @@ namespace Model.Strategies.Minimax
             {
                 if (!score.HasValue)
                 {
-                    score = GetScore(this, OriginatingMovement.Player);
+                    score = GetScore(this);
                 }
                 return score.Value;
             }
@@ -94,29 +104,31 @@ namespace Model.Strategies.Minimax
                     return new List<Node>();
                 }
 
-                foreach (var emptyPosition in OriginalBoard.GetEmptyPositions().ToList())
+                var nextLevel = Level + 1;
+
+                if (nextLevel <= MaxLevel)
                 {
-                    var boardSucessor = OriginalBoard.Clone();
 
-                    var movement = new Movement(emptyPosition, Oponent);
-                    boardSucessor.Move(movement);
+                    foreach (var emptyPosition in OriginalBoard.GetEmptyPositions().ToList())
+                    {
+                        var boardSucessor = OriginalBoard.Clone();
 
-                    var childNode = new Node(boardSucessor, new Movement(emptyPosition, Oponent), TwoPlayersGame, Max, Level + 1);
-                    nodes.Add(childNode);
+                        var nextPlayer = CurrentPlayer;
+                        var movement = new Movement(emptyPosition, nextPlayer);
+                        boardSucessor.Move(movement);
+
+                        var childNode = new Node(boardSucessor, movement, TwoPlayersGame, Max, nextLevel);
+                        nodes.Add(childNode);
+                    }
                 }
 
                 return nodes;
             }
         }
 
-        public Player Oponent
+        private Player CurrentPlayer
         {
-            get
-            {
-                return OriginatingPlayer == TwoPlayersGame.FirstPlayer
-                    ? this.TwoPlayersGame.SecondPlayer
-                    : this.TwoPlayersGame.FirstPlayer;
-            }
+            get { return GetOponent(OriginatingPlayer); }
         }
 
         private Board OriginalBoard { get; set; }

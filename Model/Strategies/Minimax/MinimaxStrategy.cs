@@ -18,7 +18,8 @@ namespace Model.Strategies.Minimax
         {
             var root = new Node(board, new Movement(new Position(-1, -1), GetOponent(Max)), TwoPlayersGame, Max, 0);
 
-            var max = root.Nodes.Max(node => node.Score);
+
+            var max = root.Score;
 
             var result = root.Nodes.First(node => node.Score == max);
 

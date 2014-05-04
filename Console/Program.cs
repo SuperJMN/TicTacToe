@@ -9,18 +9,18 @@ namespace Console
 {
     static class Program
     {
-        static Dictionary<string, int> scores = new Dictionary<string, int>();
+        static readonly Dictionary<string, int> Scores = new Dictionary<string, int>();
 
         public static void Main()
         {
-            var i = 1000;
+            var i = 1;
             for (var t = 0; t < i; t++)
             {
 
                 var matchConfiguration = new MatchConfiguration
                 {
-                    Player1 = new PlayerInfo("JMN", PlayerType.ComputerRandom, 'O'),
-                    Player2 = new PlayerInfo("Anytta", PlayerType.ComputerRandom, 'X'),
+                    Player1 = new PlayerInfo("JMN", PlayerType.Human, 'O'),
+                    Player2 = new PlayerInfo("Anytta", PlayerType.ComputerMinimax, 'X'),
                 };
 
                 var match = new ConsoleMatch(matchConfiguration);
@@ -38,7 +38,7 @@ namespace Console
             System.Console.WriteLine("Total matches played: {0}", playedGames);
 
             var wins = 0;
-            foreach (var score in scores)
+            foreach (var score in Scores)
             {
                 wins += score.Value;
                 System.Console.WriteLine("{0} won {1} times", score.Key, score.Value);
@@ -54,14 +54,14 @@ namespace Console
             {
                 var winner = match.GetWinner();
                 int score;
-                var existing = scores.TryGetValue(winner.Name, out score);
+                var existing = Scores.TryGetValue(winner.Name, out score);
                 if (existing)
                 {
-                    scores[winner.Name] = score + 1;
+                    Scores[winner.Name] = score + 1;
                 }
                 else
                 {
-                    scores.Add(winner.Name, 1);
+                    Scores.Add(winner.Name, 1);
                 }
             }
         }
