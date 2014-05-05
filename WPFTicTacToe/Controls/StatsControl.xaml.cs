@@ -12,18 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Model;
 
 namespace WPFTicTacToe
 {
     /// <summary>
-    /// Interaction logic for PlayerConfigurationControl.xaml
+    /// Interaction logic for StatsControl.xaml
     /// </summary>
-    public partial class PlayerConfigurationControl : UserControl
+    public partial class StatsControl : UserControl
     {
-        public PlayerConfigurationControl()
+        public StatsControl()
         {
             InitializeComponent();
-        }               
+        }
     }
 }

@@ -106,42 +106,35 @@ namespace WPFTicTacToe.Controls
 
         #endregion
 
-        #region HighlightedLines
+        #region HighlightedSquares
 
-        public static readonly DependencyProperty HighlightedLinesProperty =
-            DependencyProperty.Register("HighlightedLines", typeof(IEnumerable<SquareCollection>), typeof(TicTacToeControl),
-                new FrameworkPropertyMetadata(new List<SquareCollection>(),
+        public static readonly DependencyProperty HighlightedSquaresProperty =
+            DependencyProperty.Register("HighlightedSquares", typeof(IEnumerable<Square>), typeof(TicTacToeControl),
+                new FrameworkPropertyMetadata(new List<Square>(),
                     OnHighlightedLinesChanged));
 
-        public IEnumerable<SquareCollection> HighlightedLines
+        public IEnumerable<Square> HighlightedSquares
         {
-            get { return (IEnumerable<SquareCollection>)GetValue(HighlightedLinesProperty); }
-            set { SetValue(HighlightedLinesProperty, value); }
+            get { return (IEnumerable<Square>)GetValue(HighlightedSquaresProperty); }
+            set { SetValue(HighlightedSquaresProperty, value); }
         }
 
         private static void OnHighlightedLinesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var target = (TicTacToeControl)d;
-            var oldHighlightedLines = (IEnumerable<SquareCollection>)e.OldValue;
-            var newHighlightedLines = target.HighlightedLines;
+            var oldHighlightedLines = (IEnumerable<Square>)e.OldValue;
+            var newHighlightedLines = target.HighlightedSquares;
             target.OnHighlightedLinesChanged(oldHighlightedLines, newHighlightedLines);
         }
 
-        protected virtual void OnHighlightedLinesChanged(IEnumerable<SquareCollection> oldHighlightedLines, IEnumerable<SquareCollection> newHighlightedLines)
+        protected virtual void OnHighlightedLinesChanged(IEnumerable<Square> oldHighlightedSquares, IEnumerable<Square> newHighlightedSquares)
         {
-            if (newHighlightedLines == null)
+            if (SquareViewModels == null)
             {
                 return;
             }
-            foreach (var newHighlightedLine in newHighlightedLines)
-            {
-                HighlightLine(newHighlightedLine);
-            }
-        }
 
-        private void HighlightLine(IEnumerable<Square> newHighlightedLine)
-        {
-            var positions = newHighlightedLine.Select(square => square.Position);
+            var positions = newHighlightedSquares.Select(square => square.Position);
             var toHighlight = from squareViewModel in SquareViewModels
                               where Contains(positions, squareViewModel)
                               select squareViewModel;

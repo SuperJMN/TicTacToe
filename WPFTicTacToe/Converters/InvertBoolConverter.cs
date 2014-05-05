@@ -1,9 +1,8 @@
 using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 
-namespace WPFTicTacToe
+namespace WPFTicTacToe.Converters
 {
     public class InvertBoolConverter : IValueConverter
     {

@@ -6,7 +6,7 @@ namespace Model
 {
     public class PlayerFactory
     {
-        public ITwoPlayersGame TwoPlayersGame { get; set; }
+        private ITwoPlayersGame TwoPlayersGame { get; set; }
 
         public PlayerFactory(ITwoPlayersGame twoPlayersGame)
         {
@@ -23,9 +23,16 @@ namespace Model
                     return CreateComputerPlayerMinimax(name);
                 case PlayerType.ComputerRandom:
                     return CreateComputerPlayerRandom(name);
+                case PlayerType.ComputerDefault:
+                    return CreateComputerPlayerDefault(name);
                 default:
                     throw new ArgumentOutOfRangeException("type");
             }
+        }
+
+        private static Player CreateComputerPlayerDefault(string name)
+        {
+            return new ComputerPlayer(name);
         }
 
         private ComputerPlayer CreateComputerPlayerMinimax(string name)

@@ -5,6 +5,6 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
-        <wpfTicTacToe:InvertBoolConverter x:Key="InvertBoolConverter" />
+       
     </Application.Resources>
 </Application>

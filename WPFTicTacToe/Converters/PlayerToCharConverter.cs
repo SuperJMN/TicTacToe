@@ -1,11 +1,8 @@
 using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
-using System.Windows.Threading;
-using Model.Utils;
 
-namespace WPFTicTacToe
+namespace WPFTicTacToe.Converters
 {
     public class PlayerToCharConverter : IValueConverter
     {

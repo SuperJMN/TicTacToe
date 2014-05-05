@@ -13,7 +13,7 @@ namespace WPFTicTacToe
     public class MatchViewModel : ViewModelBase, ITwoPlayersGame
     {
         private Match match;
-        private IEnumerable<SquareCollection> highlightedLines;
+        private IEnumerable<Square> highlightedSquares;
         private Player playerInTurn;
         private IEnumerable<Square> squares;
         private PlayerPieceMapping playerPieceMapping;
@@ -21,11 +21,16 @@ namespace WPFTicTacToe
         private Player winner;
         private Player firstPlayer;
         private Player secondPlayer;
+        private bool isInitialized;
+        private int totalGames;
+        private int secondPlayerWins;
+        private int firstPlayerWins;
 
         public MatchViewModel()
         {
-            HighlightedLines = new List<SquareCollection>();           
-            PlaceHumanPieceCommand = new SimpleCommand<object, object>(PlaceHumanPiece);                        
+            HighlightedSquares = new List<Square>();
+            PlaceHumanPieceCommand = new SimpleCommand<object, object>(PlaceHumanPiece);
+            ResetStatsCommand = new SimpleCommand<object, object>(o => ResetStats());
         }
 
         public Player FirstPlayer
@@ -33,6 +38,11 @@ namespace WPFTicTacToe
             get { return firstPlayer; }
             set
             {
+                if (firstPlayer != value)
+                {
+                    ResetStats();
+                }
+                
                 firstPlayer = value;
                 NotifyPropertyChanged("FirstPlayer");
             }
@@ -43,9 +53,21 @@ namespace WPFTicTacToe
             get { return secondPlayer; }
             set
             {
+                if (secondPlayer != value)
+                {
+                    ResetStats();
+                }
+                
                 secondPlayer = value;
                 NotifyPropertyChanged("SecondPlayer");
             }
+        }
+
+        private void ResetStats()
+        {
+            TotalGames = 0;
+            FirstPlayerWins = 0;
+            SecondPlayerWins = 0;
         }
 
         private Match Match
@@ -58,8 +80,8 @@ namespace WPFTicTacToe
                     CleanUpMatch(match);
                 }
 
-                match = value;            
-   
+
+                match = value;
 
                 PlayerPieceMapping = new PlayerPieceMapping();
                 PlayerPieceMapping.Add(FirstPlayer, 'X');
@@ -87,13 +109,13 @@ namespace WPFTicTacToe
             toCleanup.Dispose();
         }
 
-        public IEnumerable<SquareCollection> HighlightedLines
+        public IEnumerable<Square> HighlightedSquares
         {
-            get { return highlightedLines; }
+            get { return highlightedSquares; }
             set
             {
-                highlightedLines = value;
-                NotifyPropertyChanged("HighlightedLines");
+                highlightedSquares = value;
+                NotifyPropertyChanged("HighlightedSquares");
             }
         }
 
@@ -127,8 +149,6 @@ namespace WPFTicTacToe
             }
         }
 
-        
-
         public ICommand PlaceHumanPieceCommand
         {
             get;
@@ -141,6 +161,7 @@ namespace WPFTicTacToe
             set
             {
                 isMatchRunning = value;
+                IsInitialized = true;
                 NotifyPropertyChanged("IsMatchRunning");
             }
         }
@@ -153,17 +174,33 @@ namespace WPFTicTacToe
                 winner = value;
                 NotifyPropertyChanged("Winner");
             }
-        }        
+        }
 
         private void MatchOnGameOver(object sender, GameOverEventArgs e)
         {
             IsMatchRunning = false;
-            HighlightedLines = e.WinningLines.Select(line => line.Line);
-            if (e.WinningLines.Any())
+            var firstWinningLine = e.WinningLines.FirstOrDefault();
+
+            var winningLines = e.WinningLines.ToList();
+
+            if (firstWinningLine != null)
             {
-                var winningLine = e.WinningLines.First();
+                HighlightedSquares = firstWinningLine.Squares;
+
+                var winningLine = winningLines.First();
                 Winner = winningLine.Player;
+
+                if (Winner == FirstPlayer)
+                {
+                    FirstPlayerWins++;
+                }
+                if (Winner == SecondPlayer)
+                {
+                    SecondPlayerWins++;
+                }
             }
+
+            TotalGames++;
         }
 
         private void MatchOnTurnChanged(object sender, EventArgs eventArgs)
@@ -193,5 +230,48 @@ namespace WPFTicTacToe
 
             }
         }
+
+        public bool IsInitialized
+        {
+            get { return isInitialized; }
+            set
+            {
+                isInitialized = value;
+                NotifyPropertyChanged("IsInitialized");
+            }
+        }
+
+
+        public int FirstPlayerWins
+        {
+            get { return firstPlayerWins; }
+            private set
+            {
+                firstPlayerWins = value;
+                NotifyPropertyChanged("FirstPlayerWins");
+            }
+        }
+
+        public int SecondPlayerWins
+        {
+            get { return secondPlayerWins; }
+            private set
+            {
+                secondPlayerWins = value;
+                NotifyPropertyChanged("SecondPlayerWins");
+            }
+        }
+
+        public int TotalGames
+        {
+            get { return totalGames; }
+            private set
+            {
+                totalGames = value;
+                NotifyPropertyChanged("TotalGames");
+            }
+        }
+
+        public ICommand ResetStatsCommand { get; private set; }
     }
 }

@@ -62,19 +62,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ComputerStrategy.cs" />
     <Compile Include="Converters\Bool2VisibilityHiddenConverter.cs" />
     <Compile Include="Converters\InverseBool2VisibilityConverter.cs" />
     <Compile Include="Controls\OutlinedTextBlock.cs" />
-    <Compile Include="InvertBoolConverter.cs" />
+    <Compile Include="Converters\InvertBoolConverter.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MatchViewModel.cs" />
     <Compile Include="PieceViewModel.cs" />
-    <Compile Include="PlayerConfigurationControl.xaml.cs">
+    <Compile Include="Controls\PlayerConfigurationControl.xaml.cs">
       <DependentUpon>PlayerConfigurationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\PlayerToCharConverter.cs" />
+    <Compile Include="PlayerViewModel.cs" />
+    <Compile Include="SettingsViewModel.cs" />
     <Compile Include="SquareViewModel.cs" />
     <Compile Include="Controls\TicTacToeControl.cs" />
+    <Compile Include="Controls\StatsControl.xaml.cs">
+      <DependentUpon>StatsControl.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -87,7 +93,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PlayerConfigurationControl.xaml">
+    <Page Include="Controls\PlayerConfigurationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StatsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

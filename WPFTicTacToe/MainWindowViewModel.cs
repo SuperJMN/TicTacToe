@@ -11,15 +11,19 @@ using Model;
 using Model.Strategies;
 using Model.Strategies.Minimax;
 using Model.Utils;
+using WPFTicTacToe.Properties;
 
 namespace WPFTicTacToe
 {
     [ExportViewModel("Main")]
     public class MainWindowViewModel : ViewModelBase
     {
+        private readonly IMessageBoxService messageBoxService;
+
         [ImportingConstructor]
-        public MainWindowViewModel()
+        public MainWindowViewModel(IMessageBoxService messageBoxService)
         {
+            this.messageBoxService = messageBoxService;
             MatchViewModel = new MatchViewModel();
             SettingsViewModel = new SettingsViewModel();
             StartMatchCommand = new SimpleCommand<object, object>(o => StartNewMatch());
@@ -27,14 +31,20 @@ namespace WPFTicTacToe
 
         private void StartNewMatch()
         {
-            var p1 = CreaterPlayer(SettingsViewModel.FirstPlayer);
-            var p2 = CreaterPlayer(SettingsViewModel.SecondPlayer);
+            if (SettingsViewModel.FirstPlayer.Name != SettingsViewModel.SecondPlayer.Name)
+            {
+                var p1 = CreaterPlayer(SettingsViewModel.FirstPlayer);
+                var p2 = CreaterPlayer(SettingsViewModel.SecondPlayer);
 
+                MatchViewModel.FirstPlayer = p1;
+                MatchViewModel.SecondPlayer = p2;
 
-            MatchViewModel.FirstPlayer = p1;
-            MatchViewModel.SecondPlayer = p2;
-
-            MatchViewModel.StartNewMatch();
+                MatchViewModel.StartNewMatch();
+            }
+            else
+            {
+                messageBoxService.ShowError("Players should have different names!");
+            }
         }
 
         private Player CreaterPlayer(PlayerViewModel playerViewModel)
@@ -70,43 +80,5 @@ namespace WPFTicTacToe
         public SettingsViewModel SettingsViewModel { get; private set; }
 
         public ICommand StartMatchCommand { get; private set; }
-    }
-
-    public class SettingsViewModel : ViewModelBase
-    {
-        public SettingsViewModel()
-        {
-
-            FirstPlayer = new PlayerViewModel()
-            {
-                Name = "JMN",
-                IsHuman = true,
-                ComputerStrategy = ComputerStrategy.Default,
-            };
-            SecondPlayer =
-            new PlayerViewModel()
-            {
-                Name = "Anytta",
-                IsHuman = false,
-                ComputerStrategy = ComputerStrategy.Minimax,
-            };
-        }
-
-        public PlayerViewModel FirstPlayer { get; set; }
-        public PlayerViewModel SecondPlayer { get; set; }
-    }
-
-    public class PlayerViewModel : ViewModelBase
-    {
-        public string Name { get; set; }
-        public bool IsHuman { get; set; }
-        public ComputerStrategy ComputerStrategy { get; set; }
-    }
-
-    public enum ComputerStrategy
-    {
-        Default,
-        Random,
-        Minimax,
     }
 }

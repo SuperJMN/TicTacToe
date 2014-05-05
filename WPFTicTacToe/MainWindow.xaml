@@ -17,17 +17,17 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="200" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Viewbox Grid.Column="1" Margin="20"  DataContext="{Binding MatchViewModel}" >
+        <Viewbox MinWidth="300" MinHeight="300" Grid.Column="1" Margin="20" Visibility="{Binding IsInitialized, Converter={StaticResource Bool2VisibilityHiddenConverter}}" DataContext="{Binding MatchViewModel}" >
             <controls:TicTacToeControl IsHitTestVisible="{Binding IsMatchRunning}"                                       
                                        Squares="{Binding Squares}"
-                                       HighlightedLines="{Binding HighlightedLines}"
+                                       HighlightedSquares="{Binding HighlightedSquares}"
                                        PlayerPieceMapping="{Binding PlayerPieceMapping}">
                 <controls:TicTacToeControl.Style>
                     <Style TargetType="{x:Type Control}">
@@ -40,27 +40,8 @@
                 </controls:TicTacToeControl.Style>
             </controls:TicTacToeControl>
         </Viewbox>
-        <controls:OutlinedTextBlock  DataContext="{Binding MatchViewModel}" Stroke="#8D5B22" Fill="#F1F063" StrokeThickness="2" FontWeight="ExtraBold" Visibility="{Binding IsMatchRunning, Converter={StaticResource InverseBool2VisibilityConverter}}" FontSize="40" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Center">
-            <controls:OutlinedTextBlock.Effect>
-                <DropShadowEffect ShadowDepth="0"
-                          Color="White"
-                          Opacity="1"
-                          BlurRadius="12"/>
-            </controls:OutlinedTextBlock.Effect>
-            <controls:OutlinedTextBlock.Style>
-                <Style TargetType="controls:OutlinedTextBlock">
-                    <Setter Property="Text" Value="{Binding Winner.Name, StringFormat='{}{0} is the winner!!'}" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Winner}" Value="{x:Null}">
-                            <Setter Property="Text" Value="It's a draw!" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </controls:OutlinedTextBlock.Style>
-        </controls:OutlinedTextBlock>
-
-        <StatusBar  DataContext="{Binding MatchViewModel}" VerticalAlignment="Bottom" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" >
-            <TextBlock Visibility="{Binding IsMatchRunning, Converter={StaticResource Bool2VisibilityHiddenConverter}}">
+        <StatusBar DataContext="{Binding MatchViewModel}" VerticalAlignment="Bottom" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" >
+            <TextBlock FontSize="18" Visibility="{Binding IsMatchRunning, Converter={StaticResource Bool2VisibilityHiddenConverter}}">
                 <TextBlock.Text>
                     <Binding Path="PlayerInTurn.Name" StringFormat="It's {0}'s turn" />
                 </TextBlock.Text>
@@ -69,12 +50,52 @@
         <StackPanel Grid.Row="0" Grid.Column="0" Margin="8" >
             <Button Command="{Binding StartMatchCommand}" Content="Start new match"
                     Height="38" Margin="10" Padding="10" VerticalAlignment="Top" />
-            <Expander Header="Game Settings" >
-                <StackPanel DataContext="{Binding SettingsViewModel}">
-                    <wpfTicTacToe:PlayerConfigurationControl DataContext="{Binding FirstPlayer}" />
-                    <wpfTicTacToe:PlayerConfigurationControl DataContext="{Binding SecondPlayer}" />
-                </StackPanel>
+            <wpfTicTacToe:StatsControl IsEnabled="{Binding IsInitialized}" DataContext="{Binding MatchViewModel}" />
+            <Expander Header="Game Settings" IsExpanded="True" >
+                <ItemsControl DataContext="{Binding SettingsViewModel}">
+                    <GroupBox Header="Player 1">                        
+                        <controls:PlayerConfigurationControl DataContext="{Binding FirstPlayer}" />
+                    </GroupBox>
+                    <GroupBox Header="Player 2">                        
+                        <controls:PlayerConfigurationControl DataContext="{Binding SecondPlayer}" />
+                    </GroupBox>
+                </ItemsControl>
             </Expander>
         </StackPanel>
+        <controls:OutlinedTextBlock DataContext="{Binding MatchViewModel}" TextWrapping="Wrap" Stroke="#8D5B22" Fill="#F1F063" StrokeThickness="2" FontWeight="ExtraBold" Visibility="{Binding IsMatchRunning, Converter={StaticResource InverseBool2VisibilityConverter}}" FontSize="40" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Center">
+            <controls:OutlinedTextBlock.Effect>
+                <DropShadowEffect ShadowDepth="0"
+                          Color="White"
+                          Opacity="1"
+                          BlurRadius="12"/>
+            </controls:OutlinedTextBlock.Effect>
+            <controls:OutlinedTextBlock.Style>
+                <Style TargetType="{x:Type controls:OutlinedTextBlock}">
+                    <Setter Property="Text" Value="Press Start Match to play!" />
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsInitialized}" Value="True" />
+                                <Condition Binding="{Binding IsMatchRunning}" Value="False" />
+
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Text" Value="{Binding Winner, StringFormat='{}{0} is the Winner!'}" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsInitialized}" Value="True" />
+                                <Condition Binding="{Binding IsMatchRunning}" Value="False" />
+                                <Condition Binding="{Binding Winner}" Value="{x:Null}" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Text" Value="It's a Draw!" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls:OutlinedTextBlock.Style>
+        </controls:OutlinedTextBlock>
     </Grid>
 </Window>

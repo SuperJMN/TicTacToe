@@ -33,7 +33,7 @@ namespace Model
                 select new WinningLine
                 {
                     Player = column.First().Piece.Player,                                        
-                    Line = column,
+                    Squares = column,
                 };
 
             return winningLines;
@@ -117,6 +117,6 @@ namespace Model
     public class WinningLine
     {
         public Player Player { get; set; }
-        public SquareCollection Line { get; set; }
+        public SquareCollection Squares { get; set; }
     }
 }

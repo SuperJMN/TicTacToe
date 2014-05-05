@@ -177,6 +177,11 @@ namespace WPFTicTacToe.Controls
         {
             this.EnsureFormattedText();
 
+            if (String.IsNullOrEmpty(Text))
+            {
+                return new Size(0,0);
+            }
+
             // constrain the formatted text according to the available size
             // the Math.Min call is important - without this constraint (which seems arbitrary, but is the maximum allowable text width), things blow up when availableSize is infinite in both directions
             // the Math.Max call is to ensure we don't hit zero, which will cause MaxTextHeight to throw
@@ -190,6 +195,11 @@ namespace WPFTicTacToe.Controls
         protected override Size ArrangeOverride(Size finalSize)
         {
             this.EnsureFormattedText();
+
+            if (String.IsNullOrEmpty(Text))
+            {
+                return finalSize;
+            }
 
             // update the formatted text with the final size
             this.formattedText.MaxTextWidth = finalSize.Width;
@@ -260,7 +270,7 @@ namespace WPFTicTacToe.Controls
 
         private void EnsureGeometry()
         {
-            if (this.textGeometry != null)
+            if (this.textGeometry != null || formattedText == null)
             {
                 return;
             }
