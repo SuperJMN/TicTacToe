@@ -5,7 +5,6 @@ using Model.Utils;
 
 namespace Model
 {
-    [DebuggerTypeProxy(typeof(BoardDebugView))]
     public class Board
     {
         const int BoardSizeConst = 3;
