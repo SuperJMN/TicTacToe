@@ -19,7 +19,7 @@ namespace WPFTicTacToe.Controls
         public TicTacToeControl()
         {
             RowCount = Board.BoardSize;
-            RowCount = Board.BoardSize;            
+            ColumnCount = Board.BoardSize;
         }
 
         #region PlayerPieceMapping
@@ -45,6 +45,11 @@ namespace WPFTicTacToe.Controls
 
         protected virtual void OnPlayerPieceMappingChanged(PlayerPieceMapping oldPlayerPieceMapping, PlayerPieceMapping newPlayerPieceMapping)
         {
+            if (SquareViewModels == null)
+            {
+                return;
+            }
+
             foreach (var squareViewModel in SquareViewModels)
             {
                 squareViewModel.PlayerPieceMapping = newPlayerPieceMapping;
@@ -138,8 +143,8 @@ namespace WPFTicTacToe.Controls
         {
             var positions = newHighlightedLine.Select(square => square.Position);
             var toHighlight = from squareViewModel in SquareViewModels
-                where Contains(positions, squareViewModel)
-                select squareViewModel;
+                              where Contains(positions, squareViewModel)
+                              select squareViewModel;
 
             foreach (var squareViewModel in toHighlight)
             {
@@ -153,8 +158,6 @@ namespace WPFTicTacToe.Controls
         }
 
         #endregion
-
-
 
         public int ColumnCount { get; set; }
         public int RowCount { get; set; }

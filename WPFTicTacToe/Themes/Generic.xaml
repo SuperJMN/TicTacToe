@@ -6,7 +6,7 @@
 
     <DataTemplate DataType="{x:Type local:SquareViewModel}">
         <Border>
-            <Button Command="{Binding Path=DataContext.PlaceHumanPieceCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" CommandParameter="{Binding}">
+            <Button Command="{Binding Path=DataContext.MatchViewModel.PlaceHumanPieceCommand, RelativeSource={RelativeSource AncestorType=local:MainWindow}}" CommandParameter="{Binding}">
                 <Button.Style>
                     <Style TargetType="Control">
                         <Setter Property="Focusable" Value="False" />

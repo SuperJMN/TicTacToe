@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Linq;
+using Model.Utils;
 
 namespace Model.Strategies.Minimax
 {
@@ -16,20 +16,14 @@ namespace Model.Strategies.Minimax
 
         public Movement GetMoveFor(Board board, Player player)
         {
-            var root = new Node(board, new Movement(new Position(-1, -1), GetOponent(Max)), TwoPlayersGame, Max, 0);
-
-
-            var max = root.Score;
-
-            var result = root.Nodes.First(node => node.Score == max);
-
-            return result.OriginatingMovement;
+            var root = new Node(board, RootGeneratingMovement, TwoPlayersGame, Max, 0);
+            var bestNode = root.Nodes.First(node => node.Score == root.Score);
+            return bestNode.OriginatingMovement;
         }
 
-
-        private Player GetOponent(Player player)
+        private Movement RootGeneratingMovement
         {
-            return player == TwoPlayersGame.FirstPlayer ? TwoPlayersGame.SecondPlayer : TwoPlayersGame.FirstPlayer;
-        }
+            get { return new Movement(new Position(-1, -1), TwoPlayersGame.GetOponent(Max)); }
+        }    
     }
 }

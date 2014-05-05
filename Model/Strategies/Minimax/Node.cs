@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Model.Utils;
 
 namespace Model.Strategies.Minimax
 {
@@ -67,11 +68,6 @@ namespace Model.Strategies.Minimax
             
         }
 
-        private Player GetOponent(Player player)
-        {
-            return player == TwoPlayersGame.FirstPlayer ? TwoPlayersGame.SecondPlayer : TwoPlayersGame.FirstPlayer;
-        }
-
         public Movement OriginatingMovement { get; set; }
         private ITwoPlayersGame TwoPlayersGame { get; set; }
         private Player Max { get; set; }
@@ -134,7 +130,7 @@ namespace Model.Strategies.Minimax
 
         private Player CurrentPlayer
         {
-            get { return GetOponent(OriginatingPlayer); }
+            get { return TwoPlayersGame.GetOponent(OriginatingPlayer); }
         }
 
         private Board OriginalBoard { get; set; }

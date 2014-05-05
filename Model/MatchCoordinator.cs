@@ -1,21 +1,20 @@
 using System;
-using System.Diagnostics;
 
 namespace Model
 {
-    public class MatchCoordinator
+    public sealed class MatchCoordinator
     {
         public MatchCoordinator(Match match)
         {
             Match = match;
         }
 
-        public Match Match { get; set; }
+        private Match Match { get; set; }
 
         public void PlayerOnWantToMove(object sender, PositionEventHandlerArgs e)
         {
             var player = (Player) sender;
-            var movement = new Movement(e.Position, player); ;
+            var movement = new Movement(e.Position, player);
 
 
             if (player == Match.PlayerInTurn && !Match.IsFinished)
@@ -45,7 +44,7 @@ namespace Model
 
         public event EventHandler GameOver;
 
-        protected virtual void OnGameEnded()
+        private void OnGameEnded()
         {
             var handler = GameOver;
             if (handler != null) handler(this, EventArgs.Empty);

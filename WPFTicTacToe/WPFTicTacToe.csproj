@@ -65,7 +65,9 @@
     <Compile Include="Converters\Bool2VisibilityHiddenConverter.cs" />
     <Compile Include="Converters\InverseBool2VisibilityConverter.cs" />
     <Compile Include="Controls\OutlinedTextBlock.cs" />
+    <Compile Include="InvertBoolConverter.cs" />
     <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="MatchViewModel.cs" />
     <Compile Include="PieceViewModel.cs" />
     <Compile Include="PlayerConfigurationControl.xaml.cs">
       <DependentUpon>PlayerConfigurationControl.xaml</DependentUpon>

@@ -67,6 +67,7 @@
     <Compile Include="Strategies\ITwoPlayersGame.cs" />
     <Compile Include="Strategies\Minimax\MinimaxStrategy.cs" />
     <Compile Include="Utils\BoardToStringEncoder.cs" />
+    <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\PlayerPieceMapping.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

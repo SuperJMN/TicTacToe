@@ -24,9 +24,8 @@
             <RowDefinition></RowDefinition>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Viewbox Grid.Column="1" Margin="20">
-            <controls:TicTacToeControl 
-                    IsHitTestVisible="{Binding IsMatchRunning}"                                       
+        <Viewbox Grid.Column="1" Margin="20"  DataContext="{Binding MatchViewModel}" >
+            <controls:TicTacToeControl IsHitTestVisible="{Binding IsMatchRunning}"                                       
                                        Squares="{Binding Squares}"
                                        HighlightedLines="{Binding HighlightedLines}"
                                        PlayerPieceMapping="{Binding PlayerPieceMapping}">
@@ -41,7 +40,7 @@
                 </controls:TicTacToeControl.Style>
             </controls:TicTacToeControl>
         </Viewbox>
-        <controls:OutlinedTextBlock Stroke="#8D5B22" Fill="#F1F063" StrokeThickness="2" FontWeight="ExtraBold" Visibility="{Binding IsMatchRunning, Converter={StaticResource InverseBool2VisibilityConverter}}" FontSize="40" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Center">
+        <controls:OutlinedTextBlock  DataContext="{Binding MatchViewModel}" Stroke="#8D5B22" Fill="#F1F063" StrokeThickness="2" FontWeight="ExtraBold" Visibility="{Binding IsMatchRunning, Converter={StaticResource InverseBool2VisibilityConverter}}" FontSize="40" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Center">
             <controls:OutlinedTextBlock.Effect>
                 <DropShadowEffect ShadowDepth="0"
                           Color="White"
@@ -59,13 +58,23 @@
                 </Style>
             </controls:OutlinedTextBlock.Style>
         </controls:OutlinedTextBlock>
-        <Button Grid.Row="0" Grid.Column="0" Command="{Binding StartMatchCommand}" Content="Start new match" Height="38" Margin="10" Padding="10" VerticalAlignment="Top"/>
-        <StatusBar VerticalAlignment="Bottom" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0">
+
+        <StatusBar  DataContext="{Binding MatchViewModel}" VerticalAlignment="Bottom" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" >
             <TextBlock Visibility="{Binding IsMatchRunning, Converter={StaticResource Bool2VisibilityHiddenConverter}}">
                 <TextBlock.Text>
                     <Binding Path="PlayerInTurn.Name" StringFormat="It's {0}'s turn" />
                 </TextBlock.Text>
             </TextBlock>
         </StatusBar>
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="8" >
+            <Button Command="{Binding StartMatchCommand}" Content="Start new match"
+                    Height="38" Margin="10" Padding="10" VerticalAlignment="Top" />
+            <Expander Header="Game Settings" >
+                <StackPanel DataContext="{Binding SettingsViewModel}">
+                    <wpfTicTacToe:PlayerConfigurationControl DataContext="{Binding FirstPlayer}" />
+                    <wpfTicTacToe:PlayerConfigurationControl DataContext="{Binding SecondPlayer}" />
+                </StackPanel>
+            </Expander>
+        </StackPanel>
     </Grid>
 </Window>

@@ -5,7 +5,7 @@ using Model.Strategies;
 
 namespace Model
 {
-    public class Match : ITwoPlayersGame
+    public class Match : ITwoPlayersGame, IDisposable
     {
         private Player playerInTurn;
         public Board Board { get; private set; }
@@ -23,7 +23,8 @@ namespace Model
         private void CoordinatorOnGameOver(object sender, EventArgs eventArgs)
         {
             IsFinished = true;
-            var gameOverEventArgs = new GameOverEventArgs(Board.WinningLines);
+            var gameOverEventArgs = new GameOverEventArgs(Board.WinningLines);                       
+
             OnGameOver(gameOverEventArgs);
         }
 
@@ -43,17 +44,24 @@ namespace Model
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-
-
         public void AddChallenger(Player player)
         {
             if (Contenders.Count > 1)
             {
                 throw new InvalidOperationException("Cannot add more players to the game");
             }
+            if (player==null)
+            {
+                throw new ArgumentException("player");
+            }
 
-            player.WantToMove += (p, args) => Coordinator.PlayerOnWantToMove(p, args);
+            player.WantToMove += PlayerOnWantToMove;
             Contenders.Add(player);
+        }
+
+        private void PlayerOnWantToMove(object sender, PositionEventHandlerArgs args)
+        {
+            Coordinator.PlayerOnWantToMove(sender, args);
         }
 
         public MatchCoordinator Coordinator { get; private set; }
@@ -121,6 +129,14 @@ namespace Model
         {
             var winner = Board.GetPlayersWithLine().FirstOrDefault();
             return winner;
+        }
+
+        public void Dispose()
+        {
+            foreach (var contender in Contenders)
+            {
+                contender.WantToMove -= PlayerOnWantToMove;
+            }
         }
     }
 

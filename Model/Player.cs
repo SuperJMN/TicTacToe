@@ -7,7 +7,7 @@ namespace Model
             Name = name;
         }
 
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         public abstract void RequestMove(Board board);
 
