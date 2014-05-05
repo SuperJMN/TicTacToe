@@ -39,7 +39,8 @@
     <Compile Include="Board.cs" />
     <Compile Include="BoardChecker.cs" />
     <Compile Include="BoardDebugView.cs" />
-    <Compile Include="MatchResults.cs" />
+    <Compile Include="GameOverEventArgs.cs" />
+    <Compile Include="GameOverEventHandler.cs" />
     <Compile Include="PlayerFactory.cs" />
     <Compile Include="PlayerType.cs" />
     <Compile Include="Strategies\Minimax\Node.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Utils\BoardToStringEncoder.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\PlayerPieceMapping.cs" />
+    <Compile Include="WinningLine.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
