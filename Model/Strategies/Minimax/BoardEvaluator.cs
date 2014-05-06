@@ -24,8 +24,8 @@ namespace Model.Strategies.Minimax
 
         private int Evaluate(SquareCollection collection, Player player)
         {
-            var takenByPlayerCount = GetTakenByPlayerCount(collection, player).Count();
-            var takenByOponentCount = GetTakenByOponentCount(collection, player).Count();
+            var takenByPlayerCount = GetTakenByPlayer(collection, player).Count();
+            var takenByOponentCount = GetTakenByOponent(collection, player).Count();
 
             if (takenByPlayerCount == 3)
             {
@@ -58,12 +58,12 @@ namespace Model.Strategies.Minimax
             return 0;
         }
 
-        private static IEnumerable<Square> GetTakenByPlayerCount(IEnumerable<Square> collection, Player player)
+        private static IEnumerable<Square> GetTakenByPlayer(IEnumerable<Square> collection, Player player)
         {
             return collection.Where(square => IsTakenBy(square, player));
         }
 
-        private IEnumerable<Square> GetTakenByOponentCount(IEnumerable<Square> collection, Player player)
+        private IEnumerable<Square> GetTakenByOponent(IEnumerable<Square> collection, Player player)
         {
             return collection.Where(square => IsTakenByOponent(square, player));
         }
