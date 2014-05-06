@@ -23,9 +23,9 @@ namespace Model
         private Board(Board original)
             : this()
         {
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < BoardSize; i++)
             {
-                for (var j = 0; j < 3; j++)
+                for (var j = 0; j < BoardSize; j++)
                 {
                     var square = original.squares[i, j];
                     if (square.Piece != null)
@@ -46,9 +46,9 @@ namespace Model
 
         private void CreateSquares()
         {
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < BoardSize; i++)
             {
-                for (var j = 0; j < 3; j++)
+                for (var j = 0; j < BoardSize; j++)
                 {
                     squares[i, j] = new Square(new Position(i, j));
                 }
@@ -119,7 +119,7 @@ namespace Model
 
         public bool HasWinner
         {
-            get { return BoardChecker.HasWinningRow; }
+            get { return BoardChecker.WinningLines.Any(); }
         }
 
         public IEnumerable<Player> GetPlayersWithLine()

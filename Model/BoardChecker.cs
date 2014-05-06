@@ -37,27 +37,7 @@ namespace Model
                 };
 
             return winningLines;
-        }
-
-        public bool HasWinningRow
-        {
-            get { return Has3InAnyRow || Has3InAnyColumn || Has3InAnyDiagonal; }
-        }
-
-        private bool Has3InAnyRow
-        {
-            get { return board.Rows.Any(AreFullAndTakenBySamePlayer); }
-        }
-
-        private bool Has3InAnyColumn
-        {
-            get { return board.Columns.Any(AreFullAndTakenBySamePlayer); }
-        }
-
-        private bool Has3InAnyDiagonal
-        {
-            get { return board.Diagonals.Any(AreFullAndTakenBySamePlayer); }
-        }
+        }      
 
         public IEnumerable<Player> GetPlayersWithLine()
         {

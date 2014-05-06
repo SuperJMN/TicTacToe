@@ -58,7 +58,7 @@ namespace Model.Strategies.Minimax
             return 0;
         }
 
-        private IEnumerable<Square> TakenByPlayer(IEnumerable<Square> collection, Player player)
+        private static IEnumerable<Square> TakenByPlayer(IEnumerable<Square> collection, Player player)
         {
             return collection.Where(square => IsTakenBy(square, player));
         }
