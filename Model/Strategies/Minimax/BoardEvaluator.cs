@@ -29,30 +29,30 @@ namespace Model.Strategies.Minimax
 
             if (takenByPlayerCount == 3)
             {
-                return 1000;
-            }
-            if (takenByPlayerCount == 2 && takenByOponentCount == 0)
-            {
                 return 100;
             }
-
-            if (takenByPlayerCount == 1 && takenByOponentCount == 0)
+            if (takenByPlayerCount == 2 && takenByOponentCount == 0)
             {
                 return 10;
             }
 
+            if (takenByPlayerCount == 1 && takenByOponentCount == 0)
+            {
+                return 1;
+            }
+
             if (takenByOponentCount == 3)
             {
-                return -1000;
+                return -100;
             }
             if (takenByOponentCount == 2 && takenByPlayerCount == 0)
             {
-                return -100;
+                return -10;
             }
 
             if (takenByOponentCount == 1 && takenByPlayerCount == 0)
             {
-                return -10;
+                return -1;
             }
 
             return 0;

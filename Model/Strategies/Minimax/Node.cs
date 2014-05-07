@@ -1,21 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Model.Utils;
 
 namespace Model.Strategies.Minimax
 {
-    public class Node
+    public class MinimaxNode
     {
-        private const int MaxLevel = 8;
+        private const int MaxDepth = 8;
 
-        public Node(Board originalBoard, Movement originatingMovement, ITwoPlayersGame twoPlayersGame, Player max, int level)
+        public MinimaxNode(Board originalBoard, Movement originatingMovement, ITwoPlayersGame twoPlayersGame, Player max, int depth)
         {
             OriginatingMovement = originatingMovement;
             TwoPlayersGame = twoPlayersGame;
             Max = max;
-            Level = level;
+            Depth = depth;
             OriginalBoard = originalBoard;
         }
 
@@ -24,51 +23,58 @@ namespace Model.Strategies.Minimax
             get { return OriginatingMovement.Player; }
         }
 
-        private int GetScore(Node node)
+        private int GetScore(MinimaxNode minimaxNode, int alpha, int beta)
         {
-            if (node.IsTerminal)
+            if (minimaxNode.IsTerminal)
             {
-                return EvaluateTerminalNode(node);
+                return EvaluateTerminalNode(minimaxNode);
             }
 
-            if (node.CurrentPlayer == Max)
+            if (minimaxNode.CurrentPlayer == Max)
             {
-                var childScore = int.MinValue + 1;
-                foreach (var stateNode in node.Nodes)
+                foreach (var stateNode in minimaxNode.Nodes)
                 {
-                    childScore = Math.Max(childScore, GetScore(stateNode));
+                    alpha = Math.Max(alpha, GetScore(stateNode, alpha, beta));
+                    if (beta < alpha)
+                    {
+                        break;
+                    }
                 }
-                return childScore;
+                return alpha;
             }
             else
             {
-                var childScore = int.MaxValue - 1;
-                foreach (var stateNode in node.Nodes)
+
+                foreach (var stateNode in minimaxNode.Nodes)
                 {
-                    childScore = Math.Min(childScore, GetScore(stateNode));
+                    beta = Math.Min(beta, GetScore(stateNode, alpha, beta));
+                    if (beta < alpha)
+                    {
+                        break;
+                    }
                 }
-                return childScore;
+                return beta;
             }
         }
 
-        private static int EvaluateTerminalNode(Node node)
+        private static int EvaluateTerminalNode(MinimaxNode minimaxNode)
         {
-            var boardEvaluatorSimple = new BoardEvaluator(node.OriginalBoard);
-            var best = boardEvaluatorSimple.Evaluate(node.OriginatingPlayer);
+            var boardEvaluatorSimple = new BoardEvaluator(minimaxNode.OriginalBoard);
+            var best = boardEvaluatorSimple.Evaluate(minimaxNode.OriginatingPlayer);
 
-            if (node.CurrentPlayer == node.Max)
+            if (minimaxNode.CurrentPlayer == minimaxNode.Max)
             {
-                return -best;    
+                return -best;
             }
             else
             {
                 return best;
             }
 
-            
+
         }
 
-        public Movement OriginatingMovement { get; set; }
+        public Movement OriginatingMovement { get; private set; }
         private ITwoPlayersGame TwoPlayersGame { get; set; }
         private Player Max { get; set; }
 
@@ -77,8 +83,8 @@ namespace Model.Strategies.Minimax
             get
             {
                 return OriginalBoard.IsFull ||
-                    Level == MaxLevel ||
-                    OriginalBoard.HasWinner;
+                       Depth == MaxDepth ||
+                       OriginalBoard.HasWinner;
             }
         }
 
@@ -90,26 +96,26 @@ namespace Model.Strategies.Minimax
             {
                 if (!score.HasValue)
                 {
-                    score = GetScore(this);
+                    score = GetScore(this, int.MinValue + 1, int.MaxValue - 1);
                 }
                 return score.Value;
             }
         }
 
-        public int Level { get; set; }
+        private int Depth { get; set; }
 
-        public IEnumerable<Node> Nodes
+        public IEnumerable<MinimaxNode> Nodes
         {
             get
             {
-                var nodes = new List<Node>();
+                var nodes = new List<MinimaxNode>();
 
                 if (this.IsTerminal)
                 {
-                    return new List<Node>();
+                    return new List<MinimaxNode>();
                 }
 
-                if (Level + 1 <= MaxLevel)
+                if (Depth + 1 <= MaxDepth)
                 {
 
                     foreach (var emptyPosition in OriginalBoard.GetEmptyPositions().ToList())
@@ -119,7 +125,7 @@ namespace Model.Strategies.Minimax
                         var movement = new Movement(emptyPosition, CurrentPlayer);
                         boardSucessor.Move(movement);
 
-                        var childNode = new Node(boardSucessor, movement, TwoPlayersGame, Max, Level + 1);
+                        var childNode = new MinimaxNode(boardSucessor, movement, TwoPlayersGame, Max, Depth + 1);
                         nodes.Add(childNode);
                     }
                 }

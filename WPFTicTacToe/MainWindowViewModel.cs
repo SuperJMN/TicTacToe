@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Windows.Documents;
+﻿using System.ComponentModel.Composition;
 using System.Windows.Input;
 using Cinch;
 using MEFedMVVM.ViewModelLocator;
 using Model;
-using Model.Strategies;
-using Model.Strategies.Minimax;
-using Model.Utils;
-using WPFTicTacToe.Properties;
 
 namespace WPFTicTacToe
 {

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Model;
-using Model.Strategies;
-using Model.Strategies.Minimax;
-using Model.Utils;
 
 namespace Console
 {
     static class Program
     {
-        static readonly Dictionary<string, int> Scores = new Dictionary<string, int>();
+        static readonly Dictionary<Player, int> Scores = new Dictionary<Player, int>();
 
         public static void Main()
         {
@@ -26,7 +23,7 @@ namespace Console
                 var match = new ConsoleMatch(matchConfiguration);
                 match.Start();
 
-                RegisterScores(match);
+                RegisterScores(match.WinningLines);
             }
 
             ShowScores(i);
@@ -48,22 +45,28 @@ namespace Console
             System.Console.WriteLine("There have been {0} draws", draws);
         }
 
-        private static void RegisterScores(Match match)
+        private static void RegisterScores(IEnumerable<WinningLine> winningLines)
         {
-            if (match.HasWinner)
+            var winningLine = winningLines.FirstOrDefault();
+
+            if (winningLine != null)
             {
-                var winner = match.GetWinner();
-                int score;
-                var existing = Scores.TryGetValue(winner.Name, out score);
-                if (existing)
-                {
-                    Scores[winner.Name] = score + 1;
-                }
-                else
-                {
-                    Scores.Add(winner.Name, 1);
-                }
+                AddVictoryTo(winningLine.Player);
+            }          
+        }
+
+        private static void AddVictoryTo(Player winner)
+        {
+            int score;
+            var existing = Scores.TryGetValue(winner, out score);
+            if (existing)
+            {
+                Scores[winner] = score + 1;
             }
+            else
+            {
+                Scores.Add(winner, 1);
+            };
         }
     }
 }

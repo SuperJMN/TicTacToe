@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Model.Strategies;
+using Model.Utils;
 
 namespace Model
 {
-    public class Match : ITwoPlayersGame, IDisposable
+    public class Match : ITwoPlayersGame
     {
         private Player playerInTurn;
         public Board Board { get; private set; }
         private bool IsStarted { get; set; }
+        public MatchCoordinator Coordinator { get; private set; }
 
         public Match()
         {
@@ -23,8 +25,9 @@ namespace Model
         private void CoordinatorOnGameOver(object sender, EventArgs eventArgs)
         {
             IsFinished = true;
-            var gameOverEventArgs = new GameOverEventArgs(Board.WinningLines);                       
+            var gameOverEventArgs = new GameOverEventArgs(Board.WinningLines);
 
+            UnsubscribeFromContenderEvents();
             OnGameOver(gameOverEventArgs);
         }
 
@@ -40,6 +43,8 @@ namespace Model
 
         protected virtual void OnStarted()
         {
+            IsStarted = true;
+
             EventHandler handler = Started;
             if (handler != null) handler(this, EventArgs.Empty);
         }
@@ -50,56 +55,29 @@ namespace Model
             {
                 throw new InvalidOperationException("Cannot add more players to the game");
             }
-            if (player==null)
+            if (player == null)
             {
                 throw new ArgumentException("player");
             }
 
-            player.WantToMove += PlayerOnWantToMove;
             Contenders.Add(player);
-        }
-
-        private void PlayerOnWantToMove(object sender, PositionEventHandlerArgs args)
-        {
-            Coordinator.PlayerOnWantToMove(sender, args);
-        }
-
-        public MatchCoordinator Coordinator { get; private set; }
+        }        
 
         public void SwitchTurn()
         {
-            if (PlayerInTurn == Contenders[0])
-            {
-                PlayerInTurn = Contenders[1];
-            }
-            else
-            {
-                PlayerInTurn = Contenders[0];
-            }
-        }
-
-        public IList<Player> Contenders { get; private set; }
+            PlayerInTurn = this.GetOponent(PlayerInTurn);
+        }        
 
         public Player PlayerInTurn
         {
             get { return playerInTurn; }
-            set
+            private set
             {
                 playerInTurn = value;
                 OnTurnChanged();
             }
-        }
-
-        public event EventHandler TurnChanged;
-
-        protected virtual void OnTurnChanged()
-        {
-            var handler = TurnChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        public bool IsFinished { get; private set; }
-
+        }       
+       
         public void Start()
         {
             if (Contenders.Count < 2)
@@ -111,10 +89,25 @@ namespace Model
                 throw new InvalidOperationException("Cannot start a game that has already been started");
             }
 
-            IsStarted = true;
+            SubscribeToContendersEvents();
+
+            PlayerInTurn = Contenders.First();                        
             OnStarted();
-            PlayerInTurn = Contenders.First();
+
             Coordinator.StartGame();
+        }
+
+        private void SubscribeToContendersEvents()
+        {
+            foreach (var contender in Contenders)
+            {
+                contender.WantToMove += PlayerOnWantToMove;
+            }
+        }
+
+        private void PlayerOnWantToMove(object sender, PositionEventHandlerArgs args)
+        {
+            Coordinator.PlayerOnWantToMove(sender, args);
         }
 
         public Player FirstPlayer { get { return Contenders[0]; } }
@@ -125,18 +118,29 @@ namespace Model
             get { return Board.HasWinner; }
         }
 
-        public Player GetWinner()
-        {
-            var winner = Board.GetPlayersWithLine().FirstOrDefault();
-            return winner;
-        }
-
-        public void Dispose()
+        private void UnsubscribeFromContenderEvents()
         {
             foreach (var contender in Contenders)
             {
                 contender.WantToMove -= PlayerOnWantToMove;
             }
         }
+
+        public IEnumerable<WinningLine> WinningLines
+        {
+            get { return Board.WinningLines; }
+        }
+
+        public bool IsFinished { get; private set; }
+
+        public event EventHandler TurnChanged;
+
+        protected virtual void OnTurnChanged()
+        {
+            var handler = TurnChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public IList<Player> Contenders { get; private set; }
     }
 }

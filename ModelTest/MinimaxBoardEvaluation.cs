@@ -1,8 +1,5 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model;
-using Model.Strategies;
 using Model.Strategies.Minimax;
 
 namespace ModelTest

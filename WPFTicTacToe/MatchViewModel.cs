@@ -5,7 +5,6 @@ using System.Windows.Input;
 using Cinch;
 using Model;
 using Model.Strategies;
-using Model.Strategies.Minimax;
 using Model.Utils;
 
 namespace WPFTicTacToe
@@ -105,8 +104,7 @@ namespace WPFTicTacToe
         private void CleanUpMatch(Match toCleanup)
         {
             toCleanup.TurnChanged -= MatchOnTurnChanged;
-            toCleanup.GameOver -= MatchOnGameOver;
-            toCleanup.Dispose();
+            toCleanup.GameOver -= MatchOnGameOver;            
         }
 
         public IEnumerable<Square> HighlightedSquares

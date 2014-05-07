@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model;
-using Model.Strategies;
 
 namespace ModelTest
 {

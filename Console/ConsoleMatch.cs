@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Model;
-using Model.Strategies.Minimax;
 using Model.Utils;
 
 namespace Console
@@ -46,7 +43,6 @@ namespace Console
             System.Console.Write(" ¨¨ The match has finished\n\n");
         }
 
-
         private void DisposeHumanConsoleAdapters()
         {
             foreach (var humanPlayerConsoleConnector in HumanPlayerConsoleConnectors)
@@ -75,14 +71,6 @@ namespace Console
             return player;
         }
 
-        private Position GenerateRandomPosition()
-        {
-            var random = new Random((int)DateTime.Now.Ticks);
-            var x = random.Next(0, 2);
-            var y = random.Next(0, 2);
-            return new Position(x, y);
-        }
-
         private void SubscribeToMatchEvents(Match match, BoardStreamWriter writer)
         {
             match.Coordinator.GameOver += (sender, eventArgs) => ShowGameResults();
@@ -93,8 +81,6 @@ namespace Console
             };            
         }
 
-
-
         private void ComputerOnWantToMove(object sender, PositionEventHandlerArgs args)
         {
             var player = (Player)sender;
@@ -103,10 +89,9 @@ namespace Console
 
         private void ShowGameResults()
         {
-            var hasWinner = HasWinner;
             System.Console.WriteLine("The game has ended");
 
-            if (hasWinner)
+            if (HasWinner)
             {
                 System.Console.WriteLine(String.Format("We have a winner! Congratulations, " + PlayerInTurn));
             }
@@ -117,8 +102,7 @@ namespace Console
         }
 
         private BoardStreamWriter CreateBoardWriter()
-        {
-            
+        {            
             var boardWriter = new BoardStreamWriter(Board, PlayerPieceMapping);
             return boardWriter;
         }   

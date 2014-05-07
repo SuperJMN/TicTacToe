@@ -7,10 +7,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:WPFTicTacToe.Controls"
         xmlns:converters="clr-namespace:WPFTicTacToe.Converters"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         viewModelLocator:ViewModelLocator.ViewModel="Main"
         WindowStartupLocation="CenterScreen"
-        Title="Tic Tac Toe" Height="623.333" Width="711.688" d:DataContext="{d:DesignInstance wpfTicTacToe:MainWindowViewModel}">
+        Title="Tic Tac Toe" Height="623.333" Width="711.688"
+        d:DataContext="{d:DesignInstance wpfTicTacToe:MainWindowViewModel}">
     <Window.Resources>
         <converters:Bool2VisibilityHiddenConverter x:Key="Bool2VisibilityHiddenConverter" />
         <converters:InverseBool2VisibilityConverter x:Key="InverseBool2VisibilityConverter" />
@@ -21,11 +23,13 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
+            <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Viewbox MinWidth="300" MinHeight="300" Grid.Column="1" Margin="20" Visibility="{Binding IsInitialized, Converter={StaticResource Bool2VisibilityHiddenConverter}}" DataContext="{Binding MatchViewModel}" >
-            <controls:TicTacToeControl IsHitTestVisible="{Binding IsMatchRunning}"                                       
+        <Viewbox MinWidth="300" MinHeight="300" Grid.Column="1" Margin="20"
+                 Visibility="{Binding IsInitialized, Converter={StaticResource Bool2VisibilityHiddenConverter}}"
+                 DataContext="{Binding MatchViewModel}">
+            <controls:TicTacToeControl IsHitTestVisible="{Binding IsMatchRunning}"
                                        Squares="{Binding Squares}"
                                        HighlightedSquares="{Binding HighlightedSquares}"
                                        PlayerPieceMapping="{Binding PlayerPieceMapping}">
@@ -40,34 +44,42 @@
                 </controls:TicTacToeControl.Style>
             </controls:TicTacToeControl>
         </Viewbox>
-        <StatusBar DataContext="{Binding MatchViewModel}" VerticalAlignment="Bottom" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" >
-            <TextBlock FontSize="18" Visibility="{Binding IsMatchRunning, Converter={StaticResource Bool2VisibilityHiddenConverter}}">
+        <StatusBar DataContext="{Binding MatchViewModel}" VerticalAlignment="Bottom" Grid.Row="1" Grid.ColumnSpan="2"
+                   Grid.Column="0">
+            <TextBlock FontSize="18"
+                       Visibility="{Binding IsMatchRunning, Converter={StaticResource Bool2VisibilityHiddenConverter}}">
                 <TextBlock.Text>
                     <Binding Path="PlayerInTurn.Name" StringFormat="It's {0}'s turn" />
                 </TextBlock.Text>
             </TextBlock>
         </StatusBar>
-        <StackPanel Grid.Row="0" Grid.Column="0" Margin="8" >
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="8">
             <Button Command="{Binding StartMatchCommand}" Content="Start new match"
                     Height="38" Margin="10" Padding="10" VerticalAlignment="Top" />
             <wpfTicTacToe:StatsControl IsEnabled="{Binding IsInitialized}" DataContext="{Binding MatchViewModel}" />
-            <Expander Header="Game Settings" IsExpanded="True" >
+            <Expander Header="Game Settings" IsExpanded="True">
                 <ItemsControl DataContext="{Binding SettingsViewModel}">
-                    <GroupBox Header="Player 1">                        
+                    <GroupBox Header="Player 1">
                         <controls:PlayerConfigurationControl DataContext="{Binding FirstPlayer}" />
                     </GroupBox>
-                    <GroupBox Header="Player 2">                        
+                    <GroupBox Header="Player 2">
                         <controls:PlayerConfigurationControl DataContext="{Binding SecondPlayer}" />
                     </GroupBox>
                 </ItemsControl>
             </Expander>
         </StackPanel>
-        <controls:OutlinedTextBlock DataContext="{Binding MatchViewModel}" TextWrapping="Wrap" Stroke="#8D5B22" Fill="#F1F063" StrokeThickness="2" FontWeight="ExtraBold" Visibility="{Binding IsMatchRunning, Converter={StaticResource InverseBool2VisibilityConverter}}" FontSize="40" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Center">
+        <controls:OutlinedTextBlock TextWrapping="Wrap"
+                                    Stroke="#8D5B22"
+                                    Fill="#F1F063"
+                                    StrokeThickness="2" FontWeight="ExtraBold"
+                                    Visibility="{Binding MatchViewModel.IsMatchRunning, Converter={StaticResource InverseBool2VisibilityConverter}}"
+                                    FontSize="40" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"
+                                    TextAlignment="Center">
             <controls:OutlinedTextBlock.Effect>
                 <DropShadowEffect ShadowDepth="0"
-                          Color="White"
-                          Opacity="1"
-                          BlurRadius="12"/>
+                                  Color="White"
+                                  Opacity="1"
+                                  BlurRadius="12" />
             </controls:OutlinedTextBlock.Effect>
             <controls:OutlinedTextBlock.Style>
                 <Style TargetType="{x:Type controls:OutlinedTextBlock}">
@@ -96,6 +108,11 @@
                     </Style.Triggers>
                 </Style>
             </controls:OutlinedTextBlock.Style>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="PreviewMouseDown">
+                    <i:InvokeCommandAction Command="{Binding StartMatchCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </controls:OutlinedTextBlock>
     </Grid>
 </Window>

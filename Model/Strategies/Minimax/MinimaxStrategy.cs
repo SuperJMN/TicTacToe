@@ -16,7 +16,7 @@ namespace Model.Strategies.Minimax
 
         public Movement GetMoveFor(Board board, Player player)
         {
-            var root = new Node(board, RootGeneratingMovement, TwoPlayersGame, Max, 0);
+            var root = new MinimaxNode(board, RootGeneratingMovement, TwoPlayersGame, Max, 0);
             var bestNode = root.Nodes.First(node => node.Score == root.Score);
             return bestNode.OriginatingMovement;
         }
