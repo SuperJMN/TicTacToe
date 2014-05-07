@@ -37,7 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Board.cs" />
-    <Compile Include="BoardChecker.cs" />
+    <Compile Include="GameOverChecker.cs" />
     <Compile Include="GameOverEventArgs.cs" />
     <Compile Include="GameOverEventHandler.cs" />
     <Compile Include="PlayerFactory.cs" />

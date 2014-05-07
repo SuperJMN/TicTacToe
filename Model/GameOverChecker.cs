@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace Model
 {
-    public class BoardChecker
+    public class GameOverChecker
     {
         private readonly Board board;
 
-        public BoardChecker(Board board)
+        public GameOverChecker(Board board)
         {
             this.board = board;
         }
@@ -25,6 +25,13 @@ namespace Model
             }
         }
 
+        public bool GetIsFull()
+        {
+            var squares = board.Squares;
+            var areAllTaken = squares.All(square => square.Piece != null);
+            return areAllTaken;
+        }
+
         private static IEnumerable<WinningLine> GetWinningLines(IEnumerable<SquareCollection> squareCollection)
         {
             var winningLines = from column in squareCollection
@@ -36,32 +43,7 @@ namespace Model
                 };
 
             return winningLines;
-        }      
-
-        public IEnumerable<Player> GetPlayersWithLine()
-        {
-            var hashSet = new HashSet<Player>();
-            hashSet.UnionWith(GetPlayersWithLine(board.Columns));
-            hashSet.UnionWith(GetPlayersWithLine(board.Rows));
-            hashSet.UnionWith(GetPlayersWithLine(board.Diagonals));
-            return hashSet;
         }
-
-        private IEnumerable<Player> GetPlayersWithLine(IEnumerable<SquareCollection> rows)
-        {
-            var rowsTakenBySamePlayer = from row in rows
-                                        where AreFullAndTakenBySamePlayer(row)
-                                        select row;
-
-            var players = rowsTakenBySamePlayer.Select(GetFirstPlayer);
-            return players;
-        }
-
-        private Player GetFirstPlayer(SquareCollection squares)
-        {
-            return squares.First().Piece.Player;
-        }
-
 
         private static bool AreFullAndTakenBySamePlayer(IList<Square> squares)
         {
@@ -83,13 +65,6 @@ namespace Model
         private static bool IsSquareCollectionFull(IEnumerable<Square> row)
         {
             return row.All(square => square.Piece != null);
-        }
-
-        public bool GetIsFull()
-        {
-            var squares = board.Squares;
-            var areAllTaken = squares.All(square => square.Piece != null);
-            return areAllTaken;
         }
     }
 }

@@ -10,13 +10,13 @@ namespace Model
 
         readonly Square[,] squares = new Square[BoardSizeConst, BoardSizeConst];
 
-        private readonly BoardChecker boardChecker;
+        private readonly GameOverChecker gameOverChecker;
 
 
         public Board()
         {
             CreateSquares();
-            boardChecker = new BoardChecker(this);
+            gameOverChecker = new GameOverChecker(this);
         }
 
         private Board(Board original)
@@ -39,7 +39,7 @@ namespace Model
         {
             get
             {
-                return boardChecker.GetIsFull();
+                return gameOverChecker.GetIsFull();
             }
         }
 
@@ -111,19 +111,14 @@ namespace Model
             }
         }
 
-        private BoardChecker BoardChecker
+        private GameOverChecker GameOverChecker
         {
-            get { return boardChecker; }
+            get { return gameOverChecker; }
         }
 
         public bool HasWinner
         {
-            get { return BoardChecker.WinningLines.Any(); }
-        }
-
-        public IEnumerable<Player> GetPlayersWithLine()
-        {
-            return BoardChecker.GetPlayersWithLine();
+            get { return GameOverChecker.WinningLines.Any(); }
         }
 
         public IEnumerable<Square> Squares
@@ -208,7 +203,7 @@ namespace Model
         {
             get
             {
-                return BoardChecker.WinningLines;
+                return GameOverChecker.WinningLines;
             }
         }
     }
