@@ -6,9 +6,9 @@ namespace Model
 {
     public class Board
     {
-        const int BoardSizeConst = 3;
+        public const int BoardSize = 3;
 
-        readonly Square[,] squares = new Square[BoardSizeConst, BoardSizeConst];
+        readonly Square[,] squares = new Square[BoardSize, BoardSize];
 
         private readonly GameOverChecker gameOverChecker;
 
@@ -101,14 +101,6 @@ namespace Model
         {
             var square = GetSquare(p);
             return square.Piece;
-        }
-
-        public static int BoardSize
-        {
-            get
-            {
-                return BoardSizeConst;
-            }
         }
 
         private GameOverChecker GameOverChecker

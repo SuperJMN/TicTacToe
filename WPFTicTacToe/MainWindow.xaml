@@ -87,19 +87,19 @@
                     <Style.Triggers>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsInitialized}" Value="True" />
-                                <Condition Binding="{Binding IsMatchRunning}" Value="False" />
+                                <Condition Binding="{Binding MatchViewModel.IsInitialized}" Value="True" />
+                                <Condition Binding="{Binding MatchViewModel.IsMatchRunning}" Value="False" />
 
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
-                                <Setter Property="Text" Value="{Binding Winner, StringFormat='{}{0} is the Winner!'}" />
+                                <Setter Property="Text" Value="{Binding MatchViewModel.Winner, StringFormat='{}{0} is the Winner!'}" />
                             </MultiDataTrigger.Setters>
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsInitialized}" Value="True" />
-                                <Condition Binding="{Binding IsMatchRunning}" Value="False" />
-                                <Condition Binding="{Binding Winner}" Value="{x:Null}" />
+                                <Condition Binding="{Binding MatchViewModel.IsInitialized}" Value="True" />
+                                <Condition Binding="{Binding MatchViewModel.IsMatchRunning}" Value="False" />
+                                <Condition Binding="{Binding MatchViewModel.Winner}" Value="{x:Null}" />
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
                                 <Setter Property="Text" Value="It's a Draw!" />
