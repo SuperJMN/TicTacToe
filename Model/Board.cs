@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Model.Utils;
 
@@ -11,7 +12,6 @@ namespace Model
         readonly Square[,] squares = new Square[BoardSize, BoardSize];
 
         private readonly GameOverChecker gameOverChecker;
-
 
         public Board()
         {
@@ -56,14 +56,21 @@ namespace Model
 
         public void Move(Movement movement)
         {
+            if (movement == null)
+            {
+                throw new ArgumentNullException("movement");
+            }            
+
             var square = GetSquare(movement.Position);
+
             if (square.Piece != null)
             {
                 throw new InvalidPositionException(movement.Position);
             }
+
             var piece = new Piece(movement.Player);
             square.Piece = piece;
-            OnPiecePlaced(new PieceEventHandlerArgs(piece) { Position = movement.Position});
+            OnPlayerMoved(new MovementEventArgs(movement));
         }
 
         private IEnumerable<Square> GetRowSquares(int number)
@@ -118,15 +125,15 @@ namespace Model
             get { return squares.Cast<Square>(); }
         }
 
-        public event PieceEventHandler PiecePlaced;
+        public event MovementEventHandler PlayerMoved;
 
-        protected virtual void OnPiecePlaced(PieceEventHandlerArgs args)
+        private void OnPlayerMoved(MovementEventArgs args)
         {
-            var handler = PiecePlaced;
+            var handler = PlayerMoved;
             if (handler != null) handler(this, args);
         }
 
-        public IList<SquareCollection> Rows
+        public IEnumerable<SquareCollection> Rows
         {
             get
             {
@@ -178,11 +185,14 @@ namespace Model
             return new Board(this);
         }
 
-        public IEnumerable<Position> GetEmptyPositions()
+        public IEnumerable<Position> EmptyPositions
         {
-            return from square in Squares
-                   where square.Piece == null
-                   select square.Position;
+            get
+            {
+                return from square in Squares
+                    where square.Piece == null
+                    select square.Position;
+            }
         }
 
         public override string ToString()
@@ -197,6 +207,18 @@ namespace Model
             {
                 return GameOverChecker.WinningLines;
             }
+        }
+    }
+
+    public delegate void MovementEventHandler(object sender, MovementEventArgs args);
+
+    public class MovementEventArgs : EventArgs
+    {
+        public Movement Movement { get; private set; }
+
+        public MovementEventArgs(Movement movement)
+        {
+            Movement = movement;
         }
     }
 }

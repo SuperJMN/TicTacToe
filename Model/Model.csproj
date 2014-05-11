@@ -42,14 +42,13 @@
     <Compile Include="GameOverEventHandler.cs" />
     <Compile Include="PlayerFactory.cs" />
     <Compile Include="PlayerType.cs" />
-    <Compile Include="Strategies\Minimax\Node.cs" />
+    <Compile Include="Strategies\Minimax\MinimaxNode.cs" />
     <Compile Include="Strategies\RandomStrategy.cs" />
     <Compile Include="Utils\BoardStreamWriter.cs" />
     <Compile Include="ComputerPlayer.cs" />
     <Compile Include="SquareCollection.cs" />
     <Compile Include="Strategies\Minimax\BoardEvaluator.cs" />
     <Compile Include="Strategies\DefaultComputerStrategy.cs" />
-    <Compile Include="MatchCoordinator.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="Strategies\IMoveStrategy.cs" />

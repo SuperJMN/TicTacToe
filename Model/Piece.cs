@@ -8,7 +8,7 @@ namespace Model
             Player = player;
         }
 
-        public Player Player { get; set; }
+        public Player Player { get; private set; }
 
         public Piece Clone()
         {

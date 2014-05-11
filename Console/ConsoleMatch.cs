@@ -74,7 +74,7 @@ namespace Console
         private void SubscribeToMatchEvents(Match match, BoardStreamWriter writer)
         {
             match.Coordinator.GameOver += (sender, eventArgs) => ShowGameResults();
-            match.Board.PiecePlaced += (sender, handlerArgs) =>
+            match.Board.PlayerMoved += (sender, handlerArgs) =>
             {
                 writer.Write(System.Console.Out);
                 System.Console.WriteLine();

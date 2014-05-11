@@ -2,7 +2,7 @@ namespace Model
 {
     public abstract class Player
     {
-        public Player(string name)
+        protected Player(string name)
         {
             Name = name;
         }
@@ -49,9 +49,9 @@ namespace Model
             OnWantToMove(new PositionEventHandlerArgs(position));
         }
 
-        public virtual event PositionEventHandler WantToMove;
+        public event PositionEventHandler WantToMove;
 
-        protected virtual void OnWantToMove(PositionEventHandlerArgs e)
+        protected void OnWantToMove(PositionEventHandlerArgs e)
         {
             var handler = WantToMove;
             if (handler != null) handler(this, e);

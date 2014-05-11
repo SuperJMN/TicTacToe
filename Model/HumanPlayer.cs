@@ -16,7 +16,7 @@ namespace Model
 
         public event EventHandler MoveRequested;
 
-        protected virtual void OnMoveRequested()
+        private void OnMoveRequested()
         {
             var handler = MoveRequested;
             if (handler != null) handler(this, EventArgs.Empty);

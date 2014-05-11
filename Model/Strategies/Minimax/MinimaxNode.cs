@@ -7,7 +7,7 @@ namespace Model.Strategies.Minimax
 {
     public class MinimaxNode
     {
-        private const int MaxDepth = 8;
+        private const int MaxDepth = 4;
 
         public MinimaxNode(Board originalBoard, Movement originatingMovement, ITwoPlayersGame twoPlayersGame, Player max, int depth)
         {
@@ -118,7 +118,7 @@ namespace Model.Strategies.Minimax
                 if (Depth + 1 <= MaxDepth)
                 {
 
-                    foreach (var emptyPosition in OriginalBoard.GetEmptyPositions().ToList())
+                    foreach (var emptyPosition in OriginalBoard.EmptyPositions.ToList())
                     {
                         var boardSucessor = OriginalBoard.Clone();
 

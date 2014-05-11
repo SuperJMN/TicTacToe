@@ -31,6 +31,7 @@ namespace Model.Strategies.Minimax
             {
                 return 100;
             }
+
             if (takenByPlayerCount == 2 && takenByOponentCount == 0)
             {
                 return 10;

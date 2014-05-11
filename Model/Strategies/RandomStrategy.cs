@@ -21,7 +21,7 @@ namespace Model.Strategies
 
         private Position GetRandomPosition(Board board)
         {
-            var emptyPositions = board.GetEmptyPositions().ToList();
+            var emptyPositions = board.EmptyPositions.ToList();
 
             var count = emptyPositions.Count();
 

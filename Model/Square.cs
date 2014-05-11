@@ -6,7 +6,7 @@ namespace Model
     {
         private Piece piece;
 
-        public Square(Position position)
+        internal Square(Position position)
         {
             Position = position;
         }
@@ -14,7 +14,7 @@ namespace Model
         public Piece Piece
         {
             get { return piece; }
-            set
+            internal set
             {
                 piece = value;
                 OnPieceChanged();
@@ -23,7 +23,7 @@ namespace Model
 
         public event EventHandler PieceChanged;
 
-        protected virtual void OnPieceChanged()
+        private void OnPieceChanged()
         {
             var handler = PieceChanged;
             if (handler != null) handler(this, EventArgs.Empty);

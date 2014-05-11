@@ -13,7 +13,7 @@ namespace Model.Strategies
 
         private Position GetEmptyPosition(Board board)
         {
-            return board.GetEmptyPositions().First();            
+            return board.EmptyPositions.First();            
         }
     }
 }
