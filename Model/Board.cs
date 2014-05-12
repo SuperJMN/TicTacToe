@@ -209,16 +209,4 @@ namespace Model
             }
         }
     }
-
-    public delegate void MovementEventHandler(object sender, MovementEventArgs args);
-
-    public class MovementEventArgs : EventArgs
-    {
-        public Movement Movement { get; private set; }
-
-        public MovementEventArgs(Movement movement)
-        {
-            Movement = movement;
-        }
-    }
 }

@@ -40,6 +40,9 @@
     <Compile Include="GameOverChecker.cs" />
     <Compile Include="GameOverEventArgs.cs" />
     <Compile Include="GameOverEventHandler.cs" />
+    <Compile Include="MatchCoordinator.cs" />
+    <Compile Include="MovementEventArgs.cs" />
+    <Compile Include="MovementEventHandler.cs" />
     <Compile Include="PlayerFactory.cs" />
     <Compile Include="PlayerType.cs" />
     <Compile Include="Strategies\Minimax\MinimaxNode.cs" />

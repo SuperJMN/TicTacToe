@@ -74,7 +74,7 @@ namespace Console
         private void SubscribeToMatchEvents(Match match, BoardStreamWriter writer)
         {
             match.Coordinator.GameOver += (sender, eventArgs) => ShowGameResults();
-            match.Board.PlayerMoved += (sender, handlerArgs) =>
+            match.PlayerMoved += (sender, handlerArgs) =>
             {
                 writer.Write(System.Console.Out);
                 System.Console.WriteLine();
@@ -103,7 +103,7 @@ namespace Console
 
         private BoardStreamWriter CreateBoardWriter()
         {            
-            var boardWriter = new BoardStreamWriter(Board, PlayerPieceMapping);
+            var boardWriter = new BoardStreamWriter(this.Board, PlayerPieceMapping);
             return boardWriter;
         }   
     }

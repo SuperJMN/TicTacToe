@@ -82,11 +82,9 @@ namespace WPFTicTacToe
 
                 match = value;
 
-                PlayerPieceMapping = new PlayerPieceMapping();
-                PlayerPieceMapping.Add(FirstPlayer, 'X');
-                PlayerPieceMapping.Add(SecondPlayer, 'O');
+                SetupPieceMapping();
 
-                Squares = match.Board.Squares;
+                Squares = match.BoardSquares;
                 Winner = null;
 
                 match.AddChallenger(FirstPlayer);
@@ -99,6 +97,13 @@ namespace WPFTicTacToe
 
                 NotifyPropertyChanged("Match");
             }
+        }
+
+        private void SetupPieceMapping()
+        {
+            PlayerPieceMapping = new PlayerPieceMapping();
+            PlayerPieceMapping.Add(FirstPlayer, 'X');
+            PlayerPieceMapping.Add(SecondPlayer, 'O');
         }
 
         private void CleanUpMatch(Match toCleanup)

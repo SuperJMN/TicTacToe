@@ -9,7 +9,34 @@ namespace Model
     public class Match : ITwoPlayersGame
     {
         private Player playerInTurn;
-        public Board Board { get; private set; }
+        private Board board;
+
+        protected internal Board Board
+        {
+            get { return board; }
+            private set
+            {
+                board = value;
+                board.PlayerMoved += (sender, args) => OnPlayerMoved(args);
+            }
+        }
+
+        public IEnumerable<Square> BoardSquares
+        {
+            get
+            {
+                return Board.Squares;
+            }
+        }
+
+        public event MovementEventHandler PlayerMoved;
+
+        protected virtual void OnPlayerMoved(MovementEventArgs args)
+        {
+            var handler = PlayerMoved;
+            if (handler != null) handler(this, args);
+        }
+
         private bool IsStarted { get; set; }
         public MatchCoordinator Coordinator { get; private set; }
 
@@ -67,10 +94,10 @@ namespace Model
             Contenders.Add(player);
         }
 
-        private void SwitchTurn()
+        internal void SwitchTurn()
         {
             PlayerInTurn = this.GetOponent(PlayerInTurn);
-        }        
+        }
 
         public Player PlayerInTurn
         {
@@ -80,8 +107,8 @@ namespace Model
                 playerInTurn = value;
                 OnTurnChanged();
             }
-        }       
-       
+        }
+
         public void Start()
         {
             if (Contenders.Count < 2)
@@ -95,7 +122,7 @@ namespace Model
 
             SubscribeToContendersEvents();
 
-            PlayerInTurn = Contenders.First();                        
+            PlayerInTurn = Contenders.First();
             OnStarted();
 
             Coordinator.StartGame();
@@ -139,67 +166,12 @@ namespace Model
 
         public event EventHandler TurnChanged;
 
-        protected virtual void OnTurnChanged()
+        private void OnTurnChanged()
         {
             var handler = TurnChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
         public IList<Player> Contenders { get; private set; }
-
-
-        public class MatchCoordinator
-        {
-            public MatchCoordinator(Match match)
-            {
-                Match = match;
-            }
-
-            private Match Match { get; set; }
-
-            public void PlayerOnWantToMove(object sender, PositionEventHandlerArgs e)
-            {
-                var player = (Player)sender;
-                var movement = new Movement(e.Position, player);
-
-
-                if (player == Match.PlayerInTurn && !Match.IsFinished)
-                {
-                    Match.Board.Move(movement);
-                }
-                else
-                {
-                    throw new InvalidOperationException("The turn should be respected");
-                }
-
-                if (CanContinueGame())
-                {
-                    Match.SwitchTurn();
-                    Match.PlayerInTurn.RequestMove(Match.Board);
-                }
-                else
-                {
-                    OnGameEnded();
-                }
-            }
-
-            private bool CanContinueGame()
-            {
-                return !Match.Board.IsFull && !Match.HasWinner;
-            }
-
-            public event EventHandler GameOver;
-
-            private void OnGameEnded()
-            {
-                var handler = GameOver;
-                if (handler != null) handler(this, EventArgs.Empty);
-            }
-
-            public void StartGame()
-            {
-                Match.PlayerInTurn.RequestMove(Match.Board);
-            }
-        }
     }
 }
