@@ -21,16 +21,16 @@ namespace WPFTicTacToe
         private Player firstPlayer;
         private Player secondPlayer;
         private bool isInitialized;
-        private int totalGames;
-        private int secondPlayerWins;
-        private int firstPlayerWins;
 
         public MatchViewModel()
         {
             HighlightedSquares = new List<Square>();
             PlaceHumanPieceCommand = new SimpleCommand<object, object>(PlaceHumanPiece);
-            ResetStatsCommand = new SimpleCommand<object, object>(o => ResetStats());
+            
+            GameStatsViewModel = new GameStatsViewModel();
         }
+
+        public GameStatsViewModel GameStatsViewModel { get; set; }
 
         public Player FirstPlayer
         {
@@ -39,9 +39,9 @@ namespace WPFTicTacToe
             {
                 if (firstPlayer != value)
                 {
-                    ResetStats();
+                    GameStatsViewModel.ResetStats();
                 }
-                
+
                 firstPlayer = value;
                 NotifyPropertyChanged("FirstPlayer");
             }
@@ -54,20 +54,15 @@ namespace WPFTicTacToe
             {
                 if (secondPlayer != value)
                 {
-                    ResetStats();
+                    GameStatsViewModel.ResetStats();
                 }
-                
+
                 secondPlayer = value;
                 NotifyPropertyChanged("SecondPlayer");
             }
         }
 
-        private void ResetStats()
-        {
-            TotalGames = 0;
-            FirstPlayerWins = 0;
-            SecondPlayerWins = 0;
-        }
+
 
         private Match Match
         {
@@ -109,7 +104,7 @@ namespace WPFTicTacToe
         private void CleanUpMatch(Match toCleanup)
         {
             toCleanup.TurnChanged -= MatchOnTurnChanged;
-            toCleanup.GameOver -= MatchOnGameOver;            
+            toCleanup.GameOver -= MatchOnGameOver;
         }
 
         public IEnumerable<Square> HighlightedSquares
@@ -195,15 +190,15 @@ namespace WPFTicTacToe
 
                 if (Winner == FirstPlayer)
                 {
-                    FirstPlayerWins++;
+                    GameStatsViewModel.FirstPlayerWins++;
                 }
                 if (Winner == SecondPlayer)
                 {
-                    SecondPlayerWins++;
+                    GameStatsViewModel.SecondPlayerWins++;
                 }
             }
 
-            TotalGames++;
+            GameStatsViewModel.TotalGames++;
         }
 
         private void MatchOnTurnChanged(object sender, EventArgs eventArgs)
@@ -240,41 +235,9 @@ namespace WPFTicTacToe
             set
             {
                 isInitialized = value;
+                GameStatsViewModel.IsEnabled = true;
                 NotifyPropertyChanged("IsInitialized");
             }
         }
-
-
-        public int FirstPlayerWins
-        {
-            get { return firstPlayerWins; }
-            private set
-            {
-                firstPlayerWins = value;
-                NotifyPropertyChanged("FirstPlayerWins");
-            }
-        }
-
-        public int SecondPlayerWins
-        {
-            get { return secondPlayerWins; }
-            private set
-            {
-                secondPlayerWins = value;
-                NotifyPropertyChanged("SecondPlayerWins");
-            }
-        }
-
-        public int TotalGames
-        {
-            get { return totalGames; }
-            private set
-            {
-                totalGames = value;
-                NotifyPropertyChanged("TotalGames");
-            }
-        }
-
-        public ICommand ResetStatsCommand { get; private set; }
     }
 }

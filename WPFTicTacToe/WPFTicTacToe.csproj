@@ -70,6 +70,7 @@
     <Compile Include="Converters\InverseBool2VisibilityConverter.cs" />
     <Compile Include="Controls\OutlinedTextBlock.cs" />
     <Compile Include="Converters\InvertBoolConverter.cs" />
+    <Compile Include="GameStatsViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MatchViewModel.cs" />
     <Compile Include="PieceViewModel.cs" />

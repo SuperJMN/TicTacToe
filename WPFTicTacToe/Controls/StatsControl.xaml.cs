@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace WPFTicTacToe
+namespace WPFTicTacToe.Controls
 {
     /// <summary>
     /// Interaction logic for StatsControl.xaml
