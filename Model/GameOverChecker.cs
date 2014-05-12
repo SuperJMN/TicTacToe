@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Model.Utils;
 
 namespace Model
 {
@@ -10,13 +11,17 @@ namespace Model
         public GameOverChecker(Board board)
         {
             this.board = board;
+            DiagonalCalculator = new DiagonalCalculator(board.Width, board.Height);
         }
+
+        public DiagonalCalculator DiagonalCalculator { get; set; }
 
         public IEnumerable<WinningLine> WinningLines
         {
             get
             {
                 var winningRows = new List<WinningLine>();
+
                 winningRows.AddRange(GetWinningLines(board.Columns));
                 winningRows.AddRange(GetWinningLines(board.Rows));
                 winningRows.AddRange(GetWinningLines(board.Diagonals));
@@ -24,6 +29,8 @@ namespace Model
                 return winningRows;
             }
         }
+
+      
 
         public bool GetIsFull()
         {

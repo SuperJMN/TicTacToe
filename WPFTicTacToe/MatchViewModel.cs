@@ -14,13 +14,14 @@ namespace WPFTicTacToe
         private Match match;
         private IEnumerable<Square> highlightedSquares;
         private Player playerInTurn;
-        private IEnumerable<Square> squares;
+        
         private PlayerPieceMapping playerPieceMapping;
         private bool isMatchRunning;
         private Player winner;
         private Player firstPlayer;
         private Player secondPlayer;
         private bool isInitialized;
+        private Board board;
 
         public MatchViewModel()
         {
@@ -79,7 +80,7 @@ namespace WPFTicTacToe
 
                 SetupPieceMapping();
 
-                Squares = match.BoardSquares;
+                Board = match.Board;
                 Winner = null;
 
                 match.AddChallenger(FirstPlayer);
@@ -91,6 +92,16 @@ namespace WPFTicTacToe
                 IsMatchRunning = true;
 
                 NotifyPropertyChanged("Match");
+            }
+        }
+
+        public Board Board
+        {
+            get { return board; }
+            set
+            {
+                board = value;
+                NotifyPropertyChanged("Board");
             }
         }
 
@@ -124,16 +135,6 @@ namespace WPFTicTacToe
             {
                 playerInTurn = value;
                 NotifyPropertyChanged("PlayerInTurn");
-            }
-        }
-
-        public IEnumerable<Square> Squares
-        {
-            get { return squares; }
-            set
-            {
-                squares = value;
-                NotifyPropertyChanged("Squares");
             }
         }
 

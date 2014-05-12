@@ -9,7 +9,7 @@ namespace ModelTest
         [TestMethod]
         public void MakeValidMove()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             var position = new Position(1, 2);
 
             var player = new HumanPlayer("Pepito");
@@ -24,7 +24,7 @@ namespace ModelTest
         [ExpectedException(typeof(InvalidPositionException))]
         public void MoveOutOfBoard()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             var position = new Position(6, 2);
 
             var player = new HumanPlayer("Pepito");
@@ -36,7 +36,7 @@ namespace ModelTest
         [ExpectedException(typeof(InvalidPositionException))]
         public void MoveToSquaresAlreadyTaken()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             var position = new Position(2, 2);
 
             var player = new HumanPlayer("Pepito");
@@ -49,7 +49,7 @@ namespace ModelTest
         [TestMethod]
         public void WinGameHorizontal()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             var player = new HumanPlayer("Pepito");
             board.Move(new Movement(new Position(0, 1), player));
             board.Move(new Movement(new Position(1, 1), player));
@@ -61,7 +61,7 @@ namespace ModelTest
         [TestMethod]
         public void WinGameVertical()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             var player = new HumanPlayer("Pepito");
             board.Move(new Movement(new Position(0, 0), player));
             board.Move(new Movement(new Position(0, 1), player));
@@ -74,7 +74,7 @@ namespace ModelTest
         [TestMethod]
         public void FullRowWithBothPlayersShouldNotWin()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             var player1 = new HumanPlayer("Pepito");
             var player2 = new HumanPlayer("Juanito");
             board.Move(new Movement(new Position(0, 0), player1));
@@ -87,14 +87,14 @@ namespace ModelTest
         [TestMethod]
         public void BoardIsIncomplete()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             Assert.IsFalse(board.IsFull);
         }
 
         [TestMethod]
         public void BoardIsFull()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             var player = new HumanPlayer("Pepito");
             FillBoard(player, board);
             Assert.IsTrue(board.IsFull);
@@ -102,9 +102,9 @@ namespace ModelTest
 
         private void FillBoard(Player player, Board board)
         {
-            for (var i = 0; i < Board.BoardSize; i++)
+            for (var i = 0; i < board.Height; i++)
             {
-                for (var j = 0; j < Board.BoardSize; j++)
+                for (var j = 0; j < board.Width; j++)
                 {
                     board.Move(new Movement(new Position(i, j), player));
                 }

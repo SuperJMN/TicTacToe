@@ -11,7 +11,7 @@ namespace Model
         private Player playerInTurn;
         private Board board;
 
-        protected internal Board Board
+        public Board Board
         {
             get { return board; }
             private set
@@ -46,7 +46,7 @@ namespace Model
             Coordinator = new MatchCoordinator(this);
             Coordinator.GameOver += CoordinatorOnGameOver;
 
-            Board = new Board();
+            Board = new TicTacToeBoard();
         }
 
         private void CoordinatorOnGameOver(object sender, EventArgs eventArgs)

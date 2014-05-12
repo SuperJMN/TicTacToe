@@ -10,7 +10,7 @@ namespace ModelTest
         [TestMethod]
         public void ThreeInARowTest()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             var player1 = new HumanPlayer("First");
             
             board.Move(new Movement(new Position(0, 0), player1));
@@ -25,7 +25,7 @@ namespace ModelTest
         [TestMethod]
         public void ThreeInARowTest2()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             var player1 = new HumanPlayer("First");
 
             board.Move(new Movement(new Position(0, 0), player1));
@@ -40,7 +40,7 @@ namespace ModelTest
         [TestMethod]
         public void ThreeInARowTest3()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             var player1 = new HumanPlayer("First");
             var player2 = new HumanPlayer("Second");
 
@@ -56,7 +56,7 @@ namespace ModelTest
         [TestMethod]
         public void SwitchPlayerMustReturnNegativeScoreTest1()
         {
-            var board = new Board();
+            var board = new TicTacToeBoard();
             var player1 = new HumanPlayer("First");
             var player2 = new HumanPlayer("Second");
 
@@ -69,69 +69,6 @@ namespace ModelTest
             var score2 = boardEvaluator.Evaluate(player2);
             Assert.AreEqual(-score1, score2);
         }
-
-
-        //[TestMethod]
-        //public void BestMoveBlockage()
-        //{
-        //    var match = new Match();
-
-        //    var human = new HumanPlayer("Pepito");
-        //    var cpu = new ComputerPlayer("Máquina");
-
-        //    cpu.Strategy = new MinimaxStrategy(match, cpu);
-
-        //    match.AddChallenger(human);
-        //    match.AddChallenger(cpu);
-
-        //    match.Board.Move(new Position(new Position(0, 0), human));
-        //    match.Board.Move(new Position(new Position(1, 0), human));
-        //    match.Board.Move(new Position(new Position(0, 1), cpu));
-
-        //    var move = cpu.Strategy.GetMoveFor(match.Board, cpu);
-        //    Assert.AreEqual(new Position(2, 0), move.Position);
-        //}
-
-        //[TestMethod]
-        //public void BestInitialPosition()
-        //{
-        //    var match = new Match();
-
-        //    var human = new HumanPlayer("Pepito");
-        //    var cpu = new ComputerPlayer("Máquina");
-
-        //    cpu.Strategy = new MinimaxStrategy(match, cpu);
-
-        //    match.AddChallenger(human);
-        //    match.AddChallenger(cpu);       
-
-        //    var move = cpu.Strategy.GetMoveFor(match.Board, cpu);
-        //    Assert.AreEqual(new Position(1, 1), move.Position);
-        //}
-
-        //[TestMethod]
-        //public void Generation()
-        //{
-        //    var match = new Match();
-
-
-        //    var max = new HumanPlayer("Max");
-        //    var min = new HumanPlayer("Min");
-
-        //    match.AddChallenger(max);
-        //    match.AddChallenger(min);
-
-        //    match.Board.Move(new Position(new Position(0, 0), max));
-        //    match.Board.Move(new Position(new Position(0, 2), max));
-        //    match.Board.Move(new Position(new Position(2, 2), max));
-
-        //    match.Board.Move(new Position(new Position(1, 0), min));
-        //    match.Board.Move(new Position(new Position(1, 1), min));
-        //    match.Board.Move(new Position(new Position(0, 1), min));
-
-        //    var node = new Node(match.Board, min, match, max);
-        //}
-
     }
 
 

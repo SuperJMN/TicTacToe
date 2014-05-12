@@ -30,7 +30,7 @@
                  Visibility="{Binding IsInitialized, Converter={StaticResource Bool2VisibilityHiddenConverter}}"
                  DataContext="{Binding MatchViewModel}">
             <controls:TicTacToeControl IsHitTestVisible="{Binding IsMatchRunning}"
-                                       Squares="{Binding Squares}"
+                                       Board="{Binding Board}"
                                        HighlightedSquares="{Binding HighlightedSquares}"
                                        PlayerPieceMapping="{Binding PlayerPieceMapping}">
                 <controls:TicTacToeControl.Style>

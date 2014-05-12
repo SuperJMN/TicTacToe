@@ -27,16 +27,16 @@ namespace Model.Utils
         {
             var builder = new StringBuilder();
             
-            for (var i = 0; i < Board.BoardSize; i++)
+            for (var y = 0; y < Board.Height; y++)
             {
                 for (var k = 0; k < Tabs; k++)
                 {
                     builder.Append("\t");
                 }
 
-                for (var j = 0; j < Board.BoardSize; j++)
+                for (var j = 0; j < this.Board.Width; j++)
                 {
-                    var piece = Board.GetPiece(new Position(j, i));
+                    var piece = Board.GetPiece(new Position(j, y));
                     char representation;
 
                     if (piece == null)

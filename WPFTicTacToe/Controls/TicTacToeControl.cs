@@ -16,12 +16,6 @@ namespace WPFTicTacToe.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TicTacToeControl), new FrameworkPropertyMetadata(typeof(TicTacToeControl)));
         }
 
-        public TicTacToeControl()
-        {
-            RowCount = Board.BoardSize;
-            ColumnCount = Board.BoardSize;
-        }
-
         #region PlayerPieceMapping
 
         public static readonly DependencyProperty PlayerPieceMappingProperty =
@@ -58,40 +52,35 @@ namespace WPFTicTacToe.Controls
 
         #endregion
 
+        #region Board
 
+        public static readonly DependencyProperty BoardProperty =
+            DependencyProperty.Register("Board", typeof(Board), typeof(TicTacToeControl),
+                new FrameworkPropertyMetadata((Board)null,
+                    new PropertyChangedCallback(OnBoardChanged)));
 
-        #region Squares
-
-        public static readonly DependencyProperty SquaresProperty =
-            DependencyProperty.Register("Squares", typeof(IEnumerable), typeof(TicTacToeControl),
-                new FrameworkPropertyMetadata(null,
-                    new PropertyChangedCallback(OnSquaresChanged)));
-
-        public IEnumerable Squares
+        public Board Board
         {
-            get { return (IEnumerable)GetValue(SquaresProperty); }
-            set { SetValue(SquaresProperty, value); }
+            get { return (Board)GetValue(BoardProperty); }
+            set { SetValue(BoardProperty, value); }
         }
 
-        private static void OnSquaresChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnBoardChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var target = (TicTacToeControl)d;
-            var oldSquares = (IEnumerable)e.OldValue;
-            var newSquares = target.Squares;
-            target.OnSquaresChanged(oldSquares, newSquares);
+            var oldBoard = (Board)e.OldValue;
+            var newBoard = target.Board;
+            target.OnBoardChanged(oldBoard, newBoard);
         }
 
-        protected virtual void OnSquaresChanged(IEnumerable oldSquares, IEnumerable newSquares)
+        protected virtual void OnBoardChanged(Board oldBoard, Board newBoard)
         {
-            if (newSquares != null)
-            {
-                var squares = newSquares.Cast<Square>();
-                var squareViewModels = squares.Select(square => new SquareViewModel(square, PlayerPieceMapping));
-                SquareViewModels = squareViewModels.ToList();
-            }
+            Squares = newBoard.Squares;
+            RowCount = Board.Width;
+            ColumnCount = Board.Height;
         }
 
-        #endregion
+        #endregion        
 
         #region SquareViewModels
         public static readonly DependencyProperty SquareViewModelsProperty =
@@ -112,6 +101,8 @@ namespace WPFTicTacToe.Controls
             DependencyProperty.Register("HighlightedSquares", typeof(IEnumerable<Square>), typeof(TicTacToeControl),
                 new FrameworkPropertyMetadata(new List<Square>(),
                     OnHighlightedLinesChanged));
+
+        private IEnumerable<Square> squares;
 
         public IEnumerable<Square> HighlightedSquares
         {
@@ -154,5 +145,20 @@ namespace WPFTicTacToe.Controls
 
         public int ColumnCount { get; set; }
         public int RowCount { get; set; }
+
+        private IEnumerable<Square> Squares
+        {
+            get { return squares; }
+            set
+            {
+                squares = value;
+
+                if (value != null)
+                {
+                    var squareViewModels = squares.Select(square => new SquareViewModel(square, PlayerPieceMapping));
+                    SquareViewModels = squareViewModels.ToList();
+                }
+            }
+        }
     }
 }

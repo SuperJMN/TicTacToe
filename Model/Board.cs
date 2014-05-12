@@ -5,31 +5,37 @@ using Model.Utils;
 
 namespace Model
 {
-    public class Board
+    public abstract class Board
     {
-        public const int BoardSize = 3;
-
-        readonly Square[,] squares = new Square[BoardSize, BoardSize];
+        private readonly Square[,] squares;
 
         private readonly GameOverChecker gameOverChecker;
 
-        public Board()
+        protected Board(int width, int height)
         {
+            Width = width;
+            Height = height;
+            squares = new Square[width, height];
+
             CreateSquares();
             gameOverChecker = new GameOverChecker(this);
         }
 
-        private Board(Board original)
-            : this()
+        public int Height { get; private set; }
+
+        public int Width { get; private set; }
+
+        protected Board(Board original)
+            : this(original.Width, original.Height)
         {
-            for (var i = 0; i < BoardSize; i++)
+            for (var y = 0; y < Height; y++)
             {
-                for (var j = 0; j < BoardSize; j++)
+                for (var x = 0; x < Width; x++)
                 {
-                    var square = original.squares[i, j];
+                    var square = original.squares[x, y];
                     if (square.Piece != null)
                     {
-                        squares[i, j].Piece = square.Piece.Clone();
+                        squares[x, y].Piece = square.Piece.Clone();
                     }
                 }
             }
@@ -45,11 +51,11 @@ namespace Model
 
         private void CreateSquares()
         {
-            for (var i = 0; i < BoardSize; i++)
+            for (var y = 0; y < Height; y++)
             {
-                for (var j = 0; j < BoardSize; j++)
+                for (var x = 0; x < Width; x++)
                 {
-                    squares[i, j] = new Square(new Position(i, j));
+                    squares[x, y] = new Square(new Position(x, y));
                 }
             }
         }
@@ -59,7 +65,7 @@ namespace Model
             if (movement == null)
             {
                 throw new ArgumentNullException("movement");
-            }            
+            }
 
             var square = GetSquare(movement.Position);
 
@@ -75,7 +81,7 @@ namespace Model
 
         private IEnumerable<Square> GetRowSquares(int number)
         {
-            for (var i = 0; i < BoardSize; i++)
+            for (var i = 0; i < Width; i++)
             {
                 yield return squares[i, number];
             }
@@ -83,7 +89,7 @@ namespace Model
 
         private IEnumerable<Square> GetColumnSquares(int number)
         {
-            for (var i = 0; i < BoardSize; i++)
+            for (var i = 0; i < Height; i++)
             {
                 yield return squares[number, i];
             }
@@ -98,10 +104,9 @@ namespace Model
             throw new InvalidPositionException(position);
         }
 
-        private static bool IsValidPosition(Position position)
+        private bool IsValidPosition(Position position)
         {
-            return position.X < BoardSize &&
-                position.Y < BoardSize;
+            return EmptyPositions.Contains(position);
         }
 
         public Piece GetPiece(Position p)
@@ -138,9 +143,9 @@ namespace Model
             get
             {
                 var rows = new List<SquareCollection>();
-                for (int i = 0; i < BoardSize; i++)
+                for (var y = 0; y < Height; y++)
                 {
-                    var row = GetRowSquares(i);
+                    var row = GetRowSquares(y);
                     rows.Add(new SquareCollection(row.ToList()));
                 }
                 return rows;
@@ -152,9 +157,9 @@ namespace Model
             get
             {
                 var rows = new List<SquareCollection>();
-                for (int i = 0; i < BoardSize; i++)
+                for (var x = 0; x < Width; x++)
                 {
-                    var row = GetColumnSquares(i);
+                    var row = GetColumnSquares(x);
                     rows.Add(new SquareCollection(row.ToList()));
                 }
                 return rows;
@@ -165,33 +170,29 @@ namespace Model
         {
             get
             {
-                var diagonal1 = new SquareCollection();
-                var diagonal2 = new SquareCollection();
-                for (var i = 0; i < BoardSize; i++)
-                {
-                    var piece1 = GetSquare(new Position(i, i));
-                    diagonal1.Add(piece1);
+                var start = new Position(0, 0);
 
-                    var piece2 = GetSquare(new Position(i, BoardSize - i - 1));
-                    diagonal2.Add(piece2);
-                }
+                var diagonalCalculator = new DiagonalCalculator(Width, Height);
 
-                return new List<SquareCollection> { diagonal1, diagonal2 };
+                var positivePositions = diagonalCalculator.GetDiagonalPositive(start, 3);
+                var negativePositions = diagonalCalculator.GetDiagonalNegative(start, 3);
+
+                var positiveSquares = Squares.Where(square => positivePositions.Contains(square.Position));
+                var negativeSquares = Squares.Where(square => negativePositions.Contains(square.Position));
+
+                return new List<SquareCollection> { new SquareCollection(positiveSquares), new SquareCollection(negativeSquares) };
             }
         }
 
-        public Board Clone()
-        {
-            return new Board(this);
-        }
+        public abstract Board Clone();
 
         public IEnumerable<Position> EmptyPositions
         {
             get
             {
                 return from square in Squares
-                    where square.Piece == null
-                    select square.Position;
+                       where square.Piece == null
+                       select square.Position;
             }
         }
 

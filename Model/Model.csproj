@@ -47,6 +47,7 @@
     <Compile Include="PlayerType.cs" />
     <Compile Include="Strategies\Minimax\MinimaxNode.cs" />
     <Compile Include="Strategies\RandomStrategy.cs" />
+    <Compile Include="TicTacToeBoard.cs" />
     <Compile Include="Utils\BoardStreamWriter.cs" />
     <Compile Include="ComputerPlayer.cs" />
     <Compile Include="SquareCollection.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Strategies\ITwoPlayersGame.cs" />
     <Compile Include="Strategies\Minimax\MinimaxStrategy.cs" />
     <Compile Include="Utils\BoardToStringEncoder.cs" />
+    <Compile Include="Utils\DiagonalCalculator.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\PlayerPieceMapping.cs" />
     <Compile Include="WinningLine.cs" />

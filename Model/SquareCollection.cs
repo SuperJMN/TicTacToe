@@ -8,7 +8,7 @@ namespace Model
         {
 
         }
-        public SquareCollection(IList<Square> squares)
+        public SquareCollection(IEnumerable<Square> squares)
             : base(squares)
         {
 
