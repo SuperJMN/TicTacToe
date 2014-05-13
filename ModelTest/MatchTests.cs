@@ -12,7 +12,7 @@ namespace ModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void StartMatchTwiceTest()
         {
-            var session = new Match();
+            var session = new Match(new TicTacToeBoard());
             session.AddChallenger(new HumanPlayer("Pepito"));
             session.AddChallenger(new HumanPlayer("Juanito"));
             session.Start();
@@ -22,7 +22,7 @@ namespace ModelTest
         [TestMethod]
         public void AddOnePlayer()
         {
-            var session = new Match();
+            var session = new Match(new TicTacToeBoard());
             session.AddChallenger(new HumanPlayer("Pepito"));
             Assert.AreEqual(1, session.Contenders.Count);
         }
@@ -30,7 +30,7 @@ namespace ModelTest
         [TestMethod]
         public void AddTwoPlayers()
         {
-            var session = new Match();
+            var session = new Match(new TicTacToeBoard());
             session.AddChallenger(new HumanPlayer("Pepito"));
             session.AddChallenger(new HumanPlayer("Juanito"));
             Assert.AreEqual(2, session.Contenders.Count);
@@ -40,7 +40,7 @@ namespace ModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AddThreePlayers()
         {
-            var session = new Match();
+            var session = new Match(new TicTacToeBoard());
             session.AddChallenger(new HumanPlayer("Pepito"));
             session.AddChallenger(new HumanPlayer("Juanito"));
             session.AddChallenger(new HumanPlayer("Jorgito"));
@@ -50,7 +50,7 @@ namespace ModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void StartInvalidSession()
         {
-            var session = new Match();
+            var session = new Match(new TicTacToeBoard());
             session.AddChallenger(new HumanPlayer("Pepito"));
             session.Start();
         }
@@ -58,7 +58,7 @@ namespace ModelTest
         [TestMethod]
         public void StartSessionVerifyFirstTurn()
         {
-            var session = new Match();
+            var session = new Match(new TicTacToeBoard());
             var humanPlayer = new HumanPlayer("Pepito");
             session.AddChallenger(humanPlayer);
             session.AddChallenger(new HumanPlayer("Juanito"));
@@ -69,7 +69,7 @@ namespace ModelTest
         [TestMethod]
         public void StartSessionVerifyNextTurn()
         {
-            var session = new Match();
+            var session = new Match(new TicTacToeBoard());
 
             var firstPlayer = new HumanPlayer("Pepito");
             session.AddChallenger(firstPlayer);
@@ -88,7 +88,7 @@ namespace ModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void StartSessionPlayerWantsToRepeatTurn()
         {
-            var session = new Match();
+            var session = new Match(new TicTacToeBoard());
 
             var firstPlayer = new HumanPlayer("Pepito");
             session.AddChallenger(firstPlayer);
@@ -106,7 +106,7 @@ namespace ModelTest
         [ExpectedException(typeof(InvalidPositionException))]
         public void PlayerMovesToTakenSquares()
         {
-            var session = new Match();
+            var session = new Match(new TicTacToeBoard());
 
             var firstPlayer = new HumanPlayer("Pepito");
             session.AddChallenger(firstPlayer);
@@ -124,7 +124,7 @@ namespace ModelTest
         [TestMethod]
         public void ComputerPlay()
         {
-            var session = new Match();
+            var session = new Match(new TicTacToeBoard());
 
             var firstPlayer = new ComputerPlayer("Pepito");
             session.AddChallenger(firstPlayer);

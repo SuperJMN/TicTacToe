@@ -11,6 +11,15 @@ namespace Model
         private Player playerInTurn;
         private Board board;
 
+        public Match(Board board)
+        {
+            Contenders = new List<Player>();
+            Coordinator = new MatchCoordinator(this);
+            Coordinator.GameOver += CoordinatorOnGameOver;
+
+            Board = board;
+        }
+
         public Board Board
         {
             get { return board; }
@@ -40,14 +49,7 @@ namespace Model
         private bool IsStarted { get; set; }
         public MatchCoordinator Coordinator { get; private set; }
 
-        public Match()
-        {
-            Contenders = new List<Player>();
-            Coordinator = new MatchCoordinator(this);
-            Coordinator.GameOver += CoordinatorOnGameOver;
-
-            Board = new TicTacToeBoard();
-        }
+        
 
         private void CoordinatorOnGameOver(object sender, EventArgs eventArgs)
         {
@@ -138,6 +140,11 @@ namespace Model
 
         private void PlayerOnWantToMove(object sender, PositionEventHandlerArgs args)
         {
+            if (!Board.GetValidMovePositions().Contains(args.Position))
+            {
+                throw new InvalidPositionException(args.Position);
+            }
+
             Coordinator.PlayerOnWantToMove(sender, args);
         }
 

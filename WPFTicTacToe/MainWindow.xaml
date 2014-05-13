@@ -11,7 +11,8 @@
         mc:Ignorable="d"
         viewModelLocator:ViewModelLocator.ViewModel="Main"
         WindowStartupLocation="CenterScreen"
-        Title="Tic Tac Toe" Height="623.333" Width="711.688"
+        Title="Tic Tac Toe" Height="623.333" Width="
+        11.688"
         d:DataContext="{d:DesignInstance wpfTicTacToe:MainWindowViewModel}">
     <Window.Resources>
         <converters:Bool2VisibilityHiddenConverter x:Key="Bool2VisibilityHiddenConverter" />

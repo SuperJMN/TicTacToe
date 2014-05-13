@@ -63,8 +63,6 @@ namespace WPFTicTacToe
             }
         }
 
-
-
         private Match Match
         {
             get { return match; }
@@ -209,7 +207,7 @@ namespace WPFTicTacToe
 
         public void StartNewMatch()
         {
-            Match = new Match();
+            Match = new Match(new TicTacToeBoard());
             match.Start();
         }
 

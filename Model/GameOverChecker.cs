@@ -28,9 +28,7 @@ namespace Model
 
                 return winningRows;
             }
-        }
-
-      
+        }      
 
         public bool GetIsFull()
         {

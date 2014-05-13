@@ -79,34 +79,42 @@ namespace Model
             OnPlayerMoved(new MovementEventArgs(movement));
         }
 
-        private IEnumerable<Square> GetRowSquares(int number)
+        protected IList<Square> GetRowSquares(int number)
         {
+            var row = new List<Square>();
             for (var i = 0; i < Width; i++)
             {
-                yield return squares[i, number];
+                row.Add(squares[i, number]);
             }
+            return row;
         }
 
-        private IEnumerable<Square> GetColumnSquares(int number)
+        protected IList<Square> GetColumnSquares(int number)
         {
+            var row = new List<Square>();
             for (var i = 0; i < Height; i++)
             {
-                yield return squares[number, i];
+                row.Add(squares[number, i]);
             }
+            return row;
         }
 
         private Square GetSquare(Position position)
         {
-            if (IsValidPosition(position))
+            if (IsInsideBoard(position))
             {
                 return squares[position.X, position.Y];
             }
             throw new InvalidPositionException(position);
         }
 
-        private bool IsValidPosition(Position position)
+
+        public abstract IEnumerable<Position> GetValidMovePositions();
+
+        private bool IsInsideBoard(Position position)
         {
-            return EmptyPositions.Contains(position);
+            return position.X >= 0 && position.X < Width &&
+                position.Y >= 0 && position.Y < Height;
         }
 
         public Piece GetPiece(Position p)

@@ -7,7 +7,7 @@ namespace Model.Strategies.Minimax
 {
     public class MinimaxNode
     {
-        private const int MaxDepth = 4;
+        private const int MaxDepth = 2;
 
         public MinimaxNode(Board originalBoard, Movement originatingMovement, ITwoPlayersGame twoPlayersGame, Player max, int depth)
         {

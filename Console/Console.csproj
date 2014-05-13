@@ -42,8 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectFourHumanPlayerConsoleConnector.cs" />
     <Compile Include="ConsoleMatch.cs" />
     <Compile Include="HumanPlayerConsoleConnector.cs" />
+    <Compile Include="TicTacToeHumanPlayerConsoleConnector.cs" />
     <Compile Include="MatchConfiguration.cs" />
     <Compile Include="PlayerInfo.cs" />
     <Compile Include="Program.cs" />

@@ -6,6 +6,11 @@ namespace Model
     {
         public Position Position { get; private set; }
 
+        public InvalidPositionException()
+        {
+            
+        }
+
         public InvalidPositionException(Position position)
         {
             Position = position;

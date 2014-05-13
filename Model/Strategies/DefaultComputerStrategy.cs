@@ -7,13 +7,13 @@ namespace Model.Strategies
 
         public Movement GetMoveFor(Board board, Player player)
         {
-            var emptyPosition = GetEmptyPosition(board);
+            var emptyPosition = GetFirstValidPosition(board);
             return new Movement(emptyPosition, player);
         }
 
-        private Position GetEmptyPosition(Board board)
+        private static Position GetFirstValidPosition(Board board)
         {
-            return board.EmptyPositions.First();            
+            return board.GetValidMovePositions().First();            
         }
     }
 }

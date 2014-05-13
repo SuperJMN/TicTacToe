@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Model
 {
     public class TicTacToeBoard : Board
@@ -15,6 +18,11 @@ namespace Model
         public override Board Clone()
         {
             return new TicTacToeBoard(this);
+        }
+
+        public override IEnumerable<Position> GetValidMovePositions()
+        {
+            return EmptyPositions;
         }
     }
 }

@@ -4,22 +4,22 @@ using Model;
 
 namespace Console
 {
-    class HumanPlayerConsoleConnector : IDisposable
+    internal abstract class HumanPlayerConsoleConnector : IDisposable
     {
-        private char PieceChar { get; set; }
-
-        public HumanPlayer Player
-        {
-            get { return player; }
-        }
-
-        private readonly HumanPlayer player;
+        private HumanPlayer player;
 
         public HumanPlayerConsoleConnector(HumanPlayer player, char pieceChar)
         {
             PieceChar = pieceChar;
             this.player = player;
             player.MoveRequested += HumanPlayerOnMoveRequested;
+        }
+
+        private char PieceChar { get; set; }
+
+        public HumanPlayer Player
+        {
+            get { return player; }
         }
 
         private void HumanPlayerOnMoveRequested(object sender, EventArgs eventArgs)
@@ -43,15 +43,9 @@ namespace Console
             } while (isPositionInvalid);
         }
 
-        private static Position GetPosition(TextReader input)
-        {
-            var x = PromptForInteger(input, "Column");
-            var y = PromptForInteger(input, "Row");
+        protected abstract Position GetPosition(TextReader textReader);
 
-            return new Position(x, y);
-        }
-
-        private static int PromptForInteger(TextReader input, string prompt)
+        protected static int PromptForInteger(TextReader input, string prompt)
         {
             System.Console.Write(prompt + ": ");
             return GetInteger(input);

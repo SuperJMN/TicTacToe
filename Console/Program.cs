@@ -17,7 +17,7 @@ namespace Console
                 var matchConfiguration = new MatchConfiguration
                 {
                     Player1 = new PlayerInfo("JMN", PlayerType.Human, 'O'),
-                    Player2 = new PlayerInfo("Anytta", PlayerType.ComputerMinimax, 'X'),
+                    Player2 = new PlayerInfo("Anytta", PlayerType.ComputerDefault, 'X'),
                 };
 
                 var match = new ConsoleMatch(matchConfiguration);

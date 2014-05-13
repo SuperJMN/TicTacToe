@@ -16,7 +16,6 @@ namespace Model
             var player = (Player)sender;
             var movement = new Movement(e.Position, player);
 
-
             if (player == Match.PlayerInTurn && !Match.IsFinished)
             {
                 Match.Board.Move(movement);

@@ -10,7 +10,7 @@ namespace Console
         private PlayerPieceMapping PlayerPieceMapping { get; set; }
         private Collection<HumanPlayerConsoleConnector> HumanPlayerConsoleConnectors { get; set; }
 
-        public ConsoleMatch(MatchConfiguration matchConfiguration)
+        public ConsoleMatch(MatchConfiguration matchConfiguration) : base(new ConnectFourBoard())
         {
             HumanPlayerConsoleConnectors = new Collection<HumanPlayerConsoleConnector>();
             PlayerPieceMapping = new PlayerPieceMapping();
@@ -58,7 +58,7 @@ namespace Console
 
             if (playerInfo.PlayerType == PlayerType.Human)
             {                
-                var connector = new HumanPlayerConsoleConnector((HumanPlayer) player, playerInfo.Piece);
+                var connector = new ConnectFourHumanPlayerConsoleConnector((HumanPlayer) player, playerInfo.Piece, Board);
                 HumanPlayerConsoleConnectors.Add(connector);
             }
             else
