@@ -9,7 +9,7 @@ namespace Model
     {
         private readonly Square[,] squares;
 
-        private readonly GameOverChecker gameOverChecker;
+        private GameOverChecker gameOverChecker;
 
         protected Board(int width, int height)
         {
@@ -18,7 +18,6 @@ namespace Model
             squares = new Square[width, height];
 
             CreateSquares();
-            gameOverChecker = new GameOverChecker(this);
         }
 
         public int Height { get; private set; }
@@ -123,9 +122,10 @@ namespace Model
             return square.Piece;
         }
 
-        private GameOverChecker GameOverChecker
+        protected GameOverChecker GameOverChecker
         {
             get { return gameOverChecker; }
+            set { gameOverChecker = value; }
         }
 
         public bool HasWinner
@@ -146,35 +146,35 @@ namespace Model
             if (handler != null) handler(this, args);
         }
 
-        public IEnumerable<SquareCollection> Rows
+        public IList<SquareList> Rows
         {
             get
             {
-                var rows = new List<SquareCollection>();
+                var rows = new List<SquareList>();
                 for (var y = 0; y < Height; y++)
                 {
                     var row = GetRowSquares(y);
-                    rows.Add(new SquareCollection(row.ToList()));
+                    rows.Add(new SquareList(row.ToList()));
                 }
                 return rows;
             }
         }
 
-        public IEnumerable<SquareCollection> Columns
+        public IList<SquareList> Columns
         {
             get
             {
-                var rows = new List<SquareCollection>();
+                var rows = new List<SquareList>();
                 for (var x = 0; x < Width; x++)
                 {
                     var row = GetColumnSquares(x);
-                    rows.Add(new SquareCollection(row.ToList()));
+                    rows.Add(new SquareList(row.ToList()));
                 }
                 return rows;
             }
         }
 
-        public IEnumerable<SquareCollection> Diagonals
+        public IEnumerable<SquareList> Diagonals
         {
             get
             {
@@ -188,7 +188,7 @@ namespace Model
                 var positiveSquares = Squares.Where(square => positivePositions.Contains(square.Position));
                 var negativeSquares = Squares.Where(square => negativePositions.Contains(square.Position));
 
-                return new List<SquareCollection> { new SquareCollection(positiveSquares), new SquareCollection(negativeSquares) };
+                return new List<SquareList> { new SquareList(positiveSquares), new SquareList(negativeSquares) };
             }
         }
 

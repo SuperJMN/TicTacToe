@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Model.Utils
 {
@@ -47,6 +48,21 @@ namespace Model.Utils
         {
             return start.X >= 0 && start.Y >= 0
                    && start.X + length - 1 < Width && start.Y + length - 1 < Height;
+        }
+
+        public IEnumerable<Position> GetDiagonalPositive(Position position)
+        {
+            var minDistanceToZero = Math.Min(position.X, position.Y);
+            var minDistanceToBounds = Math.Min(Width - position.X -1, Height - position.Y -1);
+
+            var p = new Position(position.X - minDistanceToZero, position.Y - minDistanceToZero);
+
+            var m = minDistanceToZero + minDistanceToBounds;
+            for (var i = 0; i <= m; i++)
+            {
+                yield return p;
+                p = new Position(p.X + 1, p.Y + 1);
+            }
         }
     }
 }

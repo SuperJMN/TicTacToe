@@ -7,7 +7,7 @@ namespace Model
     {
         public TicTacToeBoard() : base(3, 3)
         {
-          
+            this.GameOverChecker = new GameOverChecker(this, 4);
         }
 
         private TicTacToeBoard(TicTacToeBoard ticTacToeBoard) : base(ticTacToeBoard)

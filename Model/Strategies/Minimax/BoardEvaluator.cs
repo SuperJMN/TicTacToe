@@ -22,10 +22,10 @@ namespace Model.Strategies.Minimax
             return rows + columns + diagonals;
         }
 
-        private int Evaluate(SquareCollection collection, Player player)
+        private int Evaluate(SquareList list, Player player)
         {
-            var takenByPlayerCount = GetTakenByPlayer(collection, player).Count();
-            var takenByOponentCount = GetTakenByOponent(collection, player).Count();
+            var takenByPlayerCount = GetTakenByPlayer(list, player).Count();
+            var takenByOponentCount = GetTakenByOponent(list, player).Count();
 
             if (takenByPlayerCount == 3)
             {

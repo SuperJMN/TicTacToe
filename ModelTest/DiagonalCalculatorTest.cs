@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model;
 using Model.Utils;
@@ -11,9 +12,9 @@ namespace ModelTest
         [TestMethod]
         public void TestMethod()
         {
-            var diagonalCalculator = new DiagonalCalculator(6, 6);
-            var positions = diagonalCalculator.GetDiagonalPositive(new Position(1, 2), 4);
-            var flipped = diagonalCalculator.GetDiagonalNegative(new Position(1, 2), 4);
+            var diagonalCalculator = new DiagonalCalculator(5, 4);
+            var positions = diagonalCalculator.GetDiagonalPositive(new Position(3, 2)).ToList();
+            
         }
     }
 }

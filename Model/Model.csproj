@@ -51,7 +51,7 @@
     <Compile Include="TicTacToeBoard.cs" />
     <Compile Include="Utils\BoardStreamWriter.cs" />
     <Compile Include="ComputerPlayer.cs" />
-    <Compile Include="SquareCollection.cs" />
+    <Compile Include="SquareList.cs" />
     <Compile Include="Strategies\Minimax\BoardEvaluator.cs" />
     <Compile Include="Strategies\DefaultComputerStrategy.cs" />
     <Compile Include="Match.cs" />

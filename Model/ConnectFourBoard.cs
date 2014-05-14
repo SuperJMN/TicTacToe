@@ -9,7 +9,7 @@ namespace Model
         public ConnectFourBoard()
             : base(7, 6)
         {
-
+            this.GameOverChecker = new GameOverChecker(this, 4);
         }
 
         private ConnectFourBoard(ConnectFourBoard ticTacToeBoard)
@@ -28,7 +28,7 @@ namespace Model
             return positions;
         }
 
-        private IEnumerable<Position> GetValidMoveFrom(SquareCollection column)
+        private IEnumerable<Position> GetValidMoveFrom(SquareList column)
         {
             var positions = new List<Position>();
             for (int i = Height - 1; i >= 0; i--)
