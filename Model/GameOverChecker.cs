@@ -82,12 +82,14 @@ namespace Model
             var row = board.Rows[position.Y];
             var column = board.Columns[position.X];
             var positiveDiagonal = GetPositiveDiagonal(position);
+            var negativeDiagional = GetNegativeDiagonal(position);
 
             var rowCount = GetInlineCount(row, position.X);
             var columnCount = GetInlineCount(column, position.Y);
             var positiveDiagionalCount = GetInlineCount(positiveDiagonal, Math.Min(position.X, position.Y));
+            var negativeDiagionalCount = GetInlineCount(negativeDiagional, Math.Min(position.X, board.Height - 1 - position.Y));
 
-            var results = new List<int> {rowCount, columnCount, positiveDiagionalCount};
+            var results = new List<int> { rowCount, columnCount, positiveDiagionalCount, negativeDiagionalCount };
 
             var isEndingPosition = results.Any(i => i >= minimumPiecesCount);
 
@@ -98,6 +100,14 @@ namespace Model
         {
             var diagonalCalculator = new DiagonalCalculator(board.Width, board.Height);
             var positions = diagonalCalculator.GetDiagonalPositive(position);
+            var squares = board.Squares.Where(square => positions.Contains(square.Position)).OrderBy(square => square.Position.X);
+            return new SquareList(squares);
+        }
+
+        private SquareList GetNegativeDiagonal(Position position)
+        {
+            var diagonalCalculator = new DiagonalCalculator(board.Width, board.Height);
+            var positions = diagonalCalculator.GetDiagonalNegative(position);
             var squares = board.Squares.Where(square => positions.Contains(square.Position)).OrderBy(square => square.Position.X);
             return new SquareList(squares);
         }

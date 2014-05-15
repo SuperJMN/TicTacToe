@@ -217,5 +217,10 @@ namespace Model
                 return GameOverChecker.WinningLines;
             }
         }
+
+        public bool IsThisAWinningMovement(Movement movement)
+        {
+            return GameOverChecker.IsThisPositionEndingTheGame(movement.Position);
+        }
     }
 }

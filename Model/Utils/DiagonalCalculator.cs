@@ -52,16 +52,32 @@ namespace Model.Utils
 
         public IEnumerable<Position> GetDiagonalPositive(Position position)
         {
-            var minDistanceToZero = Math.Min(position.X, position.Y);
-            var minDistanceToBounds = Math.Min(Width - position.X -1, Height - position.Y -1);
+            var minDiff = Math.Min(position.X, position.Y);
+            
 
-            var p = new Position(position.X - minDistanceToZero, position.Y - minDistanceToZero);
+            var zeroBasedPosition = new Position(position.X - minDiff, position.Y - minDiff);
 
-            var m = minDistanceToZero + minDistanceToBounds;
-            for (var i = 0; i <= m; i++)
+            var sideLength = Math.Min(Height - zeroBasedPosition.Y - 1, Width - zeroBasedPosition.X - 1);
+
+            for (var i = 0; i <= sideLength; i++)
             {
-                yield return p;
-                p = new Position(p.X + 1, p.Y + 1);
+                yield return zeroBasedPosition;
+                zeroBasedPosition = new Position(zeroBasedPosition.X + 1, zeroBasedPosition.Y + 1);
+            }
+        }
+
+        public IEnumerable<Position> GetDiagonalNegative(Position position)
+        {
+            var minDiff = Math.Min(position.X, Height - position.Y - 1);
+
+            var zeroBasedPosition = new Position(position.X - minDiff, position.Y + minDiff);
+
+            var sideLength = Math.Min(zeroBasedPosition.Y, Width - zeroBasedPosition.X - 1);
+
+            for (var i = 0; i <= sideLength; i++)
+            {
+                yield return zeroBasedPosition;
+                zeroBasedPosition = new Position(zeroBasedPosition.X + 1, zeroBasedPosition.Y - 1);
             }
         }
     }

@@ -180,5 +180,10 @@ namespace Model
         }
 
         public IList<Player> Contenders { get; private set; }
+
+        public bool IsAWinningMovement(Movement movement)
+        {
+            return Board.IsThisAWinningMovement(movement);
+        }
     }
 }

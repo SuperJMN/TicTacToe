@@ -25,10 +25,10 @@ namespace Model
                 throw new InvalidOperationException("The turn should be respected");
             }
 
-            if (CanContinueGame())
+            if (CanContinueGame(movement))
             {
                 Match.SwitchTurn();
-                Match.PlayerInTurn.RequestMove(Match.Board);
+                Match.PlayerInTurn.RequestMove(Match.Board);                
             }
             else
             {
@@ -36,9 +36,9 @@ namespace Model
             }
         }
 
-        private bool CanContinueGame()
+        private bool CanContinueGame(Movement movement)
         {
-            return !Match.Board.IsFull && !Match.HasWinner;
+            return !Match.Board.IsFull && !Match.IsAWinningMovement(movement);
         }
 
         public event EventHandler GameOver;

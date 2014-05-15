@@ -9,6 +9,6 @@ namespace Model
             Position = position;
         }
 
-        public Position Position { get; set; }
+        public Position Position { get; private set; }
     }
 }
