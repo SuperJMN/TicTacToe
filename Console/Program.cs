@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Model;
+using Model.Utils;
 
 namespace Console
 {
@@ -10,24 +11,40 @@ namespace Console
 
         public static void Main()
         {
+            var matchFactory = new ConnectFourMatchFactory();
+            var connectorFactory = new ConnectFourConsoleConnectorFactory();
+
             var i = 1;
             for (var t = 0; t < i; t++)
             {
 
                 var matchConfiguration = new MatchConfiguration
                 {
-                    Player1 = new PlayerInfo("JMN", PlayerType.Human, 'O'),
-                    Player2 = new PlayerInfo("Anytta", PlayerType.Human, 'X'),
+                    Player1 = new PlayerInfo("JMN", PlayerType.Human),
+                    Player2 = new PlayerInfo("Anytta", PlayerType.ComputerDefault),
                 };
 
-                var match = new ConsoleMatch(matchConfiguration);
-                match.Start();
 
-                RegisterScores(match.WinningLines);
+                var match = matchFactory.CreateMatch(matchConfiguration);
+                
+                var createMapping = CreateMapping(match);
+
+                var decoratedMatch = new ConsoleMatchDecorator(match, connectorFactory, createMapping);
+                decoratedMatch.Start();
+
+                RegisterScores(decoratedMatch.WinningLines);
             }
 
             ShowScores(i);
             System.Console.ReadLine();
+        }
+
+        private static PlayerPieceMapping CreateMapping(Match match)
+        {
+            var playerPieceMapphing = new PlayerPieceMapping();
+            playerPieceMapphing.Add(match.FirstPlayer, 'X');
+            playerPieceMapphing.Add(match.SecondPlayer, 'O');
+            return playerPieceMapphing;
         }
 
         private static void ShowScores(int playedGames)

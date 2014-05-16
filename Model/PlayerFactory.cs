@@ -6,10 +6,12 @@ namespace Model
 {
     public class PlayerFactory
     {
+        private readonly GameOverChecker gameOverChecker;
         private ITwoPlayersGame TwoPlayersGame { get; set; }
 
-        public PlayerFactory(ITwoPlayersGame twoPlayersGame)
+        public PlayerFactory(ITwoPlayersGame twoPlayersGame, GameOverChecker gameOverChecker)
         {
+            this.gameOverChecker = gameOverChecker;
             TwoPlayersGame = twoPlayersGame;
         }
 
@@ -38,7 +40,7 @@ namespace Model
         private ComputerPlayer CreateComputerPlayerMinimax(string name)
         {
             var computer = new ComputerPlayer(name);
-            computer.Strategy = new MinimaxStrategy(TwoPlayersGame, computer);
+            computer.Strategy = new MinimaxStrategy(TwoPlayersGame, computer, gameOverChecker);
 
             return computer;
         }

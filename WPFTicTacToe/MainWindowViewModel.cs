@@ -61,7 +61,7 @@ namespace WPFTicTacToe
                         break;
                 }
             }
-            var factory = new PlayerFactory(MatchViewModel);
+            var factory = new PlayerFactory(MatchViewModel, MatchViewModel.GameOverChecker);
             var player  = factory.CreatePlayer(name, playerType);
             return player;
         }

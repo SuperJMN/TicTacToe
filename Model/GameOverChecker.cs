@@ -7,93 +7,105 @@ namespace Model
 {
     public class GameOverChecker
     {
-        private readonly Board board;
+        private Board board;
         private readonly int minimumPiecesCount;
 
         public GameOverChecker(Board board, int minimumPiecesCount)
         {
-            this.board = board;
+            Board = board;
             this.minimumPiecesCount = minimumPiecesCount;
             DiagonalCalculator = new DiagonalCalculator(board.Width, board.Height);
         }
 
-
-
         public DiagonalCalculator DiagonalCalculator { get; set; }
 
-        public IEnumerable<WinningLine> WinningLines
+        public IEnumerable<WinningLine> WinningLines { get; set; }
+
+        public Board Board
         {
-            get
+            get { return board; }
+            set
             {
-                var winningRows = new List<WinningLine>();
-
-                winningRows.AddRange(GetWinningLines(board.Columns));
-                winningRows.AddRange(GetWinningLines(board.Rows));
-                winningRows.AddRange(GetWinningLines(board.Diagonals));
-
-                return winningRows;
+                board = value;
+                board.PlayerMoved += BoardOnPlayerMoved;
             }
         }
 
-        public bool GetIsFull()
+        public bool HasWinner { get; private set; }
+
+        public bool IsGameOver
         {
-            var squares = board.Squares;
-            var areAllTaken = squares.All(square => square.Piece != null);
-            return areAllTaken;
+            get { return Board.IsFull || HasWinner; }
         }
 
-        private static IEnumerable<WinningLine> GetWinningLines(IEnumerable<SquareList> squareCollection)
+        private void BoardOnPlayerMoved(object sender, MovementEventArgs args)
         {
-            var winningLines = from column in squareCollection
-                               where AreFullAndTakenBySamePlayer(column)
-                               select new WinningLine
-                               {
-                                   Player = column.First().Piece.Player,
-                                   Squares = column,
-                               };
-
-            return winningLines;
-        }
-
-        private static bool AreFullAndTakenBySamePlayer(IList<Square> squares)
-        {
-            var areSquaresFull = IsSquareCollectionFull(squares);
-            if (areSquaresFull)
+            var linesWithWinningInline = GetLinesWithWinningInline(args.Movement.Position);
+            if (linesWithWinningInline.Any())
             {
-                return AllTakenBySamePlayer(squares);
+                var winningLines = linesWithWinningInline.Select(list => new WinningLine()
+                {
+                    Squares = list,
+                    Player = args.Movement.Player,
+                });
+
+
+                WinningLines = winningLines;
+                HasWinner = true;
             }
-            return false;
         }
 
-        private static bool AllTakenBySamePlayer(IEnumerable<Square> row)
+        private IEnumerable<SquareList> GetLinesWithWinningInline(Position position)
         {
-            var allTakenBySamePlayer = row.Select(square => square.Piece.Player);
-            var takenBySamePlayer = allTakenBySamePlayer.Distinct();
-            return takenBySamePlayer.Count() == 1;
+            var list = new List<SquareList>();
+
+            var row = new LineToBeExplored(board.Rows[position.Y], position.X);
+            var column = new LineToBeExplored(board.Columns[position.X], position.Y);
+            var diagonal1 = new LineToBeExplored(GetPositiveDiagonal(position), Math.Min(position.X, position.Y));
+            var diagonal2 = new LineToBeExplored(GetNegativeDiagonal(position), Math.Min(position.X, board.Height - 1 - position.Y));
+
+            AddIfWinner(row, list);
+            AddIfWinner(column, list);
+            AddIfWinner(diagonal1, list);
+            AddIfWinner(diagonal2, list);
+
+            return list;
         }
 
-        private static bool IsSquareCollectionFull(IEnumerable<Square> row)
+        private void AddIfWinner(LineToBeExplored lineToBeExplored, List<SquareList> list)
         {
-            return row.All(square => square.Piece != null);
+            if (GetInlineCount(lineToBeExplored.SquareList, lineToBeExplored.X) >= minimumPiecesCount)
+            {
+                list.Add(lineToBeExplored.SquareList);
+            }
+        }
+
+        private class LineToBeExplored
+        {
+            private readonly SquareList squareList;
+            private readonly int x;
+
+            public SquareList SquareList
+            {
+                get { return squareList; }
+            }
+
+            public int X
+            {
+                get { return x; }
+            }
+
+            public LineToBeExplored(SquareList squareList, int x)
+            {
+                this.squareList = squareList;
+                this.x = x;
+            }
         }
 
         public bool IsThisPositionEndingTheGame(Position position)
         {
-            var row = board.Rows[position.Y];
-            var column = board.Columns[position.X];
-            var positiveDiagonal = GetPositiveDiagonal(position);
-            var negativeDiagional = GetNegativeDiagonal(position);
-
-            var rowCount = GetInlineCount(row, position.X);
-            var columnCount = GetInlineCount(column, position.Y);
-            var positiveDiagionalCount = GetInlineCount(positiveDiagonal, Math.Min(position.X, position.Y));
-            var negativeDiagionalCount = GetInlineCount(negativeDiagional, Math.Min(position.X, board.Height - 1 - position.Y));
-
-            var results = new List<int> { rowCount, columnCount, positiveDiagionalCount, negativeDiagionalCount };
-
-            var isEndingPosition = results.Any(i => i >= minimumPiecesCount);
-
-            return isEndingPosition;
+            var linesWithWinningInline = GetLinesWithWinningInline(position);
+            return linesWithWinningInline.Any();
         }
 
         private SquareList GetPositiveDiagonal(Position position)
@@ -144,17 +156,15 @@ namespace Model
                     if (player == toFind)
                     {
                         count++;
-                        i++;    
+                        i++;
                     }
                     else
                     {
                         foundOther = true;
-                    }                    
-                }                
+                    }
+                }
             }
             return count;
         }
     }
-
-
 }

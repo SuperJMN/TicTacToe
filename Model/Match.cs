@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Model.Strategies;
 using Model.Utils;
 
 namespace Model
 {
-    public class Match : ITwoPlayersGame
+    public class Match : IMatch
     {
+        private readonly GameOverChecker gameOverChecker;
         private Player playerInTurn;
         private Board board;
 
-        public Match(Board board)
+        public Match(Board board, GameOverChecker gameOverChecker)
         {
-            Contenders = new List<Player>();
-            Coordinator = new MatchCoordinator(this);
-            Coordinator.GameOver += CoordinatorOnGameOver;
-
+            this.gameOverChecker = gameOverChecker;
             Board = board;
+            Contenders = new List<Player>();
+            Coordinator = new MatchCoordinator(this, gameOverChecker);
+            Coordinator.GameOver += CoordinatorOnGameOver;            
         }
 
         public Board Board
@@ -54,7 +54,7 @@ namespace Model
         private void CoordinatorOnGameOver(object sender, EventArgs eventArgs)
         {
             IsFinished = true;
-            var gameOverEventArgs = new GameOverEventArgs(Board.WinningLines);
+            var gameOverEventArgs = new GameOverEventArgs(gameOverChecker.WinningLines);
 
             UnsubscribeFromContenderEvents();
             OnGameOver(gameOverEventArgs);
@@ -153,7 +153,7 @@ namespace Model
 
         public bool HasWinner
         {
-            get { return Board.HasWinner; }
+            get { return gameOverChecker.HasWinner; }
         }
 
         private void UnsubscribeFromContenderEvents()
@@ -166,7 +166,7 @@ namespace Model
 
         public IEnumerable<WinningLine> WinningLines
         {
-            get { return Board.WinningLines; }
+            get { return gameOverChecker.WinningLines; }
         }
 
         public bool IsFinished { get; private set; }
@@ -180,10 +180,5 @@ namespace Model
         }
 
         public IList<Player> Contenders { get; private set; }
-
-        public bool IsAWinningMovement(Movement movement)
-        {
-            return Board.IsThisAWinningMovement(movement);
-        }
     }
 }

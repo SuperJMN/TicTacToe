@@ -5,8 +5,11 @@ namespace Model.Strategies.Minimax
 {
     public class MinimaxStrategy : IMoveStrategy
     {
-        public MinimaxStrategy(ITwoPlayersGame twoPlayersGame, Player max)
+        private readonly GameOverChecker gameOverChecker;
+
+        public MinimaxStrategy(ITwoPlayersGame twoPlayersGame, Player max, GameOverChecker gameOverChecker)
         {
+            this.gameOverChecker = gameOverChecker;
             TwoPlayersGame = twoPlayersGame;
             Max = max;
         }
@@ -16,7 +19,7 @@ namespace Model.Strategies.Minimax
 
         public Movement GetMoveFor(Board board, Player player)
         {
-            var root = new MinimaxNode(board, RootGeneratingMovement, TwoPlayersGame, Max, 0);
+            var root = new MinimaxNode(board, RootGeneratingMovement, TwoPlayersGame, Max, 0, gameOverChecker);
             var bestNode = root.Nodes.First(node => node.Score == root.Score);
             return bestNode.OriginatingMovement;
         }

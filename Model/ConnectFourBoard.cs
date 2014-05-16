@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Model
 {
@@ -9,7 +7,7 @@ namespace Model
         public ConnectFourBoard()
             : base(7, 6)
         {
-            this.GameOverChecker = new GameOverChecker(this, 4);
+            
         }
 
         private ConnectFourBoard(ConnectFourBoard ticTacToeBoard)

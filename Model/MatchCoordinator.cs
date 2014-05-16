@@ -2,21 +2,26 @@ using System;
 
 namespace Model
 {
-    public class MatchCoordinator
+    public sealed class MatchCoordinator
     {
-        public MatchCoordinator(Match match)
-        {
+        private readonly GameOverChecker gameOverChecker;
+
+        public MatchCoordinator(Match match, GameOverChecker gameOverChecker)
+        {            
             Match = match;
+            this.gameOverChecker = gameOverChecker;
+            this.gameOverChecker.Board = match.Board;            
+            
         }
 
         private Match Match { get; set; }
-
+        
         public void PlayerOnWantToMove(object sender, PositionEventHandlerArgs e)
         {
             var player = (Player)sender;
             var movement = new Movement(e.Position, player);
 
-            if (player == Match.PlayerInTurn && !Match.IsFinished)
+            if (player == Match.PlayerInTurn && !gameOverChecker.IsGameOver)
             {
                 Match.Board.Move(movement);
             }
@@ -25,29 +30,25 @@ namespace Model
                 throw new InvalidOperationException("The turn should be respected");
             }
 
-            if (CanContinueGame(movement))
+            if (!gameOverChecker.IsGameOver)
             {
                 Match.SwitchTurn();
                 Match.PlayerInTurn.RequestMove(Match.Board);                
             }
             else
             {
-                OnGameEnded();
+                OnGameOver(new GameOverEventArgs(gameOverChecker.WinningLines));
             }
         }
 
-        private bool CanContinueGame(Movement movement)
-        {
-            return !Match.Board.IsFull && !Match.IsAWinningMovement(movement);
-        }
+        public event GameOverEventHandler GameOver;
 
-        public event EventHandler GameOver;
-
-        private void OnGameEnded()
+        private void OnGameOver(GameOverEventArgs e)
         {
             var handler = GameOver;
-            if (handler != null) handler(this, EventArgs.Empty);
+            if (handler != null) handler(this, e);
         }
+
 
         public void StartGame()
         {

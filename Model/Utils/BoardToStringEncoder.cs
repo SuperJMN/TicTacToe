@@ -6,7 +6,7 @@ namespace Model.Utils
     {
         public Board Board { get; set; }
         public PlayerPieceMapping Mapping { get; set; }
-        private int Tabs { get; set; }
+        
 
 
 
@@ -29,24 +29,12 @@ namespace Model.Utils
             
             for (var y = 0; y < Board.Height; y++)
             {
-                for (var k = 0; k < Tabs; k++)
-                {
-                    builder.Append("\t");
-                }
-
-                for (var j = 0; j < this.Board.Width; j++)
+                for (var j = 0; j < Board.Width; j++)
                 {
                     var piece = Board.GetPiece(new Position(j, y));
                     char representation;
 
-                    if (piece == null)
-                    {
-                        representation = ' ';
-                    }
-                    else
-                    {
-                        representation = Mapping[piece.Player];
-                    }
+                    representation = piece == null ? ' ' : Mapping[piece.Player];
 
                     builder.Append("[" + representation + "]");
                 }

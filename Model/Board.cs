@@ -7,9 +7,7 @@ namespace Model
 {
     public abstract class Board
     {
-        private readonly Square[,] squares;
-
-        private GameOverChecker gameOverChecker;
+        private readonly Square[,] squares;        
 
         protected Board(int width, int height)
         {
@@ -44,7 +42,8 @@ namespace Model
         {
             get
             {
-                return gameOverChecker.GetIsFull();
+                var areAllTaken = Squares.All(square => square.Piece != null);
+                return areAllTaken;
             }
         }
 
@@ -68,7 +67,7 @@ namespace Model
 
             var square = GetSquare(movement.Position);
 
-            if (square.Piece != null)
+            if (SquareIsTaken(square))
             {
                 throw new InvalidPositionException(movement.Position);
             }
@@ -78,7 +77,12 @@ namespace Model
             OnPlayerMoved(new MovementEventArgs(movement));
         }
 
-        protected IList<Square> GetRowSquares(int number)
+        private static bool SquareIsTaken(Square square)
+        {
+            return square.Piece != null;
+        }
+
+        private IList<Square> GetRowSquares(int number)
         {
             var row = new List<Square>();
             for (var i = 0; i < Width; i++)
@@ -88,7 +92,7 @@ namespace Model
             return row;
         }
 
-        protected IList<Square> GetColumnSquares(int number)
+        private IList<Square> GetColumnSquares(int number)
         {
             var row = new List<Square>();
             for (var i = 0; i < Height; i++)
@@ -107,7 +111,6 @@ namespace Model
             throw new InvalidPositionException(position);
         }
 
-
         public abstract IEnumerable<Position> GetValidMovePositions();
 
         private bool IsInsideBoard(Position position)
@@ -120,17 +123,6 @@ namespace Model
         {
             var square = GetSquare(p);
             return square.Piece;
-        }
-
-        protected GameOverChecker GameOverChecker
-        {
-            get { return gameOverChecker; }
-            set { gameOverChecker = value; }
-        }
-
-        public bool HasWinner
-        {
-            get { return GameOverChecker.WinningLines.Any(); }
         }
 
         public IEnumerable<Square> Squares
@@ -208,19 +200,6 @@ namespace Model
         {
             var encoder = new BoardToStringEncoder(this);
             return encoder.ToString();
-        }
-
-        public IEnumerable<WinningLine> WinningLines
-        {
-            get
-            {
-                return GameOverChecker.WinningLines;
-            }
-        }
-
-        public bool IsThisAWinningMovement(Movement movement)
-        {
-            return GameOverChecker.IsThisPositionEndingTheGame(movement.Position);
         }
     }
 }

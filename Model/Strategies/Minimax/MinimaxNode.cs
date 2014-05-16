@@ -7,10 +7,12 @@ namespace Model.Strategies.Minimax
 {
     public class MinimaxNode
     {
+        private readonly GameOverChecker gameOverChecker;
         private const int MaxDepth = 2;
 
-        public MinimaxNode(Board originalBoard, Movement originatingMovement, ITwoPlayersGame twoPlayersGame, Player max, int depth)
+        public MinimaxNode(Board originalBoard, Movement originatingMovement, ITwoPlayersGame twoPlayersGame, Player max, int depth, GameOverChecker gameOverChecker)
         {
+            this.gameOverChecker = gameOverChecker;
             OriginatingMovement = originatingMovement;
             TwoPlayersGame = twoPlayersGame;
             Max = max;
@@ -84,7 +86,7 @@ namespace Model.Strategies.Minimax
             {
                 return OriginalBoard.IsFull ||
                        Depth == MaxDepth ||
-                       OriginalBoard.HasWinner;
+                       gameOverChecker.HasWinner;
             }
         }
 
@@ -125,7 +127,7 @@ namespace Model.Strategies.Minimax
                         var movement = new Movement(emptyPosition, CurrentPlayer);
                         boardSucessor.Move(movement);
 
-                        var childNode = new MinimaxNode(boardSucessor, movement, TwoPlayersGame, Max, Depth + 1);
+                        var childNode = new MinimaxNode(boardSucessor, movement, TwoPlayersGame, Max, Depth + 1, gameOverChecker);
                         nodes.Add(childNode);
                     }
                 }

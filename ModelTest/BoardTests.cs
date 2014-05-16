@@ -50,26 +50,58 @@ namespace ModelTest
         public void WinGameHorizontal()
         {
             var board = new TicTacToeBoard();
+            var gameOverChecker = new GameOverChecker(board, 3);
             var player = new HumanPlayer("Pepito");
             board.Move(new Movement(new Position(0, 1), player));
             board.Move(new Movement(new Position(1, 1), player));
             board.Move(new Movement(new Position(2, 1), player));
 
-            Assert.IsTrue(board.HasWinner);
+            Assert.IsTrue(gameOverChecker.HasWinner);
         }
 
         [TestMethod]
         public void WinGameVertical()
         {
             var board = new TicTacToeBoard();
+            var gameOverChecker = new GameOverChecker(board, 3);
+
             var player = new HumanPlayer("Pepito");
+
             board.Move(new Movement(new Position(0, 0), player));
             board.Move(new Movement(new Position(0, 1), player));
             board.Move(new Movement(new Position(0, 2), player));
 
-            Assert.IsTrue(board.HasWinner);
+            Assert.IsTrue(gameOverChecker.HasWinner);
         }
 
+        [TestMethod]
+        public void WinGameDiagonal1()
+        {
+            var board = new TicTacToeBoard();
+            var gameOverChecker = new GameOverChecker(board, 3);
+            var player = new HumanPlayer("Pepito");
+            board.Move(new Movement(new Position(0, 0), player));
+            board.Move(new Movement(new Position(1, 1), player));
+            var winningMovement = new Movement(new Position(2, 2), player);
+            board.Move(winningMovement);
+
+            Assert.IsTrue(gameOverChecker.IsThisPositionEndingTheGame(winningMovement.Position));
+        }
+
+        [TestMethod]
+        public void WinGameDiagonal2()
+        {
+            var board = new TicTacToeBoard();
+            var gameOverChecker = new GameOverChecker(board, 3);
+
+            var player = new HumanPlayer("Pepito");
+            board.Move(new Movement(new Position(2, 0), player));
+            board.Move(new Movement(new Position(1, 1), player));
+            var winningMovement = new Movement(new Position(0, 2), player);
+            board.Move(winningMovement);
+
+            Assert.IsTrue(gameOverChecker.IsThisPositionEndingTheGame(winningMovement.Position));
+        }
 
         [TestMethod]
         public void FullRowWithBothPlayersShouldNotWin()
@@ -77,11 +109,14 @@ namespace ModelTest
             var board = new TicTacToeBoard();
             var player1 = new HumanPlayer("Pepito");
             var player2 = new HumanPlayer("Juanito");
+
+            var gameOverChecker = new GameOverChecker(board, 3);
+
             board.Move(new Movement(new Position(0, 0), player1));
             board.Move(new Movement(new Position(0, 1), player2));
             board.Move(new Movement(new Position(0, 2), player1));
 
-            Assert.IsFalse(board.HasWinner);
+            Assert.IsFalse(gameOverChecker.HasWinner);
         }
 
         [TestMethod]

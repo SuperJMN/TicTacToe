@@ -2,17 +2,15 @@ using Model;
 
 namespace Console
 {
-    internal class PlayerInfo
+    public class PlayerInfo
     {
-        public PlayerInfo(string name, PlayerType playerType, char piece)
+        public PlayerInfo(string name, PlayerType playerType)
         {
             Name = name;
-            PlayerType = playerType;
-            Piece = piece;
+            PlayerType = playerType;            
         }
 
         public string Name { get; set; }
-        public PlayerType PlayerType { get; set; }        
-        public char Piece { get; set; }
+        public PlayerType PlayerType { get; set; }                
     }
 }

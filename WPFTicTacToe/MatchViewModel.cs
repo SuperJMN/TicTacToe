@@ -205,9 +205,13 @@ namespace WPFTicTacToe
             PlayerInTurn = Match.PlayerInTurn;
         }
 
+        public GameOverChecker GameOverChecker { get; set; }
+
         public void StartNewMatch()
         {
-            Match = new Match(new TicTacToeBoard());
+            var ticTacToeBoard = new TicTacToeBoard();
+            GameOverChecker = new GameOverChecker(ticTacToeBoard, 3);
+            Match = new Match(ticTacToeBoard, GameOverChecker);
             match.Start();
         }
 
