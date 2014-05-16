@@ -44,19 +44,13 @@
   <ItemGroup>
     <Compile Include="ConnectFourConsoleConnectorFactory.cs" />
     <Compile Include="ConnectFourHumanPlayerConsoleConnector.cs" />
-    <Compile Include="ConnectFourMatchFactory.cs" />
     <Compile Include="ConsoleMatchDecorator.cs" />
-    <Compile Include="GameType.cs" />
     <Compile Include="HumanPlayerConsoleConnector.cs" />
     <Compile Include="HumanPlayerConsoleConnectorFactory.cs" />
-    <Compile Include="MatchFactory.cs" />
     <Compile Include="TicTacToeConsoleConnectorFactory.cs" />
     <Compile Include="TicTacToeHumanPlayerConsoleConnector.cs" />
-    <Compile Include="MatchConfiguration.cs" />
-    <Compile Include="PlayerInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TicTacToeMatchFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

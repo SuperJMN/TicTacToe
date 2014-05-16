@@ -21,7 +21,7 @@ namespace Console
                 var matchConfiguration = new MatchConfiguration
                 {
                     Player1 = new PlayerInfo("JMN", PlayerType.Human),
-                    Player2 = new PlayerInfo("Anytta", PlayerType.ComputerDefault),
+                    Player2 = new PlayerInfo("Anytta", PlayerType.ComputerRandom),
                 };
 
 

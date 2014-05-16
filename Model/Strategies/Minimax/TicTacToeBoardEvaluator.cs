@@ -3,12 +3,11 @@ using System.Linq;
 
 namespace Model.Strategies.Minimax
 {
-
-    public class BoardEvaluator
+    public class TicTacToeBoardEvaluator : IBoardEvaluator
     {
         private Board Board { get; set; }
 
-        public BoardEvaluator(Board board)
+        public TicTacToeBoardEvaluator(Board board)
         {
             Board = board;
         }

@@ -21,13 +21,13 @@ namespace Model.Strategies
 
         private Position GetRandomPosition(Board board)
         {
-            var emptyPositions = board.EmptyPositions.ToList();
+            var validPositions = board.GetValidMovePositions().ToList();
 
-            var count = emptyPositions.Count();
+            var count = validPositions.Count;
 
             var randomEmptyIndex = random.Next(0, count - 1);
 
-            return emptyPositions[randomEmptyIndex];
+            return validPositions[randomEmptyIndex];
         }
     }
 }

@@ -1,6 +1,4 @@
-using Model;
-
-namespace Console
+namespace Model
 {
     public class PlayerInfo
     {

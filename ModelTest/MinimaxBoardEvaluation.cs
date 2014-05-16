@@ -17,7 +17,7 @@ namespace ModelTest
             board.Move(new Movement(new Position(0, 1), player1));
             board.Move(new Movement(new Position(0, 2), player1));
 
-            var boardEvaluator = new BoardEvaluator(board);
+            var boardEvaluator = new TicTacToeBoardEvaluator(board);
             var score = boardEvaluator.Evaluate(player1);
             Assert.AreEqual(105, score);
         }
@@ -32,7 +32,7 @@ namespace ModelTest
             board.Move(new Movement(new Position(1, 1), player1));
             board.Move(new Movement(new Position(2, 2), player1));
 
-            var boardEvaluator = new BoardEvaluator(board);
+            var boardEvaluator = new TicTacToeBoardEvaluator(board);
             var score = boardEvaluator.Evaluate(player1);
             Assert.AreEqual(107, score);
         }
@@ -48,7 +48,7 @@ namespace ModelTest
             board.Move(new Movement(new Position(1, 1), player2));
             board.Move(new Movement(new Position(2, 2), player1));
 
-            var boardEvaluator = new BoardEvaluator(board);
+            var boardEvaluator = new TicTacToeBoardEvaluator(board);
             var score = boardEvaluator.Evaluate(player1);
             Assert.AreEqual(1, score);
         }
@@ -64,7 +64,7 @@ namespace ModelTest
             board.Move(new Movement(new Position(1, 1), player2));
             board.Move(new Movement(new Position(2, 2), player1));
 
-            var boardEvaluator = new BoardEvaluator(board);
+            var boardEvaluator = new TicTacToeBoardEvaluator(board);
             var score1 = boardEvaluator.Evaluate(player1);
             var score2 = boardEvaluator.Evaluate(player2);
             Assert.AreEqual(-score1, score2);

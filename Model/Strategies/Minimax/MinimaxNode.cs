@@ -8,11 +8,13 @@ namespace Model.Strategies.Minimax
     public class MinimaxNode
     {
         private readonly GameOverChecker gameOverChecker;
+        private readonly IBoardEvaluator boardEvaluator;
         private const int MaxDepth = 2;
 
-        public MinimaxNode(Board originalBoard, Movement originatingMovement, ITwoPlayersGame twoPlayersGame, Player max, int depth, GameOverChecker gameOverChecker)
+        public MinimaxNode(Board originalBoard, Movement originatingMovement, ITwoPlayersGame twoPlayersGame, Player max, int depth, GameOverChecker gameOverChecker, IBoardEvaluator boardEvaluator)
         {
             this.gameOverChecker = gameOverChecker;
+            this.boardEvaluator = boardEvaluator;
             OriginatingMovement = originatingMovement;
             TwoPlayersGame = twoPlayersGame;
             Max = max;
@@ -59,10 +61,9 @@ namespace Model.Strategies.Minimax
             }
         }
 
-        private static int EvaluateTerminalNode(MinimaxNode minimaxNode)
+        private int EvaluateTerminalNode(MinimaxNode minimaxNode)
         {
-            var boardEvaluatorSimple = new BoardEvaluator(minimaxNode.OriginalBoard);
-            var best = boardEvaluatorSimple.Evaluate(minimaxNode.OriginatingPlayer);
+            var best = boardEvaluator.Evaluate(minimaxNode.OriginatingPlayer);
 
             if (minimaxNode.CurrentPlayer == minimaxNode.Max)
             {
@@ -127,7 +128,7 @@ namespace Model.Strategies.Minimax
                         var movement = new Movement(emptyPosition, CurrentPlayer);
                         boardSucessor.Move(movement);
 
-                        var childNode = new MinimaxNode(boardSucessor, movement, TwoPlayersGame, Max, Depth + 1, gameOverChecker);
+                        var childNode = new MinimaxNode(boardSucessor, movement, TwoPlayersGame, Max, Depth + 1, gameOverChecker, boardEvaluator);
                         nodes.Add(childNode);
                     }
                 }
