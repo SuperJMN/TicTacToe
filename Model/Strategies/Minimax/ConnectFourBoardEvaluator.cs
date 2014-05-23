@@ -24,9 +24,9 @@ namespace Model.Strategies.Minimax
                              Score = EvaluatePosition(player, position)
                          };
 
-            var positionEvaluation = scores.Max();
+            var positionEvaluation = scores.Max(arg => arg.Score);
 
-            return positionEvaluation.Score;
+            return positionEvaluation;
         }
 
         private int EvaluatePosition(Player player, Position position)
@@ -34,23 +34,60 @@ namespace Model.Strategies.Minimax
             var newBoard = board.Clone();
             newBoard.Move(new Movement(position, player));
 
-            int rowScore = EvaluateRow(position, newBoard);
-            return rowScore;
+            var rowScore = EvaluateRow(position, newBoard, player);
+            var transposed = newBoard.Clone();
+            transposed.Transpose();
+            var columnScore = EvaluateColumn(new Position(position.Y, position.X), transposed, player);
+            
+            return rowScore + columnScore;
         }
 
-        private int EvaluateRow(Position position, Board newBoard)
+        private int EvaluateColumn(Position position, Board newBoard, Player player)
         {
-            var squares = GetRow(position, newBoard, 4);
+            var squares = GetColumn(position, newBoard, 4);
+            if (IsPossibleToFillWithPlayer(player, squares))
+            {
+                return 1;
+            }
             return 0;
         }
 
-        private SquareList GetRow(Position position, Board newBoard, int i)
+        private static SquareList GetColumn(Position position, Board newBoard, int i)
+        {
+            var start = Math.Max(position.Y - i, 0);
+            var end = Math.Min(position.Y + i - 1, newBoard.Height - 1);
+            var count = end - start;
+
+            var squareList = newBoard.Rows[position.X];
+
+            var squares = squareList.GetRange(start, count);
+            return new SquareList(squares);
+        }
+
+        private int EvaluateRow(Position position, Board newBoard, Player player)
+        {
+            var squares = GetRow(position, newBoard, 4);
+            if (IsPossibleToFillWithPlayer(player, squares))
+            {
+                return 1;
+            }
+            return 0;
+        }
+
+        private bool IsPossibleToFillWithPlayer(Player player, SquareList squares)
+        {
+            return squares.All(square => square.IsEmtpy || square.IsTakenBy(player));
+        }
+
+        private static SquareList GetRow(Position position, Board newBoard, int i)
         {
             var start = Math.Max(position.X - i, 0);
-            var end = Math.Min(position.X + i, newBoard.Width - 1);
-            var count = board.Width - start - end;
+            var end = Math.Min(position.X + i - 1, newBoard.Width - 1);
+            var count = end - start;
 
-            var squares = newBoard.Rows[position.Y].GetRange(start, count);
+            var squareList = newBoard.Rows[position.Y];
+
+            var squares = squareList.GetRange(start, count);
             return new SquareList(squares);
         }
     }

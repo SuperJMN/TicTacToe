@@ -7,14 +7,13 @@ namespace Model
 {
     public abstract class Board
     {
-        private readonly Square[,] squares;        
+        private Square[,] squares;
 
         protected Board(int width, int height)
         {
             Width = width;
             Height = height;
-            squares = new Square[width, height];
-
+           
             CreateSquares();
         }
 
@@ -22,7 +21,7 @@ namespace Model
 
         public int Width { get; private set; }
 
-        protected Board(Board original)
+        protected internal Board(Board original)
             : this(original.Width, original.Height)
         {
             for (var y = 0; y < Height; y++)
@@ -49,6 +48,8 @@ namespace Model
 
         private void CreateSquares()
         {
+            squares = new Square[Width, Height];
+
             for (var y = 0; y < Height; y++)
             {
                 for (var x = 0; x < Width; x++)
@@ -200,6 +201,29 @@ namespace Model
         {
             var encoder = new BoardToStringEncoder(this);
             return encoder.ToString();
+        }
+
+        public void Transpose()
+        {
+            var oldSquares = (Square[,]) squares.Clone();
+
+            var oldHeight = Height;
+            Height = Width;
+            Width = oldHeight;
+
+            CreateSquares();
+
+            for (var y = 0; y < Height; y++)
+            {
+                for (var x = 0; x < Width; x++)
+                {
+                    var square = oldSquares[y, x];
+                    if (square.Piece != null)
+                    {
+                        squares[y, x].Piece = oldSquares[y, x].Piece;
+                    }
+                }
+            }
         }
     }
 }

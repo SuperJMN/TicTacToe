@@ -40,6 +40,16 @@ namespace Model
             } 
 
             return Position +  " - Taken by " + Piece.Player;
-        }       
+        }
+
+        public bool IsTakenBy(Player player)
+        {
+            return Piece != null && Piece.Player.Equals(player);
+        }
+
+        public bool IsEmtpy
+        {
+            get { return Piece == null; }
+        }
     }
 }

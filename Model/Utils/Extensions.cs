@@ -7,6 +7,6 @@ namespace Model.Utils
         public static Player GetOponent(this ITwoPlayersGame game, Player player)
         {
             return player == game.FirstPlayer ? game.SecondPlayer : game.FirstPlayer;
-        }
+        }        
     }
 }
