@@ -9,7 +9,7 @@ namespace Model.Strategies.Minimax
     {
         private readonly GameOverChecker gameOverChecker;
         private readonly IBoardEvaluator boardEvaluator;
-        private const int MaxDepth = 2;
+        private const int MaxDepth = 5;
 
         public MinimaxNode(Board originalBoard, Movement originatingMovement, ITwoPlayersGame twoPlayersGame, Player max, int depth, GameOverChecker gameOverChecker, IBoardEvaluator boardEvaluator)
         {
@@ -121,7 +121,7 @@ namespace Model.Strategies.Minimax
                 if (Depth + 1 <= MaxDepth)
                 {
 
-                    foreach (var emptyPosition in OriginalBoard.EmptyPositions.ToList())
+                    foreach (var emptyPosition in OriginalBoard.GetValidMovePositions())
                     {
                         var boardSucessor = OriginalBoard.Clone();
 

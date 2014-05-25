@@ -2,7 +2,7 @@ using Model.Strategies.Minimax;
 
 namespace Model
 {
-    class TicTacToeMatchFactory : MatchFactory
+    public class TicTacToeMatchFactory : MatchFactory
     {
         public override Match CreateMatch(MatchConfiguration configuration)
         {

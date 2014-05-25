@@ -64,7 +64,7 @@ namespace Model.Strategies.Minimax
             return new SquareList(squares);
         }
 
-        private int EvaluateRow(Position position, Board newBoard, Player player)
+        private static int EvaluateRow(Position position, Board newBoard, Player player)
         {
             var squares = GetRow(position, newBoard, 4);
             if (IsPossibleToFillWithPlayer(player, squares))
@@ -74,12 +74,12 @@ namespace Model.Strategies.Minimax
             return 0;
         }
 
-        private bool IsPossibleToFillWithPlayer(Player player, SquareList squares)
+        private static bool IsPossibleToFillWithPlayer(Player player, IEnumerable<Square> squares)
         {
             return squares.All(square => square.IsEmtpy || square.IsTakenBy(player));
         }
 
-        private static SquareList GetRow(Position position, Board newBoard, int i)
+        private static IEnumerable<Square> GetRow(Position position, Board newBoard, int i)
         {
             var start = Math.Max(position.X - i, 0);
             var end = Math.Min(position.X + i - 1, newBoard.Width - 1);

@@ -11,8 +11,8 @@ namespace Console
 
         public static void Main()
         {
-            var matchFactory = new ConnectFourMatchFactory();
-            var connectorFactory = new ConnectFourConsoleConnectorFactory();
+            var matchFactory = new TicTacToeMatchFactory();
+            var connectorFactory = new TicTacToeConsoleConnectorFactory();
 
             var i = 1;
             for (var t = 0; t < i; t++)
