@@ -192,7 +192,7 @@ namespace Model
             get
             {
                 return from square in Squares
-                       where square.Piece == null
+                       where square.IsEmtpy
                        select square.Position;
             }
         }
@@ -220,7 +220,7 @@ namespace Model
                     var square = oldSquares[y, x];
                     if (square.Piece != null)
                     {
-                        squares[y, x].Piece = oldSquares[y, x].Piece;
+                        squares[x, y].Piece = square.Piece;
                     }
                 }
             }

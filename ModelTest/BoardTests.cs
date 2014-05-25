@@ -145,6 +145,22 @@ namespace ModelTest
                 }
             }
         }
+
+        [TestMethod]
+        public void TrasposeTest()
+        {
+            var board = new ConnectFourBoard();
+            var player = new HumanPlayer("Pepito");
+            var position = new Position(1,2);
+            var trasposedPosition = new Position(2, 1);
+
+            board.Move(new Movement(position, player));
+
+            board.Transpose();
+
+            var piece = board.GetPiece(trasposedPosition);
+            Assert.AreEqual(player, piece.Player);
+        }
     }
 
 

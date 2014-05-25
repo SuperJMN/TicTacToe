@@ -46,5 +46,9 @@ namespace Model
             return !x.Equals(y);
         }
 
+        public Position Traspose()
+        {
+            return new Position(Y, X);
+        }
     }
 }

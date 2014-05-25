@@ -37,7 +37,7 @@ namespace Model.Strategies.Minimax
             var rowScore = EvaluateRow(position, newBoard, player);
             var transposed = newBoard.Clone();
             transposed.Transpose();
-            var columnScore = EvaluateColumn(new Position(position.Y, position.X), transposed, player);
+            var columnScore = EvaluateColumn(position.Traspose(), transposed, player);
             
             return rowScore + columnScore;
         }
