@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Model.Utils;
 
 namespace Model.Strategies.Minimax
@@ -9,7 +8,7 @@ namespace Model.Strategies.Minimax
     {
         private readonly GameOverChecker gameOverChecker;
         private readonly IBoardEvaluator boardEvaluator;
-        private const int MaxDepth = 5;
+        private const int MaxDepth = 9;
 
         public MinimaxNode(Board originalBoard, Movement originatingMovement, ITwoPlayersGame twoPlayersGame, Player max, int depth, GameOverChecker gameOverChecker, IBoardEvaluator boardEvaluator)
         {

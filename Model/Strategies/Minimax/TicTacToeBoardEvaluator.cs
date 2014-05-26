@@ -60,18 +60,12 @@ namespace Model.Strategies.Minimax
 
         private static IEnumerable<Square> GetTakenByPlayer(IEnumerable<Square> collection, Player player)
         {
-            return collection.Where(square => IsTakenBy(square, player));
+            return collection.Where(square => square.IsTakenBy(player));
         }
 
         private IEnumerable<Square> GetTakenByOponent(IEnumerable<Square> collection, Player player)
         {
             return collection.Where(square => IsTakenByOponent(square, player));
-        }
-
-        private static bool IsTakenBy(Square square, Player player)
-        {
-            var piece = square.Piece;
-            return piece != null && piece.Player.Equals(player);
         }
 
         private bool IsTakenByOponent(Square square, Player player)
