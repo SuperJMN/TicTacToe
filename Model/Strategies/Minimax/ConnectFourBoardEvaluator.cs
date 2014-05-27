@@ -6,14 +6,7 @@ namespace Model.Strategies.Minimax
 {
     public class ConnectFourBoardEvaluator : IBoardEvaluator
     {
-        private readonly ConnectFourBoard board;
-
-        public ConnectFourBoardEvaluator(ConnectFourBoard board)
-        {
-            this.board = board;
-        }
-
-        public int Evaluate(Player player)
+        public int Evaluate(Board board, Player player)
         {
             var validPositions = board.GetValidMovePositions();
 
@@ -21,7 +14,7 @@ namespace Model.Strategies.Minimax
                          select new
                          {
                              Position = position,
-                             Score = EvaluatePosition(player, position)
+                             Score = EvaluatePosition(board, player, position)
                          };
 
             var positionEvaluation = scores.Max(arg => arg.Score);
@@ -29,7 +22,7 @@ namespace Model.Strategies.Minimax
             return positionEvaluation;
         }
 
-        private int EvaluatePosition(Player player, Position position)
+        private int EvaluatePosition(Board board, Player player, Position position)
         {
             var newBoard = board.Clone();
             newBoard.Move(new Movement(position, player));

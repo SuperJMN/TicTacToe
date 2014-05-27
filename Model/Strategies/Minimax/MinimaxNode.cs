@@ -9,7 +9,7 @@ namespace Model.Strategies.Minimax
     {
         private readonly GameOverChecker gameOverChecker;
         private readonly IBoardEvaluator boardEvaluator;
-        private const int MaxDepth = 5;
+        private const int MaxDepth = 1;
 
         public MinimaxNode(Board originalBoard, Movement originatingMovement, ITwoPlayersGame twoPlayersGame, Player max, int depth, GameOverChecker gameOverChecker, IBoardEvaluator boardEvaluator)
         {
@@ -63,7 +63,7 @@ namespace Model.Strategies.Minimax
 
         private int EvaluateTerminalNode(MinimaxNode minimaxNode)
         {
-            var best = boardEvaluator.Evaluate(minimaxNode.OriginatingPlayer);
+            var best = boardEvaluator.Evaluate(minimaxNode.OriginalBoard, minimaxNode.OriginatingPlayer);
 
             if (minimaxNode.CurrentPlayer == minimaxNode.Max)
             {

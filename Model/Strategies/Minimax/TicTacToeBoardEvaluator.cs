@@ -5,18 +5,11 @@ namespace Model.Strategies.Minimax
 {
     public class TicTacToeBoardEvaluator : IBoardEvaluator
     {
-        private Board Board { get; set; }
-
-        public TicTacToeBoardEvaluator(Board board)
+        public int Evaluate(Board board, Player player)
         {
-            Board = board;
-        }
-
-        public int Evaluate(Player player)
-        {
-            var rows = Board.Rows.Sum(collection => Evaluate(collection, player));
-            var columns = Board.Columns.Sum(collection => Evaluate(collection, player));
-            var diagonals = Board.Diagonals.Sum(collection => Evaluate(collection, player));
+            var rows = board.Rows.Sum(collection => Evaluate(collection, player));
+            var columns = board.Columns.Sum(collection => Evaluate(collection, player));
+            var diagonals = board.Diagonals.Sum(collection => Evaluate(collection, player));
 
             return rows + columns + diagonals;
         }

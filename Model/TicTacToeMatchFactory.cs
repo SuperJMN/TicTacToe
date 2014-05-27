@@ -11,7 +11,7 @@ namespace Model
             
             var match = new Match(board, boardChecker);
 
-            var playerFactory = new PlayerFactory(match, boardChecker, new TicTacToeBoardEvaluator(board));
+            var playerFactory = new PlayerFactory(match, boardChecker, new TicTacToeBoardEvaluator());
             var player1 = playerFactory.CreatePlayer(configuration.Player1.Name, configuration.Player1.PlayerType);
             var player2 = playerFactory.CreatePlayer(configuration.Player2.Name, configuration.Player2.PlayerType);
 

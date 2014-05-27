@@ -2,6 +2,6 @@ namespace Model.Strategies.Minimax
 {
     public interface IBoardEvaluator
     {
-        int Evaluate(Player player);
+        int Evaluate(Board board, Player player);
     }
 }
