@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Cinch;
 using MEFedMVVM.ViewModelLocator;
 using Model;
+using Model.Strategies.Minimax;
 
 namespace WPFTicTacToe
 {
@@ -61,7 +62,9 @@ namespace WPFTicTacToe
                         break;
                 }
             }
-            var factory = new PlayerFactory(MatchViewModel, MatchViewModel.GameOverChecker);
+
+            var boardEvaluator = new TicTacToeBoardEvaluator();
+            var factory = new PlayerFactory(MatchViewModel, MatchViewModel.GameOverChecker, boardEvaluator);
             var player  = factory.CreatePlayer(name, playerType);
             return player;
         }
